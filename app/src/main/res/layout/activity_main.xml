@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="#007BFF"
+    tools:context=".ui.MainActivity">
+
+    <RelativeLayout
+        android:paddingBottom="15dp"
+        android:id="@+id/rl_sel_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <TextView
+            android:layout_alignParentLeft="true"
+            android:id="@+id/tv_sel_title"
+            android:layout_marginTop="20dp"
+            android:layout_marginLeft="11dp"
+            android:text="发货管理"
+            android:layout_width="wrap_content"
+            android:textSize="17sp"
+            android:textColor="@color/white"
+            android:layout_height="wrap_content"/>
+
+        <LinearLayout
+            android:layout_marginTop="20dp"
+            android:layout_marginRight="15dp"
+            android:gravity="center"
+            android:layout_alignParentRight="true"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_marginRight="15dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="周润发..."
+                android:textColor="#ffffffff"
+                android:textSize="12sp"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@drawable/sel_btn_mine"/>
+
+        </LinearLayout>
+
+    </RelativeLayout>
+
+
+
+    <FrameLayout
+        android:id="@+id/homeContain"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:background="@color/white" />
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1px"
+        android:background="@color/grayDark" />
+
+    <include
+        android:layout_height="wrap_content"
+        android:layout_width="match_parent"
+        layout="@layout/layout_bottom_navigation_bar" />
+
+</LinearLayout>

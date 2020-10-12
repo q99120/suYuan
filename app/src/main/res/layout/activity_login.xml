@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".ui.MainActivity">
+
+   <TextView
+       android:layout_width="wrap_content"
+       android:layout_height="wrap_content"
+       android:textSize="21sp"
+       android:layout_marginTop="80dp"
+       android:layout_marginLeft="50dp"
+       android:textColor="#202020"
+       android:text="欢迎来到溯源APP平台"/>
+
+
+    <TextView
+        android:layout_marginTop="65dp"
+        android:layout_marginLeft="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="账号"
+        android:textColor="#ff202020"
+        android:textSize="17sp" />
+
+    <EditText
+        android:id="@+id/editAccount"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:hint="请输入账号..."
+        android:textSize="14sp"
+        android:textColor="#CCCCCC"/>
+
+
+
+    <TextView
+        android:layout_marginTop="15dp"
+        android:layout_marginLeft="50dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="密码"
+        android:textColor="#ff202020"
+        android:textSize="17sp" />
+
+    <EditText
+        android:id="@+id/editPassword"
+        android:padding="10dp"
+        android:layout_marginTop="10dp"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginLeft="50dp"
+        android:hint="请输入密码..."
+        android:textSize="14sp"
+        android:textColor="#CCCCCC"/>
+
+
+    <Button
+        android:id="@+id/btnLogin"
+        android:layout_marginRight="45dp"
+        android:layout_marginLeft="45dp"
+        android:layout_marginTop="30dp"
+        android:textSize="16sp"
+        android:textColor="@color/white"
+        android:text="登录"
+        android:background="@drawable/shape_login"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
+
+
+</LinearLayout>

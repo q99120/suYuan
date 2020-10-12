@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+
+
+    <TextView
+        android:id="@+id/tvSendQrTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="产品条码"
+        android:layout_marginStart="55dp"
+        android:textColor="#202020"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+
+    <TextView
+        android:id="@+id/tvActionQr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:drawablePadding="15dp"
+        android:text="扫一扫"
+        android:textColor="#808080"
+        android:textSize="14sp"
+        app:drawableEndCompat="@mipmap/action_qrcode"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvSendQrTitle" />
+
+
+    <EditText
+        android:id="@+id/editQrCode"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="请填写外箱条码..."
+        android:layout_marginStart="60dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvSendQrTitle"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"/>
+
+
+
+    <LinearLayout
+        android:id="@+id/llActionImFile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="25dp"
+        android:gravity="center_vertical"
+        app:layout_constraintLeft_toLeftOf="@id/tvSendQrTitle"
+        app:layout_constraintTop_toBottomOf="@+id/editQrCode">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="导入文件"
+            android:textColor="#ff202020"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/shape_import_file"
+            android:gravity="center_vertical"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp">
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:src="@mipmap/home_trac_file" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7.5dp"
+                android:paddingEnd="18dp"
+                android:text="导入文件"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+
+    <LinearLayout
+        android:id="@+id/llNotice"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:background="#F4F9FF"
+        android:padding="11dp"
+        app:layout_constraintLeft_toLeftOf="@+id/llActionImFile"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llActionImFile">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="10dp"
+            android:text="@string/notice" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:background="#F7F7F7"
+        android:layout_marginTop="30dp"
+        app:layout_constraintTop_toBottomOf="@+id/llNotice"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        app:layout_constraintBottom_toBottomOf="parent">
+
+        <Button
+            android:enabled="false"
+            android:textSize="16sp"
+            android:textColor="@color/white"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="45dp"
+            android:layout_marginLeft="45dp"
+            app:layout_constraintTop_toBottomOf="@+id/layout_send_manage_fm"
+            android:text="确定取消"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_cancel"/>
+
+    </LinearLayout>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

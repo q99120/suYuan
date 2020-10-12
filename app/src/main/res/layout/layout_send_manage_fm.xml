@@ -1,0 +1,235 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:paddingBottom="30dp">
+
+
+    <TextView
+        android:id="@+id/tvProduct"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="15dp"
+        android:text="所属产品"
+        android:textColor="#202020"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:id="@+id/tvChooseProduct"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:hint="请选择产品（可留空）..."
+        android:textColor="#cccccc"
+        android:textSize="14sp"
+        app:drawableEndCompat="@mipmap/page_down"
+        app:layout_constraintLeft_toRightOf="@+id/tvProduct"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvProduct" />
+
+
+    <View
+        android:id="@+id/viewLine1"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#F0F0F0"
+        app:layout_constraintLeft_toLeftOf="@+id/tvChooseProduct"
+        app:layout_constraintRight_toRightOf="@+id/tvChooseProduct"
+        app:layout_constraintTop_toBottomOf="@+id/tvChooseProduct" />
+
+
+    <TextView
+        android:id="@+id/tvDistributor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="50dp"
+        android:layout_marginTop="15dp"
+        android:gravity="center_vertical"
+        android:text="经销商"
+        android:textColor="#202020"
+        android:textSize="16sp"
+        app:drawableStartCompat="@drawable/xinghao"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/viewLine1" />
+
+    <TextView
+        android:id="@+id/tvChooseDistributor"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginEnd="20dp"
+        android:hint="请选择经销商..."
+        android:textColor="#cccccc"
+        android:textSize="14sp"
+        app:drawableEndCompat="@mipmap/page_down"
+        app:layout_constraintLeft_toRightOf="@+id/tvDistributor"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvDistributor" />
+
+
+    <View
+        android:id="@+id/viewLine2"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:layout_marginTop="10dp"
+        android:background="#F0F0F0"
+        app:layout_constraintLeft_toLeftOf="@+id/tvChooseDistributor"
+        app:layout_constraintRight_toRightOf="@+id/tvChooseDistributor"
+        app:layout_constraintTop_toBottomOf="@+id/tvChooseDistributor" />
+
+
+
+    <include
+        android:id="@+id/layoutFloWater"
+        android:layout_height="wrap_content"
+        android:layout_width="wrap_content"
+        app:layout_constraintLeft_toLeftOf="@+id/tvProduct"
+        app:layout_constraintTop_toBottomOf="@+id/viewLine2"
+        layout="@layout/layoutflowwater"/>
+
+
+
+    <TextView
+        android:id="@+id/tvSendQrTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:text="产品条码"
+        android:textColor="#202020"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="@+id/tvProduct"
+        app:layout_constraintTop_toBottomOf="@+id/layoutFloWater" />
+
+
+    <EditText
+        android:id="@+id/editQrCode"
+        android:layout_marginTop="20dp"
+        android:layout_marginEnd="20dp"
+        android:text="请填写外箱条码..."
+        android:layout_marginStart="60dp"
+        app:layout_constraintTop_toBottomOf="@+id/tvSendQrTitle"
+        android:layout_width="match_parent"
+        android:layout_height="100dp"/>
+
+
+    <TextView
+        android:id="@+id/tvActionQr"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginEnd="20dp"
+        android:drawablePadding="15dp"
+        android:text="扫一扫"
+        android:textColor="#808080"
+        android:textSize="14sp"
+        app:drawableEndCompat="@mipmap/action_qrcode"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvSendQrTitle" />
+
+
+
+
+    <TextView
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="20dp"
+        android:layout_marginTop="15dp"
+        android:drawablePadding="15dp"
+        android:text="发货时间"
+        android:textColor="#202020"
+        android:textSize="16sp"
+        app:drawableStartCompat="@mipmap/home_trac_time"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editQrCode" />
+
+
+    <TextView
+        android:id="@+id/tvTracingTime"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="15dp"
+        android:layout_marginEnd="20dp"
+        android:drawablePadding="15dp"
+        android:text="2020-09-28 08:48:25"
+        android:textColor="#808080"
+        android:textSize="16sp"
+        app:drawableEndCompat="@mipmap/pozhehao"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/editQrCode" />
+
+
+    <LinearLayout
+        android:id="@+id/llActionImFile"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="60dp"
+        android:layout_marginTop="25dp"
+        android:gravity="center_vertical"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/tvTracingTime">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="导入文件"
+            android:textColor="#ff202020"
+            android:textSize="16sp" />
+
+        <LinearLayout
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="15dp"
+            android:background="@drawable/shape_import_file"
+            android:gravity="center_vertical"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp">
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:paddingStart="20dp"
+                android:src="@mipmap/home_trac_file" />
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="7.5dp"
+                android:paddingEnd="18dp"
+                android:text="导入文件"
+                android:textColor="@color/white"
+                android:textSize="14sp" />
+
+        </LinearLayout>
+
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="30dp"
+        android:layout_marginEnd="20dp"
+        android:background="#F4F9FF"
+        android:padding="11dp"
+        app:layout_constraintLeft_toLeftOf="@+id/llActionImFile"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/llActionImFile">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:lineSpacingExtra="10dp"
+            android:text="@string/notice" />
+
+    </LinearLayout>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

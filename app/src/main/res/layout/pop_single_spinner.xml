@@ -1,0 +1,46 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:background="@drawable/shape_pop_bg"
+    android:layout_height="wrap_content">
+
+
+    <TextView
+        android:id="@+id/tvPopTitle"
+        android:layout_marginTop="20dp"
+        android:layout_marginStart="25dp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="#202020"
+        android:textSize="16sp"
+        android:text="经销商"/>
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/recyclerSinglePop"
+        android:layout_marginTop="15dp"
+        app:layout_constraintBottom_toTopOf="@+id/tvPopCancel"
+        app:layout_constraintTop_toBottomOf="@+id/tvPopTitle"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="255dp"
+        android:layout_height="250dp"/>
+
+    <TextView
+        android:id="@+id/tvPopCancel"
+        android:padding="22dp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/recyclerSinglePop"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="取消"
+        android:textColor="#ff007cff"
+        android:textSize="16sp"
+        />
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

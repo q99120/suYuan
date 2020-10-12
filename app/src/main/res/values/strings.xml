@@ -1,0 +1,4 @@
+<resources>
+    <string name="app_name">ShuoYuan</string>
+    <string name="notice">注：支持导入 XLS(XLSX)、CSV、TXT(utf8编码)三种格式文档,大小3M以内。</string>
+</resources>

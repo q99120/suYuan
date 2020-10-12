@@ -1,0 +1,75 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <ImageView
+        android:id="@+id/ivCheckOut"
+        android:padding="16dp"
+        android:layout_marginStart="10dp"
+        android:src="@mipmap/checkin"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"/>
+
+
+    <TextView
+        android:id="@+id/tvID"
+        app:layout_constraintBottom_toBottomOf="@+id/ivCheckOut"
+        app:layout_constraintTop_toTopOf="@+id/ivCheckOut"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="ID"
+        android:layout_marginStart="40dp"
+        app:layout_constraintLeft_toRightOf="@+id/ivCheckOut"
+        android:textColor="#007BFF"
+        android:textSize="16sp"
+        />
+
+    <ImageView
+        android:visibility="invisible"
+        android:id="@+id/ivHomeCircle"
+        android:layout_marginStart="35dp"
+        android:src="@mipmap/ivhomecicle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/tvID"
+        app:layout_constraintBottom_toBottomOf="@+id/tvID"
+        app:layout_constraintLeft_toRightOf="@+id/tvID"/>
+
+    <TextView
+        android:id="@+id/tvHomeTitle"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="流程名称"
+        app:layout_constraintTop_toTopOf="@id/tvID"
+        app:layout_constraintBottom_toBottomOf="@+id/tvID"
+        app:layout_constraintLeft_toRightOf="@+id/ivHomeCircle"
+        android:layout_marginStart="15dp"
+        android:textColor="#007BFF"
+        android:textSize="16sp"
+        />
+
+    <TextView
+        android:id="@+id/tvSort"
+        app:layout_constraintTop_toTopOf="@id/tvID"
+        app:layout_constraintBottom_toBottomOf="@+id/tvID"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="排序"
+        android:layout_marginEnd="20dp"
+        app:layout_constraintRight_toRightOf="parent"
+        android:textColor="#007BFF"
+        android:textSize="16sp"
+        />
+
+    <View
+        app:layout_constraintTop_toBottomOf="@+id/ivCheckOut"
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F0F0F0"/>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
