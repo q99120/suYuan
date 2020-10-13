@@ -15,6 +15,7 @@ import cn.work.suyuan.util.DateUtil
 import com.bigkoo.pickerview.builder.TimePickerBuilder
 import com.bigkoo.pickerview.view.TimePickerView
 import kotlinx.android.synthetic.main.fragment_home_child.*
+import kotlinx.android.synthetic.main.layoutadtitle.*
 
 
 class BoxRecordFragment : BaseFragment() {

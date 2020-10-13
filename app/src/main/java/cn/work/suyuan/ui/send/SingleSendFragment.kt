@@ -1,16 +1,20 @@
 package cn.work.suyuan.ui.send
 
+import android.os.Build
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
 import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
-import cn.work.suyuan.ui.home.HomeViewModel
+import cn.work.suyuan.ui.dialog.FileChooseDialog
+import cn.work.suyuan.util.DateUtil
+import cn.work.suyuan.util.FileUtils
 import cn.work.suyuan.util.InjectorUtil
 import cn.work.suyuan.util.SinglePopUtil
 import kotlinx.android.synthetic.main.fragment_send_manage.*
@@ -38,17 +42,21 @@ class SingleSendFragment: BaseFragment(){
 
 
 
+    @RequiresApi(Build.VERSION_CODES.R)
     private fun initViews() {
-        setOnClickListener(tvChooseDistributor,btnSend){
+        setOnClickListener(tvChooseDistributor,btnSend,tvChooseProduct,tvTracingTime,llActionImFiles){
             when(this){
-                tvChooseDistributor->{
-                    //获取经销商
-                    viewModel.getDistributor()
+                tvChooseDistributor->{ viewModel.getDistributor() }
+                tvChooseProduct->{viewModel.getProduct()}
+                llActionImFiles->
+                    fileChooseDialog.setData(FileUtils.queryFiles())
+                btnSend->{ viewModel.sendProduct(1,productId,distributorId,productCode,productTime,productFile)}
+                tvTracingTime->
+                {DateUtil.showDate(activity,true,object :DateUtil.ChooseDate{
+                    override fun getTime(result: String)
+                    { tvTracingTime.text = result }
                 }
-                btnSend->{
-                 //发货
-                    viewModel.sendProduct(1,productId,distributorId,productCode,productTime,productFile)
-                }
+                )}
             }
         }
     }
@@ -64,12 +72,22 @@ class SingleSendFragment: BaseFragment(){
             val popUtil = SinglePopUtil(requireContext(),object :SinglePopUtil.popClick{
                 override fun clickPop(type: String, pi: Int) {
                     tvChooseDistributor.text = type
-                    distributorId = pi
-                }
+                    distributorId = pi }
 
             })
-            popUtil.setData(rp.data)
+            popUtil.setData(rp.data,1)
             popUtil.showAsDropDown(tvChooseDistributor)
+        })
+        viewModel.productLiveData.observe(viewLifecycleOwner, Observer {
+            val rp = it.getOrNull()?:return@Observer
+            val popUtil = SinglePopUtil(requireContext(),object :SinglePopUtil.popClick{
+                override fun clickPop(type: String, pi: Int) {
+                    tvChooseProduct.text = type
+                    productId = pi }
+
+            })
+            popUtil.setData(rp.data,2)
+            popUtil.showAsDropDown(tvChooseProduct)
         })
         viewModel.sendProductLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull()?:return@Observer
@@ -80,7 +98,6 @@ class SingleSendFragment: BaseFragment(){
 
     override fun loadDataOnce() {
         super.loadDataOnce()
-        //获取经销商数据
     }
 
 
@@ -88,6 +105,9 @@ class SingleSendFragment: BaseFragment(){
         fun newInstance() = SingleSendFragment()
     }
 
+    private val fileChooseDialog by lazy {
+        FileChooseDialog(requireContext())
+    }
 
 
 }

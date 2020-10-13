@@ -37,7 +37,10 @@ class SendPackRepository private constructor(private val network: SuYuanNetwork)
         response
     }
 
-
+    suspend fun getSendRecord(body: RequestBody)= withContext(Dispatchers.IO){
+        val response = network.login(body)
+        response
+    }
     companion object {
 
         private var repository: SendPackRepository? = null

@@ -26,7 +26,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:hint="请选择产品（可留空）..."
-        android:textColor="#cccccc"
+        android:textColor="@color/black"
         android:textSize="14sp"
         app:drawableEndCompat="@mipmap/page_down"
         app:layout_constraintLeft_toRightOf="@+id/tvProduct"
@@ -66,7 +66,7 @@
         android:layout_marginStart="20dp"
         android:layout_marginEnd="20dp"
         android:hint="请选择经销商..."
-        android:textColor="#cccccc"
+        android:textColor="@color/black"
         android:textSize="14sp"
         app:drawableEndCompat="@mipmap/page_down"
         app:layout_constraintLeft_toRightOf="@+id/tvDistributor"
@@ -88,7 +88,7 @@
 
     <include
         android:id="@+id/layoutFloWater"
-        android:layout_height="wrap_content"
+        android:layout_height="150dp"
         android:layout_width="wrap_content"
         app:layout_constraintLeft_toLeftOf="@+id/tvProduct"
         app:layout_constraintTop_toBottomOf="@+id/viewLine2"
@@ -183,6 +183,7 @@
             android:textSize="16sp" />
 
         <LinearLayout
+            android:id="@+id/llActionImFiles"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"

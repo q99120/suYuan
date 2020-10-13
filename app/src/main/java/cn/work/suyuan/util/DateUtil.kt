@@ -17,6 +17,10 @@
 
 package cn.work.suyuan.util
 
+import android.content.Context
+import com.bigkoo.pickerview.builder.TimePickerBuilder
+import com.bigkoo.pickerview.configure.PickerOptions
+import kotlinx.android.synthetic.main.fragment_home_child.*
 import java.text.SimpleDateFormat
 import java.util.*
 
@@ -63,6 +67,22 @@ object DateUtil {
     private fun getDateAndHourMinuteTime(dateMillis: Long): String {
         val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
         return sdf.format(Date(dateMillis))
+    }
+
+    lateinit var  dateClick :ChooseDate
+    lateinit var  pickArray:BooleanArray
+    fun showDate(context: Context,isHour:Boolean,param:ChooseDate){
+        dateClick = param
+        pickArray = if (isHour) booleanArrayOf(true,true,true,true,true,false) else booleanArrayOf(true,true,true,false,false,false)
+        val pickerView =  TimePickerBuilder(context)
+        { date, v ->
+            if (isHour)  dateClick.getTime(getDateAndTime(date.time)) else  dateClick.getTime(getDate(date.time))
+        }.isCenterLabel(true).setType(pickArray).build()
+        pickerView.show()
+    }
+
+    interface ChooseDate{
+           fun getTime(result:String)
     }
 
 }

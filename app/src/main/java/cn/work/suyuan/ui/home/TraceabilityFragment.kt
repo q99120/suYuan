@@ -49,8 +49,14 @@ class TraceabilityFragment : BaseFragment() {
         initViews()
         homeMgRecycler.layoutManager = LinearLayoutManager(requireContext())
         homeMgRecycler.adapter = traceAdapter
+        tvTitle6.visibility = View.GONE
+        tvTitle1.text = "ID"
+        tvTitle2.text = "流程名称"
+        tvTitle3.text = "产品条码"
+        tvTitle4.text = "操作人"
+        tvTitle5.text = "生产时间"
+
         ll_date.visibility = View.VISIBLE
-        tvSort.text = "产品条码"
        observer()
     }
 

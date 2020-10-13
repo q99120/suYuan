@@ -12,7 +12,12 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 class SingleSpinnerAdapter :
     BaseQuickAdapter<HomeData.Data, BaseViewHolder>(R.layout.adapter_single_spinner) {
     override fun convert(holder: BaseViewHolder, item:HomeData.Data) {
-        holder.setText(R.id.tvPopItemTitle,item.title)
+        if (flags == 1) holder.setText(R.id.tvPopItemTitle,item.title)
+        else holder.setText(R.id.tvPopItemTitle,item.name) }
+
+    private var flags = -1
+    fun setType(flag: Int) {
+            flags = flag
     }
 
 }

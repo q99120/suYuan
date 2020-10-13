@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
+import android.view.View.GONE
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
@@ -19,6 +20,7 @@ import cn.work.suyuan.ui.dialog.HomeNormalDialog
 import cn.work.suyuan.util.InjectorUtil
 import kotlinx.android.synthetic.main.fragment_home_child.*
 import kotlinx.android.synthetic.main.layout_page_action.*
+import kotlinx.android.synthetic.main.layoutadtitle.*
 
 /**
  * 流程管理
@@ -50,6 +52,9 @@ class ManageFragment : BaseFragment() {
         iv_action1.setImageResource(R.mipmap.action_add)
         iv_action2.setImageResource(R.mipmap.action_edit)
         iv_action3.setImageResource(R.mipmap.action_delete)
+        tvTitle4.visibility = GONE
+        tvTitle5.visibility = GONE
+        tvTitle6.visibility = GONE
         tv_action1.text = "添加数据"
         tv_action2.text = "编辑数据"
         tv_action3.text = "删除数据"
