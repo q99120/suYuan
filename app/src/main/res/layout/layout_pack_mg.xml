@@ -1,5 +1,6 @@
 <?xml version="1.0" encoding="utf-8"?>
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto">
@@ -48,6 +49,7 @@
 
     <TextView
         android:id="@+id/BigBoxQr"
+        android:visibility="visible"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginStart="30dp"
@@ -58,6 +60,21 @@
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/etProductQr" />
 
+
+    <TextView
+        android:visibility="invisible"
+        android:id="@+id/BigBoxQr2"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="30dp"
+        android:text="条码 (大箱)"
+        android:drawablePadding="5dp"
+        android:textColor="#ff202020"
+        android:textSize="16sp"
+        app:layout_constraintLeft_toLeftOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/etProductQr"
+        app:drawableStartCompat="@mipmap/boxbox" />
 
     <TextView
         android:layout_marginEnd="20dp"
@@ -79,18 +96,19 @@
         android:background="@drawable/shape_edit_bg"
         android:layout_marginTop="20dp"
         android:gravity="top|left"
-        android:hint="请扫描外箱条码..."
+        android:hint="请扫描大箱条码..."
         app:layout_constraintRight_toRightOf="@+id/tvActionQr"
         app:layout_constraintLeft_toLeftOf="@+id/tvProductTitle"
         app:layout_constraintTop_toBottomOf="@+id/BigBoxActionQr"
         android:layout_width="0dp"
-        android:layout_height="60dp"/>
+        android:layout_height="60dp"
+        tools:ignore="RtlSymmetry" />
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
-        android:drawablePadding="10dp"
+        android:drawablePadding="5dp"
         android:text="装箱时间"
         android:layout_marginStart="5dp"
         android:textColor="#202020"

@@ -21,6 +21,7 @@ import cn.work.suyuan.logic.model.HomeData
 import cn.work.suyuan.logic.model.Model
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 /**
@@ -41,6 +42,18 @@ class SendPackRepository private constructor(private val network: SuYuanNetwork)
         val response = network.login(body)
         response
     }
+
+    suspend fun doPackOne(body: RequestBody)= withContext(Dispatchers.IO){
+        val response = network.processManage(body)
+        response
+    }
+
+    suspend fun upLoadFile(part: MultipartBody.Part)= withContext(Dispatchers.IO){
+        val response = network.upLoadFile(part)
+        response
+    }
+
+
     companion object {
 
         private var repository: SendPackRepository? = null

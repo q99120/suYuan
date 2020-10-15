@@ -6,8 +6,12 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.ViewModelProvider
 import cn.work.suyuan.R
+import cn.work.suyuan.common.extensions.setOnClickListener
 import cn.work.suyuan.common.ui.BaseFragment
+import cn.work.suyuan.ui.dialog.SingleSpinnerDialog
 import cn.work.suyuan.util.InjectorUtil
+import kotlinx.android.synthetic.main.fragment_home_tracing.*
+import kotlinx.android.synthetic.main.layout_tracing_fm.*
 
 /**
  * 流程追朔
@@ -30,7 +34,20 @@ class TracingFragment  : BaseFragment(){
         initViews()
     }
 
+    var categoryId = 1
     private fun initViews() {
+        setOnClickListener(btnConfirm,tvChooseCate){
+            when(this){
+                btnConfirm->{viewModel.setTracing()}
+                tvChooseCate->{spinnerDialog.initSpinner(viewModel.getCate(),object :SingleSpinnerDialog.HomeNormalClick{
+                    override fun dialogClick(processName: String, sort: Int) {
+                        tvChooseCate.text = processName
+                        categoryId = sort
+                    }
+
+                })}
+            }
+        }
 
     }
 
@@ -43,6 +60,10 @@ class TracingFragment  : BaseFragment(){
 
     override fun loadDataOnce() {
         super.loadDataOnce()
+    }
+
+    private val spinnerDialog by lazy {
+        SingleSpinnerDialog(requireContext())
     }
 
 }

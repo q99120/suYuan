@@ -23,7 +23,7 @@ class TraceAdapter :
             holder.setText(R.id.tvLabel5, item.product_time)
             holder.setVisible(R.id.tvLabel4,true)
             holder.setVisible(R.id.tvLabel5,true)
-        }else{
+        }else if (fmStatus == 2){
             holder.setText(R.id.tvTitle1,"操作员")
             holder.setText(R.id.tvTitle2,"条码")
             holder.setText(R.id.tvTitle3,"产品名称")
@@ -39,6 +39,19 @@ class TraceAdapter :
             holder.setVisible(R.id.tvLabel4,true)
             holder.setVisible(R.id.tvLabel5,true)
             holder.setVisible(R.id.tvLabel6,true)
+        }else{
+            holder.setText(R.id.tvTitle1,"ID")
+            holder.setText(R.id.tvTitle2,"操作员")
+            holder.setText(R.id.tvTitle3,"箱码")
+            holder.setText(R.id.tvTitle4,"时间")
+            holder.setText(R.id.tvTitle5,"IP")
+            holder.setText(R.id.tvLabel1, item.id.toString())
+            holder.setText(R.id.tvLabel2, item.nickname)
+            holder.setText(R.id.tvLabel3, item.carton)
+            holder.setText(R.id.tvLabel4, item.product_time)
+            holder.setText(R.id.tvLabel5, item.ip)
+            holder.setVisible(R.id.tvLabel4,true)
+            holder.setVisible(R.id.tvLabel5,true)
         }
 
 

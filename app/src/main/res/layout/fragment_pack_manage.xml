@@ -18,6 +18,7 @@
 
 
         <Button
+            android:id="@+id/btnDonePack"
             android:textSize="16sp"
             android:textColor="@color/white"
             android:layout_marginTop="30dp"

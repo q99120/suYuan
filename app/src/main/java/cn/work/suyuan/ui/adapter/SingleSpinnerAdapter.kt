@@ -12,12 +12,24 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
 class SingleSpinnerAdapter :
     BaseQuickAdapter<HomeData.Data, BaseViewHolder>(R.layout.adapter_single_spinner) {
     override fun convert(holder: BaseViewHolder, item:HomeData.Data) {
+        if (selectPosition == holder.bindingAdapterPosition){
+            holder.setImageResource(R.id.ivPopItemCheck,R.mipmap.circlein)
+        }else{
+            holder.setImageResource(R.id.ivPopItemCheck,R.mipmap.circleout)
+        }
         if (flags == 1) holder.setText(R.id.tvPopItemTitle,item.title)
         else holder.setText(R.id.tvPopItemTitle,item.name) }
 
     private var flags = -1
     fun setType(flag: Int) {
             flags = flag
+    }
+
+
+    var selectPosition = -1
+    fun setCheck(position:Int){
+        selectPosition = position
+        notifyItemChanged(selectPosition)
     }
 
 }

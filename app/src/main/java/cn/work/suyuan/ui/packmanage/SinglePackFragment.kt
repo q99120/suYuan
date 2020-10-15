@@ -8,16 +8,39 @@ import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
 import android.widget.Toast
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
+import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
+import cn.work.suyuan.ui.send.SendPackViewModel
+import cn.work.suyuan.util.InjectorUtil
 import com.uuzuche.lib_zxing.activity.CaptureActivity
 import com.uuzuche.lib_zxing.activity.CodeUtils
+import kotlinx.android.synthetic.main.fragment_pack_manage.*
 import kotlinx.android.synthetic.main.layout_pack_mg.*
 import kotlinx.android.synthetic.main.layout_send_manage_fm.tvActionQr
 
-
+/**
+ * 单个装箱
+ */
 class SinglePackFragment :BaseFragment(){
+
+    private val viewModel by lazy {
+        ViewModelProvider(
+            this,
+            InjectorUtil.getSendViewModelFactory()
+        ).get(SendPackViewModel::class.java)
+    }
+
+    override fun loadDataOnce() {
+        super.loadDataOnce()
+        BigBoxQr2.visibility = View.INVISIBLE
+        BigBoxQr.visibility = View.VISIBLE
+        etBoxQr.hint = "请扫描外箱条码..."
+    }
+
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -30,17 +53,29 @@ class SinglePackFragment :BaseFragment(){
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         initClicks()
+        observer()
+    }
+
+    private fun observer() {
+        viewModel.doPackSingBoxLiveData.observe(viewLifecycleOwner, Observer {
+            val rp = it.getOrNull()?:return@Observer
+            rp.msg.toast()
+        })
     }
 
     private fun initClicks() {
-        setOnClickListener(tvActionQr, BigBoxActionQr){
+        setOnClickListener(tvActionQr, BigBoxActionQr,btnDonePack){
             when(this){
                 tvActionQr -> {
                     val intent = Intent(requireContext(), CaptureActivity::class.java)
                     startActivityForResult(intent, 7777)
                 }
                 BigBoxActionQr -> {
+                    val intent = Intent(requireContext(), CaptureActivity::class.java)
+                    startActivityForResult(intent, 9999)
                 }
+                btnDonePack->viewModel.doPackSingBox("","","2020-10-09 11:05:06",
+                    "/uploads/video/20201009/2f905868d24a13ff66d4c002f8c8d2a5.mp4",1,"")
             }
         }
     }

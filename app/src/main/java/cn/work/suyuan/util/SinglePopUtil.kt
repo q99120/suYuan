@@ -39,6 +39,7 @@ class SinglePopUtil(context: Context, param: popClick) : PopupWindow(context) {
         btnCancel.setOnClickListener { dismiss() }
 
         singleSpinnerAdapter.setOnItemClickListener { adapter, view, position ->
+            singleSpinnerAdapter.setCheck(position)
             if (flags == 1){
                 callbacks.clickPop(singleSpinnerAdapter.data[position].title,singleSpinnerAdapter.data[position].id)
             }else{

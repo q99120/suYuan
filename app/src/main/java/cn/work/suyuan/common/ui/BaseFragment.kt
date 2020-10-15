@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment
 import cn.work.suyuan.common.callback.RequestLifecycle
 import cn.work.suyuan.common.extensions.logD
 import cn.work.suyuan.event.MessageEvent
+import cn.work.suyuan.ui.dialog.EditPackDialog
 import cn.work.suyuan.ui.dialog.HomeNormalDialog
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -226,6 +227,10 @@ open class BaseFragment : Fragment(), RequestLifecycle {
 
     val homeNormalDialog by lazy {
         HomeNormalDialog(requireContext())
+    }
+
+    val editPackDialog by lazy {
+        EditPackDialog(requireContext())
     }
 
 

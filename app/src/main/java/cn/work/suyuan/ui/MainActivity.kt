@@ -1,14 +1,21 @@
 package cn.work.suyuan.ui
 
 import android.Manifest
+import android.app.Activity
+import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
-import android.graphics.Camera
+import android.database.Cursor
+import android.net.Uri
 import android.os.Bundle
+import android.provider.MediaStore
+import android.provider.MediaStore.MediaColumns
+import android.util.Log
 import android.view.View
-import androidx.camera.core.CameraX
 import androidx.fragment.app.FragmentManager
 import androidx.fragment.app.FragmentTransaction
+import androidx.lifecycle.Observer
+import androidx.lifecycle.ViewModelProvider
 import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
 import cn.work.suyuan.common.ui.BaseActivity
@@ -17,13 +24,16 @@ import cn.work.suyuan.ui.home.HomePageFragment
 import cn.work.suyuan.ui.mine.MineFragment
 import cn.work.suyuan.ui.packmanage.PackManageFragment
 import cn.work.suyuan.ui.send.SendManageFragment
+import cn.work.suyuan.ui.send.SendPackViewModel
+import cn.work.suyuan.util.InjectorUtil
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_bar.*
 import org.greenrobot.eventbus.EventBus
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 
-class MainActivity:BaseActivity() {
+
+class MainActivity : BaseActivity() {
     private val fragmentManager: FragmentManager by lazy { supportFragmentManager }
 
     private var homePageFragment: HomePageFragment? = null
@@ -40,9 +50,13 @@ class MainActivity:BaseActivity() {
 
     override fun setupViews() {
         super.setupViews()
+        viewModel.upLoadFileLiveData.observe(this, Observer {
+            val rp = it.getOrNull() ?: return@Observer
+            Log.e("黄金时代婚纱", rp.msg.toString())
+        })
         setTabSelection(0)
-        setOnClickListener(ll_home, ll_pack, ll_send, ll_mine){
-            when(this){
+        setOnClickListener(ll_home, ll_pack, ll_send, ll_mine) {
+            when (this) {
                 ll_home -> {
                     notificationUiRefresh(0)
                     setTabSelection(0)
@@ -144,7 +158,7 @@ class MainActivity:BaseActivity() {
         fragmentManager.beginTransaction().apply {
             clearAllSelected()
             hideFragments(this)
-            when(index){
+            when (index) {
                 0 -> {
                     rl_sel_title.visibility = View.VISIBLE
                     tv_sel_title.text = "首页"
@@ -224,9 +238,9 @@ class MainActivity:BaseActivity() {
     private val REQUEST_CODE_QRCODE_PERMISSIONS = 1
 
 
-    val perms:Array<String> = arrayOf(
+    private val perms: Array<String> = arrayOf(
         Manifest.permission.CAMERA,
-        Manifest.permission.READ_EXTERNAL_STORAGE
+        Manifest.permission.READ_EXTERNAL_STORAGE, Manifest.permission.WRITE_EXTERNAL_STORAGE
     )
 
     @AfterPermissionGranted(1)
@@ -240,9 +254,46 @@ class MainActivity:BaseActivity() {
         }
     }
 
-    companion object{
-        fun start(context:Context){
-            context.startActivity(Intent(context,MainActivity::class.java))
+    companion object {
+        fun start(context: Context) {
+            context.startActivity(Intent(context, MainActivity::class.java))
         }
     }
+
+
+    private val viewModel by lazy {
+        ViewModelProvider(
+            this,
+            InjectorUtil.getSendViewModelFactory()
+        ).get(SendPackViewModel::class.java)
+    }
+    override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        super.onActivityResult(requestCode, resultCode, data)
+        if (resultCode == Activity.RESULT_OK) {
+            if (requestCode == 1007){
+                Log.e("12121", data.toString())
+                if (data!=null){
+                    val uri: Uri = data.data!!
+                    val path = getFilePathFromContentUri(uri,contentResolver)
+                }
+            }
+        }
+    }
+
+    private fun getFilePathFromContentUri(
+        selectedVideoUri: Uri?,
+        contentResolver: ContentResolver
+    ): String? {
+        val filePath: String
+        val filePathColumn = arrayOf(MediaColumns.DATA)
+        val cursor = contentResolver.query(selectedVideoUri!!, filePathColumn, null, null, null)
+        //      也可用下面的方法拿到cursor
+//      Cursor cursor = this.context.managedQuery(selectedVideoUri, filePathColumn, null, null, null);
+        cursor!!.moveToFirst()
+        val columnIndex = cursor.getColumnIndex(filePathColumn[0])
+        filePath = cursor.getString(columnIndex)
+        cursor.close()
+        return filePath
+    }
+
 }

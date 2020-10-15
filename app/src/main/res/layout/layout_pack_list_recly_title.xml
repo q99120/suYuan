@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="utf-8"?>
+<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+
+    android:layout_height="wrap_content"
+    android:background="@color/white"
+    android:gravity="center_vertical"
+    android:orientation="horizontal">
+
+    <LinearLayout
+        android:paddingBottom="20dp"
+        android:layout_width="wrap_content"
+        android:layout_height="match_parent"
+        android:orientation="vertical">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="horizontal"
+            android:paddingTop="15dp"
+            android:paddingBottom="15dp">
+
+            <ImageView
+                android:id="@+id/ivCheckTitle"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="13dp"
+                android:src="@mipmap/uncheck" />
+
+
+            <TextView
+                android:id="@+id/tvTitle1"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:text="ID"
+                android:textColor="#007CFF"
+                android:textSize="16sp" />
+
+
+            <TextView
+                android:id="@+id/tvTitle2"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:text="流程名称"
+                android:textColor="#007CFF"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvTitle3"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="65dp"
+                android:text="排序"
+                android:textColor="#007CFF"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvTitle4"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="45dp"
+                android:text="排序"
+                android:textColor="#007CFF"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvTitle5"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="40dp"
+                android:text="排序"
+                android:textColor="#007CFF"
+                android:textSize="16sp" />
+
+            <TextView
+                android:id="@+id/tvTitle6"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="105dp"
+                android:paddingEnd="20dp"
+                android:text="排序"
+                android:textColor="#007CFF"
+                android:textSize="16sp" />
+
+        </LinearLayout>
+
+        <androidx.recyclerview.widget.RecyclerView
+            android:background="@color/white"
+            android:layout_marginEnd="20dp"
+            android:layout_marginStart="13dp"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:layout_weight="1"/>
+
+        <TextView
+            android:layout_marginTop="20dp"
+            android:layout_marginStart="13dp"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="共6条记录"
+            android:textColor="#ff808080"
+            android:textSize="12sp"
+            />
+
+
+    </LinearLayout>
+</HorizontalScrollView>

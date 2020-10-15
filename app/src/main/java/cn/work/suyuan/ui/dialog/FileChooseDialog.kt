@@ -11,8 +11,7 @@ import cn.work.suyuan.util.FileUtils
 import kotlinx.android.synthetic.main.dialog_choose_file.*
 
 class FileChooseDialog : Dialog {
-
-
+    lateinit var fileClicks:FileClick
     constructor(context: Context) : this(context, 0)
     constructor(context: Context, themeResId: Int) : super(context, R.style.dialog) {
         setContentView(R.layout.dialog_choose_file)
@@ -26,12 +25,24 @@ class FileChooseDialog : Dialog {
 
     }
 
-   fun setData(queryFiles: MutableList<FileUtils.FileParam>) {
+   fun setData(queryFiles: MutableList<FileUtils.FileParam>, param: FileClick) {
+       fileClicks = param
        val spinnerAdapter = FileListAdapter()
        recyclerFileList.layoutManager = LinearLayoutManager(context)
        recyclerFileList.adapter = spinnerAdapter
        spinnerAdapter.setList(queryFiles)
        show()
+
+       spinnerAdapter.setOnItemClickListener { adapter, view, position ->
+           spinnerAdapter.setCheck(position)
+           fileClicks.fileClick(spinnerAdapter.data[position].fileName,spinnerAdapter.data[position].filePath)
+       }
+
+
    }
+
+    interface FileClick{
+        fun fileClick(fileName:String,filePath:String)
+    }
 
 }

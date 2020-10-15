@@ -11,6 +11,7 @@ import cn.work.suyuan.logic.model.TokenData
 import cn.work.suyuan.logic.model.UserInfo
 import cn.work.suyuan.logic.network.HomePageRepository
 import cn.work.suyuan.logic.network.api.MainPageService
+import cn.work.suyuan.util.FileUtils
 import okhttp3.MediaType.*
 import okhttp3.RequestBody
 
@@ -161,6 +162,23 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
      * 流程追溯
      */
     fun refreshTrace() {
+    }
+
+    //获取生产流程
+    val array1 = arrayOf("原料入库","组装","质检","包装","出库","发货")
+    val array2 = arrayOf("1","2","3","4","5","6")
+
+    fun getCate(): MutableList<FileUtils.FileParam> {
+        val list = mutableListOf<FileUtils.FileParam>()
+         for (a in array1.indices){
+             val bean = FileUtils.FileParam(array1[a],array2[a])
+             list.add(bean)
+         }
+        return list
+    }
+
+    fun setTracing() {
+        TODO("Not yet implemented")
     }
 
 

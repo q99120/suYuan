@@ -163,11 +163,13 @@
     <TextView
         android:id="@+id/tvLabel4"
         android:visibility="gone"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:text="排序"
         android:textColor="@color/black"
         android:textSize="14sp"
+        android:singleLine="false"
+        app:layout_constraintRight_toLeftOf="@+id/tvTitle5"
         app:layout_constraintLeft_toLeftOf="@+id/tvTitle4"
         app:layout_constraintTop_toTopOf="@+id/tvLabel3" />
 

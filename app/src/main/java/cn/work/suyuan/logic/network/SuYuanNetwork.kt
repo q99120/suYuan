@@ -19,6 +19,7 @@ package cn.work.suyuan.logic.network
 import cn.work.suyuan.logic.model.HomeData
 import cn.work.suyuan.logic.model.Model
 import cn.work.suyuan.logic.network.api.MainPageService
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import retrofit2.Call
 import retrofit2.Callback
@@ -60,6 +61,7 @@ class SuYuanNetwork {
     suspend fun login(body: RequestBody) = mainPageService.login(body).await()
     suspend fun getUser(body: RequestBody) = mainPageService.getUser(body).await()
     suspend fun getDistributor(body: RequestBody) = mainPageService.getHomeManageData(body).await()
+    suspend fun upLoadFile(part: MultipartBody.Part) = mainPageService.upLoadFile(part).await()
 
 
     companion object {
