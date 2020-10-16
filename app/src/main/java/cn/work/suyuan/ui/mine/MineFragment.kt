@@ -15,6 +15,7 @@ import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
 import cn.work.suyuan.event.MessageEvent
 import cn.work.suyuan.event.StringEvent
+import cn.work.suyuan.ui.dialog.UpdateUserDialog
 import cn.work.suyuan.ui.home.HomeViewModel
 import cn.work.suyuan.util.FileUtils
 import cn.work.suyuan.util.InjectorUtil
@@ -22,7 +23,7 @@ import cn.work.suyuan.widget.GlideEngine
 import com.huantansheng.easyphotos.EasyPhotos
 import kotlinx.android.synthetic.main.fragment_mine.*
 
-class MineFragment: BaseFragment() {
+class MineFragment : BaseFragment() {
 
     private val viewModel by lazy {
         ViewModelProvider(
@@ -31,7 +32,11 @@ class MineFragment: BaseFragment() {
         ).get(HomeViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return super.onCreateView(inflater.inflate(R.layout.fragment_mine, container, false))
     }
 
@@ -44,12 +49,36 @@ class MineFragment: BaseFragment() {
 
     private fun initView() {
 
-        setOnClickListener(llEditHead){
-            when(this){
-                llEditHead->{
-                    EasyPhotos.createAlbum(activity,true,GlideEngine.getInstance()).
-                    setFileProviderAuthority("cn.work.suyuan.fileprovider")
+        setOnClickListener(llEditHead, tvNickName) {
+            when (this) {
+                llEditHead -> {
+                    EasyPhotos.createAlbum(activity, true, GlideEngine.getInstance())
+                        .setFileProviderAuthority("cn.work.suyuan.fileprovider")
                         .start(103)
+                }
+                tvNickName -> {
+                    updateUserDialog.updateData(1, object : UpdateUserDialog.UpUserCallBack {
+                        override fun upUser(result: String) {
+                            tvNickName.text = result
+                            viewModel.updateUser(2,0,result,1,"",1)
+                        }
+                    })
+                }
+                tvDecs -> {
+                    updateUserDialog.updateData(2, object : UpdateUserDialog.UpUserCallBack {
+                        override fun upUser(result: String) {
+                            tvDecs.text = result
+                            viewModel.updateUser(4,0,"",1,result,1)
+                        }
+                    })
+                }
+                tvAge -> {
+                    updateUserDialog.updateData(3, object : UpdateUserDialog.UpUserCallBack {
+                        override fun upUser(result: String) {
+                            tvNickName.text = result
+                            viewModel.updateUser(7,0,result,1,"",result.toInt())
+                        }
+                    })
                 }
             }
         }
@@ -57,49 +86,64 @@ class MineFragment: BaseFragment() {
 
     private fun observer() {
         viewModel.userLiveData.observe(viewLifecycleOwner, Observer {
-              val rp = it.getOrNull()?:return@Observer
-               val userData = rp.data
-              tvNickName.text = userData.nickname
+            val rp = it.getOrNull() ?: return@Observer
+            val userData = rp.data
+            tvNickName.text = userData.nickname
             tvDecs.text = userData.descs
             tvAge.text = userData.age.toString()
             tvSex.text = userData.sex.toString()
-            GlideEngine.getInstance().loadPhoto(requireContext(),
-                Uri.parse(userData.cover),ivMineHead)
+            GlideEngine.getInstance().loadPhoto(
+                requireContext(),
+                Uri.parse(userData.cover), ivMineHead
+            )
         })
 
         viewModel.uploadHeadLiveData.observe(viewLifecycleOwner, Observer {
-            val rp = it.getOrNull()?:return@Observer
-            Log.e("获取id11",rp.msg.toString())
+            val rp = it.getOrNull() ?: return@Observer
+            Log.e("获取id11", rp.msg.toString())
             rp.msg.toast()
-            if (rp.code == 200){
-                updateUser(1,rp.data.lid.toInt(),"",0,"",0) }
+            if (rp.code == 200) {
+                updateUser(1, rp.data.lid.toInt(), "", 0, "", 0)
+            }
         })
         viewModel.updateUserLiveData.observe(viewLifecycleOwner, Observer {
-            val rp = it.getOrNull()?:return@Observer
+            val rp = it.getOrNull() ?: return@Observer
             rp.msg.toast()
         })
 
 
     }
 
-    private fun updateUser(type: Int,cover:Int,nickName:String,sex:Int,descs:String,age:Int) {
-         viewModel.updateUser(type,cover,nickName,sex,descs,age)
+    private fun updateUser(
+        type: Int,
+        cover: Int,
+        nickName: String,
+        sex: Int,
+        descs: String,
+        age: Int
+    ) {
+        viewModel.updateUser(type, cover, nickName, sex, descs, age)
     }
 
     override fun onMessageEvent(messageEvent: MessageEvent) {
         super.onMessageEvent(messageEvent)
-        if (messageEvent is StringEvent )
-        if (messageEvent.code == 103) {
-            GlideEngine.getInstance().loadPhoto(activity,Uri.parse(messageEvent.message),ivMineHead)
-            Log.e("获取路径1",messageEvent.path)
-            val base64Result = FileUtils.imageToBase64(messageEvent.path)
+        if (messageEvent is StringEvent)
+            if (messageEvent.code == 103) {
+                GlideEngine.getInstance()
+                    .loadPhoto(activity, Uri.parse(messageEvent.message), ivMineHead)
+                Log.e("获取路径1", messageEvent.path)
+                val base64Result = FileUtils.imageToBase64(messageEvent.path)
 //            xinghao.setImageBitmap(FileUtils.base64ToBitmap(base64Result))
-            viewModel.uploadHead(base64Result!!)
-        }
+                viewModel.uploadHead(base64Result!!)
+            }
     }
 
 
     companion object {
         fun newInstance() = MineFragment()
+    }
+
+    private val updateUserDialog by lazy {
+        UpdateUserDialog(requireContext())
     }
 }

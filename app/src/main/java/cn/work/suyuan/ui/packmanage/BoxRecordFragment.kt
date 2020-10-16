@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.fragment_home_child.*
 import kotlinx.android.synthetic.main.layout_choose_date.*
 import kotlinx.android.synthetic.main.layout_pack_record_recly_title.*
 import kotlinx.android.synthetic.main.layout_page_action.*
+import kotlinx.android.synthetic.main.layout_search_view.*
 
 /**
  * 装箱记录

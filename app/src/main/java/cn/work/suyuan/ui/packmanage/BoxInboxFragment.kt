@@ -11,23 +11,36 @@ import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
 import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
+import cn.work.suyuan.ui.ScanQrCodeActivity
 import cn.work.suyuan.ui.send.SendPackViewModel
+import cn.work.suyuan.util.DateUtil
+import cn.work.suyuan.util.FileUtils
 import cn.work.suyuan.util.InjectorUtil
-import com.uuzuche.lib_zxing.activity.CaptureActivity
+import kotlinx.android.synthetic.main.fragment_cancel_send.*
 import kotlinx.android.synthetic.main.fragment_pack_manage.*
+import kotlinx.android.synthetic.main.layout_import_file.*
+import kotlinx.android.synthetic.main.layout_import_file.tvImportFile
 import kotlinx.android.synthetic.main.layout_pack_mg.*
 import kotlinx.android.synthetic.main.layout_send_manage_fm.*
 import kotlinx.android.synthetic.main.layout_send_manage_fm.tvActionQr
+import java.io.File
 
 /**
  * 大箱装小箱
  */
-class BoxInboxFragment :BaseFragment() {
+class BoxInboxFragment : BaseFragment() {
     private val viewModel by lazy {
         ViewModelProvider(
             this,
             InjectorUtil.getSendViewModelFactory()
         ).get(SendPackViewModel::class.java)
+    }
+
+    override fun loadDataOnce() {
+        super.loadDataOnce()
+        BigBoxQr2.visibility = View.VISIBLE
+        BigBoxQr.visibility = View.INVISIBLE
+        etBoxQr.hint = "请扫描大箱条码..."
     }
 
     override fun onCreateView(
@@ -40,44 +53,64 @@ class BoxInboxFragment :BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-
         initClicks()
         observer()
     }
 
     private fun observer() {
         viewModel.doPackSingBoxLiveData.observe(viewLifecycleOwner, Observer {
-            val rp = it.getOrNull()?:return@Observer
+            val rp = it.getOrNull() ?: return@Observer
             rp.msg.toast()
+        })
+        viewModel.upLoadFileLiveData.observe(viewLifecycleOwner, Observer {
+            val rp = it.getOrNull() ?: return@Observer
+            rp.msg.toast()
+            if (rp.code == 200)
+                productFile = rp.data
+            tvImportFile.text = "导入文件成功"
         })
     }
 
-
-    override fun loadDataOnce() {
-        super.loadDataOnce()
-        BigBoxQr2.visibility = View.VISIBLE
-        BigBoxQr.visibility = View.INVISIBLE
-        etBoxQr.hint = "请扫描大箱条码..."
-    }
-
+    var productTime = ""
+    var productFile = ""
     private fun initClicks() {
-        setOnClickListener(tvActionQr, BigBoxActionQr, btnDonePack) {
+        setOnClickListener(tvActionQr, BigBoxActionQr, btnDonePack, tvPackTime, llActionImFiles) {
             when (this) {
                 tvActionQr -> {
-                    val intent = Intent(requireContext(), CaptureActivity::class.java)
-                    startActivityForResult(intent, 7777)
+                    ScanQrCodeActivity.start(activity, object : ScanQrCodeActivity.QrCallBack {
+                        override fun qrData(result: String) {
+                            etProductQr.setText(result)
+                        }
+                    })
                 }
-                BigBoxActionQr -> {
-                    val intent = Intent(requireContext(), CaptureActivity::class.java)
-                    startActivityForResult(intent, 9999)
-                }
+                BigBoxActionQr -> ScanQrCodeActivity.start(activity,
+                    object : ScanQrCodeActivity.QrCallBack {
+                        override fun qrData(result: String) {
+                            etBoxQr.setText(result)
+                        }
+                    })
+                tvPackTime -> DateUtil.showDate(activity, true, object : DateUtil.ChooseDate {
+                    override fun getTime(result: String) {
+                        productTime = result
+                        tvPackTime.text = productTime
+                    }
+                })
+                llActionImFiles -> FileUtils.upLoadFiles(activity, fileChooseDialog, object :
+                    FileUtils.CallBackFile {
+                    override fun backFile(file: File) {
+                        viewModel.upLoadFile(file)
+                    }
+
+                })
+
                 btnDonePack -> viewModel.doPackSingBox(
-                    "", "", "2020-10-09 11:05:06",
-                    "/uploads/video/20201009/2f905868d24a13ff66d4c002f8c8d2a5.mp4", 2, ""
+                    etProductQr.text.toString(), etBoxQr.text.toString(), productTime,
+                    productFile, 2, ""
                 )
             }
         }
     }
+
 
     companion object {
         fun newInstance() = BoxInboxFragment()

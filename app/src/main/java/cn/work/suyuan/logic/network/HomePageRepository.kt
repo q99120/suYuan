@@ -21,6 +21,7 @@ import cn.work.suyuan.logic.model.HomeData
 import cn.work.suyuan.logic.model.Model
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.withContext
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
 
 /**
@@ -30,6 +31,12 @@ import okhttp3.RequestBody
  * @since  2020/5/2
  */
 class HomePageRepository private constructor(private val network: SuYuanNetwork) {
+
+    suspend fun upLoadFile(part: MultipartBody.Part)= withContext(Dispatchers.IO){
+        val response = network.upLoadFile(part)
+        response
+    }
+
 
 
    suspend fun getHome(body: RequestBody) = withContext(Dispatchers.IO){

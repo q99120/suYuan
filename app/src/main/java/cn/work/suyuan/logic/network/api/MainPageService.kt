@@ -23,10 +23,14 @@ import cn.work.suyuan.logic.model.TokenData
 import cn.work.suyuan.logic.model.UserInfo
 import cn.work.suyuan.util.APUtils
 import cn.work.suyuan.util.FileUtils
+import com.google.gson.Gson
+import com.google.gson.JsonArray
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONArray
 import org.json.JSONObject
+import org.json.JSONStringer
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Multipart
@@ -62,6 +66,7 @@ interface MainPageService {
 
 
     companion object {
+        val gson = Gson()
         private fun getServiceHead(manageServiceJson: JSONObject, interfaceData: String) {
             manageServiceJson.put("requestId", 2)
             manageServiceJson.put("timestamp", "1592816311")
@@ -104,7 +109,7 @@ interface MainPageService {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.goodsCateDel")
             val param = JSONObject()
-            param.put("id", arrayId)
+            param.put("id",gson.toJson(arrayId))
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }
@@ -174,7 +179,7 @@ interface MainPageService {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.goodsDel")
             val param = JSONObject()
-            param.put("id", arrayId)
+            param.put("id", gson.toJson(arrayId))
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }
@@ -261,7 +266,7 @@ interface MainPageService {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.consignmentInfoDel")
             val param = JSONObject()
-            param.put("arrayId", arrayId)
+            param.put("id", gson.toJson(arrayId))
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }
@@ -341,7 +346,7 @@ interface MainPageService {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.encasementInfoDel")
             val param = JSONObject()
-            param.put("arrayId", arrayId)
+            param.put("id", gson.toJson(arrayId))
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }

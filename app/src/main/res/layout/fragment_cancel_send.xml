@@ -38,8 +38,11 @@
         android:id="@+id/editQrCode"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:text="请填写外箱条码..."
+        android:hint="请填写外箱条码..."
         android:layout_marginStart="60dp"
+        android:padding="10dp"
+        android:gravity="left"
+        android:background="@drawable/shape_edit_bg"
         app:layout_constraintTop_toBottomOf="@+id/tvSendQrTitle"
         android:layout_width="match_parent"
         android:layout_height="100dp"/>
@@ -64,6 +67,7 @@
             android:textSize="16sp" />
 
         <LinearLayout
+            android:id="@+id/btnImportFile"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:layout_marginStart="15dp"
@@ -80,6 +84,7 @@
                 android:src="@mipmap/home_trac_file" />
 
             <TextView
+                android:id="@+id/tvImportFile"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_marginStart="7.5dp"
@@ -123,7 +128,7 @@
         app:layout_constraintBottom_toBottomOf="parent">
 
         <Button
-            android:enabled="false"
+            android:id="@+id/btnCancel"
             android:textSize="16sp"
             android:textColor="@color/white"
             android:layout_marginTop="30dp"

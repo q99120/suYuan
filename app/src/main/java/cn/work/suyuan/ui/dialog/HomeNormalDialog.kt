@@ -39,7 +39,10 @@ class HomeNormalDialog : Dialog {
     }
 
     private fun dialogClicks() {
-        homeNormalClick.dialogClick(etMgName.text.toString(), etSort.text.toString().toInt())
+        if (etMgName.text.isNotEmpty() )
+            if (etMgName.text.isNotEmpty() && etSort.text.isNotEmpty()){
+                homeNormalClick.dialogClick(etMgName.text.toString(), etSort.text.toString().toInt())
+            }
     }
 
     fun action(index: Int, name: String, sort: Int, param: HomeNormalClick) {

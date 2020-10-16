@@ -13,7 +13,9 @@ import cn.work.suyuan.logic.network.HomePageRepository
 import cn.work.suyuan.logic.network.api.MainPageService
 import cn.work.suyuan.util.FileUtils
 import okhttp3.MediaType.*
+import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import java.io.File
 
 
 class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
@@ -90,6 +92,7 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
                 val recommend = repository.deleteProcess(body)
                 Result.success(recommend)
             } catch (e: Exception) {
+                Log.e("返回错误企管科",e.toString())
                 Result.failure<NormalData>(e)
             }
             emit(result)
@@ -177,10 +180,6 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
         return list
     }
 
-    fun setTracing() {
-    }
-
-
     private val uploadHeadRequest = MutableLiveData<String>()
     fun uploadHead(string: String) {
         uploadHeadRequest.value = MainPageService.upLoadHead(string)
@@ -219,6 +218,78 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
             }
             emit(result)
         }}
+
+    /**
+     * 流程追溯
+     */
+    val setTracingRequest = MutableLiveData<String>()
+    fun setTracing(category_id:Int,uname:String,product:String,product_time:String,file:String) {
+        setTracingRequest.value = MainPageService.manageTrace(category_id,uname,product,product_time,file)
+    }
+    val setTracingLiveData  = Transformations.switchMap(setTracingRequest) {
+        liveData {
+            val result = try {
+                val body: RequestBody = RequestBody.create(parse("application/json; charset=utf-8"), it)
+                val recommend = repository.editProcess(body)
+                Result.success(recommend)
+            } catch (e: Exception) {
+                Log.e("获取错误信息",e.toString())
+                Result.failure<NormalData>(e)
+            }
+            emit(result)
+        }}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+    /**
+     * 上传文件
+     */
+    private val upLoadFileRequest = MutableLiveData<MultipartBody.Part>()
+    fun upLoadFile(file: File) {
+        upLoadFileRequest.value = MainPageService.upLoadFile(file)
+    }
+    val upLoadFileLiveData = Transformations.switchMap(upLoadFileRequest) {
+        liveData {
+            val result = try {
+                val recommend = repository.upLoadFile(it)
+                Result.success(recommend)
+            } catch (e: Exception) {
+                Log.e("获取错误", e.toString())
+                Result.failure<NormalData>(e)
+            }
+            emit(result)
+        }
+    }
 
 
 }

@@ -30,6 +30,7 @@ import cn.work.suyuan.common.extensions.logD
 import cn.work.suyuan.event.MessageEvent
 import cn.work.suyuan.event.StringEvent
 import cn.work.suyuan.ui.dialog.EditPackDialog
+import cn.work.suyuan.ui.dialog.FileChooseDialog
 import cn.work.suyuan.ui.dialog.HomeNormalDialog
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
@@ -67,6 +68,9 @@ open class BaseFragment : Fragment(), RequestLifecycle {
      */
     lateinit var activity: Activity
 
+    lateinit var inflater: LayoutInflater
+
+
     /**
      * 日志输出标志
      */
@@ -74,6 +78,8 @@ open class BaseFragment : Fragment(), RequestLifecycle {
 
     override fun onAttach(context: Context) {
         super.onAttach(context)
+        inflater = LayoutInflater.from(context)
+
         // 缓存当前依附的activity
         activity = getActivity()!!
         logD(TAG, "BaseFragment-->onAttach()")
@@ -234,5 +240,8 @@ open class BaseFragment : Fragment(), RequestLifecycle {
         EditPackDialog(requireContext())
     }
 
+     val fileChooseDialog by lazy {
+        FileChooseDialog(requireContext())
+    }
 
 }

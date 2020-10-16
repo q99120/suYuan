@@ -21,6 +21,7 @@ import com.bigkoo.pickerview.view.TimePickerView
 import kotlinx.android.synthetic.main.fragment_home_child.*
 import kotlinx.android.synthetic.main.layout_choose_date.*
 import kotlinx.android.synthetic.main.layout_page_action.*
+import kotlinx.android.synthetic.main.layout_search_view.*
 import kotlinx.android.synthetic.main.layoutadtitle.*
 
 /**

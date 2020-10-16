@@ -31,7 +31,7 @@
         android:padding="25dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="取消"
+        android:text="确认"
         android:textColor="#ff007cff"
         android:textSize="16sp"
         />

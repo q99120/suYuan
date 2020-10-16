@@ -20,6 +20,7 @@ import cn.work.suyuan.util.FileUtils
 import cn.work.suyuan.util.InjectorUtil
 import cn.work.suyuan.util.SinglePopUtil
 import kotlinx.android.synthetic.main.fragment_send_manage.*
+import kotlinx.android.synthetic.main.layout_import_file.*
 import kotlinx.android.synthetic.main.layout_send_manage_fm.*
 import java.io.File
 
@@ -64,47 +65,16 @@ class SingleSendFragment : BaseFragment() {
                 tvChooseProduct -> {
                     viewModel.getProduct()
                 }
-                llActionImFiles -> {
-                    fileChooseDialog.setData(MainPageService.getFileType(),
-                        object : FileChooseDialog.FileClick {
-                            override fun fileClick(fileName: String, filePath: String) {
-                                val list = FileUtils.queryFiles(activity, fileName)
-                                fileChooseDialog.setData(list, object : FileChooseDialog.FileClick {
-                                    override fun fileClick(fileName: String, filePath: String) {
-                                        Log.e("选择了文件",fileName)
-                                        val file = File(filePath)
-                                        viewModel.upLoadFile(file)
-                                    }
-
-                                })
-                            }
-
-                        })
-//                    FileUtils.queryFiles(activity)
-                }
-//                    fileChooseDialog.setData(FileUtils.queryFiles(),object :FileChooseDialog.FileClick{
-//                        override fun fileClick(fileName: String, filePath: String) {
-//                            tvFileName.text = fileName
-//                            val file = File(filePath)
-//                            Log.e("获取filepath",file.absolutePath)
-//                            viewModel.upLoadFile(file)
-//                        }
-//
-//                    })
+                llActionImFiles -> FileUtils.upLoadFiles(activity,fileChooseDialog,object :FileUtils.CallBackFile{
+                        override fun backFile(file: File) { viewModel.upLoadFile(file) } })
                 btnSend -> {
-                    viewModel.sendProduct(
-                        1,
-                        productId,
-                        distributorId,
-                        productCode,
-                        productTime,
-                        productFile
-                    )
+                    viewModel.sendProduct(1, productId, distributorId, productCode, productTime, productFile)
                 }
                 tvTracingTime -> {
                     DateUtil.showDate(activity, true, object : DateUtil.ChooseDate {
                         override fun getTime(result: String) {
                             tvTracingTime.text = result
+                            productTime = result
                         }
                     }
                     )
@@ -151,9 +121,10 @@ class SingleSendFragment : BaseFragment() {
         viewModel.upLoadFileLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
             rp.msg.toast()
-            Log.e("火球环境1", rp.msg.toString())
-            Log.e("火球环境2", rp.code.toString())
-//            Log.e("火球环境3",rp.data.toString())
+            if (rp.code == 200)
+                productFile = rp.data.toString()
+            tvImportFile.text = "导入文件成功"
+
 
         })
     }
@@ -168,9 +139,7 @@ class SingleSendFragment : BaseFragment() {
         fun newInstance() = SingleSendFragment()
     }
 
-    private val fileChooseDialog by lazy {
-        FileChooseDialog(requireContext())
-    }
+
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {

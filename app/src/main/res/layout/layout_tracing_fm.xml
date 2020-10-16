@@ -108,10 +108,15 @@
         android:layout_width="0dp"
         android:layout_height="100dp"
         android:layout_marginTop="10dp"
+        android:padding="10dp"
+        android:gravity="left"
         android:hint="请填写外箱条码..."
+        android:background="@drawable/shape_edit_bg"
         app:layout_constraintLeft_toLeftOf="@+id/viewLine"
         app:layout_constraintRight_toRightOf="@+id/tvActionQr"
         app:layout_constraintTop_toBottomOf="@+id/tvActionQr" />
+
+
 
 
     <TextView
@@ -153,53 +158,14 @@
         android:background="#F0F0F0"
         app:layout_constraintTop_toBottomOf="@+id/tvTracingTime" />
 
-    <LinearLayout
-        android:id="@+id/llActionImFile"
-        android:layout_width="wrap_content"
+    <include
+        android:id="@+id/layoutImportFile"
+        layout="@layout/layout_import_file"
+        android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:layout_marginStart="60dp"
         android:layout_marginTop="25dp"
-        android:gravity="center_vertical"
-        app:layout_constraintLeft_toLeftOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/viewLine2">
-
-
-        <TextView
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="导入文件"
-            android:textColor="#ff202020"
-            android:textSize="16sp" />
-
-        <LinearLayout
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="15dp"
-            android:background="@drawable/shape_import_file"
-            android:gravity="center_vertical"
-            android:paddingTop="15dp"
-            android:paddingBottom="15dp">
-
-
-            <ImageView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:paddingStart="20dp"
-                android:src="@mipmap/home_trac_file" />
-
-            <TextView
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:layout_marginStart="7.5dp"
-                android:paddingEnd="18dp"
-                android:text="导入文件"
-                android:textColor="@color/white"
-                android:textSize="14sp" />
-
-        </LinearLayout>
-
-
-    </LinearLayout>
+        app:layout_constraintTop_toBottomOf="@+id/viewLine2" />
 
     <LinearLayout
         android:layout_width="0dp"
@@ -208,9 +174,9 @@
         android:layout_marginEnd="20dp"
         android:background="#F4F9FF"
         android:padding="11dp"
-        app:layout_constraintLeft_toLeftOf="@+id/llActionImFile"
+        app:layout_constraintLeft_toLeftOf="@+id/layoutImportFile"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/llActionImFile">
+        app:layout_constraintTop_toBottomOf="@+id/layoutImportFile">
 
         <TextView
             android:layout_width="wrap_content"

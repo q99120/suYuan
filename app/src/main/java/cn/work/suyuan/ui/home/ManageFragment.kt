@@ -18,6 +18,7 @@ import cn.work.suyuan.event.RefreshEvent
 import cn.work.suyuan.ui.adapter.HomeNormalAdapter
 import cn.work.suyuan.ui.dialog.HomeNormalDialog
 import cn.work.suyuan.util.InjectorUtil
+import cn.work.suyuan.util.NormalUi
 import kotlinx.android.synthetic.main.fragment_home_child.*
 import kotlinx.android.synthetic.main.layout_page_action.*
 import kotlinx.android.synthetic.main.layoutadtitle.*
@@ -109,9 +110,11 @@ class ManageFragment : BaseFragment() {
                         for (m in mapId) {
                             lists.add(m.value)
                         }
-                        for (l in 0 until lists.size){
-                            arrayId[l] = lists[l]
+
+                        for (i in 0 until lists.size){
+                            arrayId[i] = lists[i]
                         }
+
                         viewModel.deleteProcess(arrayId)
                     } else "请先勾选".toast()
                 }
@@ -137,8 +140,7 @@ class ManageFragment : BaseFragment() {
         viewModel.dataListLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
             val response = rp.data
-            if (response.isNotEmpty()) homeAdapter.setList(response)
-            Log.e("获取发挥的结果", it.toString())
+            if (response.isNotEmpty()) homeAdapter.setList(response) else NormalUi.getEmptyDataView(homeMgRecycler,inflater)
         })
 
         viewModel.addProcessLiveData.observe(viewLifecycleOwner, Observer {
@@ -159,6 +161,7 @@ class ManageFragment : BaseFragment() {
         //删除流程
         viewModel.deleteProcessLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
+            Log.e("删除流程",rp.msg.toString())
             homeAdapter.setCheckVis(false)
             rp.msg.toast()
             mapId.clear()

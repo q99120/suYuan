@@ -130,6 +130,18 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
     fun upLoadFile(file: File) {
         upLoadFileRequest.value = MainPageService.upLoadFile(file)
     }
+    val upLoadFileLiveData = Transformations.switchMap(upLoadFileRequest) {
+        liveData {
+            val result = try {
+                val recommend = repository.upLoadFile(it)
+                Result.success(recommend)
+            } catch (e: Exception) {
+                Log.e("获取错误", e.toString())
+                Result.failure<NormalData>(e)
+            }
+            emit(result)
+        }
+    }
 
     /**
      * 装箱单独
@@ -161,18 +173,7 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
         }
     }
 
-    val upLoadFileLiveData = Transformations.switchMap(upLoadFileRequest) {
-        liveData {
-            val result = try {
-                val recommend = repository.upLoadFile(it)
-                Result.success(recommend)
-            } catch (e: Exception) {
-                Log.e("获取错误", e.toString())
-                Result.failure<NormalData>(e)
-            }
-            emit(result)
-        }
-    }
+
 
     /*
   *外箱列表
@@ -235,6 +236,7 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
     fun deleteBoxRecord(arrayId: Array<Int?>) {
         deleteRequest.value = MainPageService.deletePackRecord(arrayId)
     }
+
     val deleteRecordLiveData = Transformations.switchMap(deleteRequest) {
         liveData {
             val result = try {
@@ -245,6 +247,50 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
             } catch (e: Exception) {
                 Log.e("获取错误", e.toString())
                 Result.failure<TokenData>(e)
+            }
+            emit(result)
+        }
+    }
+
+    /**
+     * 取消发货记录
+     */
+    private val cancelSendRequest = MutableLiveData<String>()
+    fun cancelSendPack(level: Int, product: String, productTime: String, productFile: String) {
+        cancelSendRequest.value = MainPageService.sendCancel(level,product,productTime,productFile)
+    }
+    val cancelSendLiveData = Transformations.switchMap(cancelSendRequest) {
+        liveData {
+            val result = try {
+                val body: RequestBody =
+                    RequestBody.create(MediaType.parse("application/json; charset=utf-8"), it)
+                val recommend = repository.doPackOne(body)
+                Result.success(recommend)
+            } catch (e: Exception) {
+                Log.e("获取错误", e.toString())
+                Result.failure<NormalData>(e)
+            }
+            emit(result)
+        }}
+
+    /**
+     * 删除发货记录
+     */
+    val deleteSendRequest = MutableLiveData<String>()
+    fun deleteSendRecord(arrayId: Array<Int?>) {
+        deleteSendRequest.value = MainPageService.deleteDeliveryRecord(arrayId)
+    }
+
+    val deleteSendRecordLiveData = Transformations.switchMap(deleteSendRequest) {
+        liveData {
+            val result = try {
+                val body: RequestBody =
+                    RequestBody.create(MediaType.parse("application/json; charset=utf-8"), it)
+                val recommend = repository.doPackOne(body)
+                Result.success(recommend)
+            } catch (e: Exception) {
+                Log.e("获取错误", e.toString())
+                Result.failure<NormalData>(e)
             }
             emit(result)
         }

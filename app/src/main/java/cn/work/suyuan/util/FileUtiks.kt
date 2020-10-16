@@ -12,7 +12,10 @@ import android.text.TextUtils
 import android.util.Base64
 import android.util.Log
 import androidx.core.app.ActivityCompat.startActivityForResult
+import cn.work.suyuan.logic.network.api.MainPageService
 import cn.work.suyuan.ui.MainActivity
+import cn.work.suyuan.ui.dialog.FileChooseDialog
+import java.io.File
 import java.io.FileInputStream
 import java.io.IOException
 import java.io.InputStream
@@ -48,7 +51,8 @@ object FileUtils {
     private fun queryCsv(contentResolver: ContentResolver, type: String) {
         val cursor: Cursor = contentResolver.query(
             MediaStore.Files.getContentUri("external"),
-            projection, MediaStore.Files.FileColumns.DATA + " like ?", arrayOf(type), null)!!
+            projection, MediaStore.Files.FileColumns.DATA + " like ?", arrayOf(type), null
+        )!!
 
         if (cursor.moveToFirst()) {
             val idIndex: Int = cursor
@@ -106,9 +110,38 @@ object FileUtils {
         }
         return "data:image/png;base64,$result"
     }
+
     fun base64ToBitmap(base64Data: String?): Bitmap? {
         val bytes = Base64.decode(base64Data, Base64.DEFAULT)
         return BitmapFactory.decodeByteArray(bytes, 0, bytes.size)
+    }
+
+    private var fileBack: CallBackFile? = null
+    fun upLoadFiles(
+        context: Context,
+        fileChooseDialog: FileChooseDialog,
+        callBackFile: FileUtils.CallBackFile
+    ) {
+        fileBack = callBackFile
+        fileChooseDialog.setData(1, MainPageService.getFileType(),
+            object : FileChooseDialog.FileClick {
+                override fun fileClick(fileName: String, filePath: String) {
+                    val list = queryFiles(context, fileName)
+                    fileChooseDialog.setData(2, list, object : FileChooseDialog.FileClick {
+                        override fun fileClick(fileName: String, filePath: String) {
+                            Log.e("选择了文件", fileName)
+                            val file = File(filePath)
+                            callBackFile.backFile(file)
+                        }
+
+                    })
+                }
+
+            })
+    }
+
+    interface CallBackFile {
+        fun backFile(file: File)
     }
 
 
