@@ -296,4 +296,27 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
         }
     }
 
+    /**
+     * 批量发货
+     */
+    private val batchSendRequest = MutableLiveData<String>()
+    fun batchSend(product_id:Int,agent_id:Int,product:Array<String>,product_time:String,file:String,level:Int) {
+        batchSendRequest.value = MainPageService.batchSend(product_id,agent_id,product,product_time,file,level)
+    }
+
+    val batchSendLiveData = Transformations.switchMap(batchSendRequest) {
+        liveData {
+            val result = try {
+                val body: RequestBody =
+                    RequestBody.create(MediaType.parse("application/json; charset=utf-8"), it)
+                val recommend = repository.doPackOne(body)
+                Result.success(recommend)
+            } catch (e: Exception) {
+                Log.e("获取错误", e.toString())
+                Result.failure<NormalData>(e)
+            }
+            emit(result)
+        }
+    }
+
 }

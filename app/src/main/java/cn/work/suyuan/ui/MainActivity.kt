@@ -11,6 +11,7 @@ import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
 import android.provider.MediaStore.MediaColumns
+import android.provider.Settings
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentManager
@@ -19,15 +20,20 @@ import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
+import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseActivity
 import cn.work.suyuan.event.RefreshEvent
 import cn.work.suyuan.event.StringEvent
 import cn.work.suyuan.ui.home.HomePageFragment
+import cn.work.suyuan.ui.home.HomeViewModel
 import cn.work.suyuan.ui.mine.MineFragment
 import cn.work.suyuan.ui.packmanage.PackManageFragment
 import cn.work.suyuan.ui.send.SendManageFragment
 import cn.work.suyuan.ui.send.SendPackViewModel
+import cn.work.suyuan.util.ActivityCollector.removeAll
 import cn.work.suyuan.util.InjectorUtil
+import cn.work.suyuan.util.NormalUi
+import cn.work.suyuan.widget.GlideEngine
 import com.huantansheng.easyphotos.EasyPhotos
 import com.huantansheng.easyphotos.models.album.entity.Photo
 import kotlinx.android.synthetic.main.activity_main.*
@@ -37,9 +43,17 @@ import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
 import java.io.File
 import java.util.ArrayList
+import kotlin.system.exitProcess
 
 
 class MainActivity : BaseActivity() {
+    private val viewModel by lazy {
+        ViewModelProvider(
+            this,
+            InjectorUtil.getHomeViewModelFactory()
+        ).get(HomeViewModel::class.java)
+    }
+
     private val fragmentManager: FragmentManager by lazy { supportFragmentManager }
 
     private var homePageFragment: HomePageFragment? = null
@@ -51,15 +65,22 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        viewModel.getUser()
+        observer()
+    }
+
+    private fun observer() {
+        viewModel.userLiveData.observe(this, Observer {
+           val rp = it.getOrNull()?:return@Observer
+            val response = rp.data
+            tvUserName.text = response.nickname
+            GlideEngine.getInstance().loadPhoto(this,Uri.parse(response.cover),ivUserHead)
+        })
     }
 
 
     override fun setupViews() {
         super.setupViews()
-        viewModel.upLoadFileLiveData.observe(this, Observer {
-            val rp = it.getOrNull() ?: return@Observer
-            Log.e("黄金时代婚纱", rp.msg.toString())
-        })
         setTabSelection(0)
         setOnClickListener(ll_home, ll_pack, ll_send, ll_mine) {
             when (this) {
@@ -266,13 +287,6 @@ class MainActivity : BaseActivity() {
         }
     }
 
-
-    private val viewModel by lazy {
-        ViewModelProvider(
-            this,
-            InjectorUtil.getSendViewModelFactory()
-        ).get(SendPackViewModel::class.java)
-    }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
         if (data == null) return
@@ -308,5 +322,26 @@ class MainActivity : BaseActivity() {
         cursor.close()
         return filePath
     }
+
+    override fun onBackPressed() {
+        if (supportFragmentManager.backStackEntryCount > 0) {
+            supportFragmentManager.popBackStack()
+        } else {
+            processBackPressed()
+        }
+    }
+    private var backPressTime = 0L
+
+    private fun processBackPressed() {
+        val now = System.currentTimeMillis()
+        if (now - backPressTime > 2000) {
+            String.format(getString(R.string.press_again_to_exit), NormalUi.appName).toast()
+            backPressTime = now
+        } else {
+            removeAll()
+            super.onBackPressed()
+        }
+    }
+
 
 }

@@ -33,6 +33,7 @@ class LoginActivity:BaseActivity() {
                 val token = rp.data.token
                 APUtils.putString("tokens",token)
                 MainActivity.start(this)
+                finish()
             }
 
         })

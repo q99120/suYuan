@@ -24,13 +24,10 @@ import cn.work.suyuan.logic.model.UserInfo
 import cn.work.suyuan.util.APUtils
 import cn.work.suyuan.util.FileUtils
 import com.google.gson.Gson
-import com.google.gson.JsonArray
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
-import org.json.JSONArray
 import org.json.JSONObject
-import org.json.JSONStringer
 import retrofit2.Call
 import retrofit2.http.Body
 import retrofit2.http.Multipart
@@ -367,12 +364,6 @@ interface MainPageService {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.comFile")
             val param = JSONObject()
-            //这里对文件进行base64编码
-//            val bStream = ByteArrayOutputStream()
-//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream)
-//            val bytes = bStream.toByteArray()
-//            val str = Base64.encodeToString(bytes, Base64.NO_WRAP)
-            Log.e("文件编码",string)
             param.put("file", string)
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
@@ -389,6 +380,30 @@ interface MainPageService {
                 list.add(bean)
             }
             return list
+        }
+
+        /**
+         * 批量发货
+         */
+        fun batchSend(
+            product_id: Int,
+            agent_id: Int,
+            product: Array<String>,
+            product_time: String,
+            file: String,
+            level: Int
+        ): String {
+            val manageServiceJson = JSONObject()
+            getServiceHead(manageServiceJson, "shop.consignmentAddAll")
+            val param = JSONObject()
+            param.put("product_id", product_id)
+            param.put("agent_id", agent_id)
+            param.put("product", gson.toJson(product))
+            param.put("product_time", product_time)
+            param.put("file", file)
+            param.put("level", level)
+            manageServiceJson.put("param", param)
+            return manageServiceJson.toString()
         }
 
 

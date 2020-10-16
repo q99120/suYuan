@@ -67,7 +67,7 @@ class BatchSendFragment: BaseFragment(){
                     FileUtils.CallBackFile{
                     override fun backFile(file: File) { viewModel.upLoadFile(file) } })
                 btnSend -> {
-                    viewModel.sendProduct(2, productId, distributorId, productCode, productTime, productFile)
+//                    viewModel.batchSend(productId, agentId, distributorId, productCode, productTime, productFile)
                 }
                 tvTracingTime -> {
                     DateUtil.showDate(activity, true, object : DateUtil.ChooseDate {
@@ -83,7 +83,7 @@ class BatchSendFragment: BaseFragment(){
     }
 
     private var productId = -1
-    private var distributorId = -1
+    private var agentId = -1
     private var productCode = ""
     private var productTime = ""
     private var productFile = ""
@@ -93,7 +93,7 @@ class BatchSendFragment: BaseFragment(){
             val popUtil = SinglePopUtil(requireContext(), object : SinglePopUtil.popClick {
                 override fun clickPop(type: String, pi: Int) {
                     tvChooseDistributor.text = type
-                    distributorId = pi
+                    agentId = pi
                 }
 
             })
