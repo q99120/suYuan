@@ -1,26 +1,19 @@
 package cn.work.suyuan.ui.send
 
-import android.R.attr
-import android.R.attr.path
 import android.app.Activity
-import android.content.Context
 import android.content.Intent
-import android.net.Uri
-import android.os.Build
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import android.widget.Toast
-import androidx.annotation.RequiresApi
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
 import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
-import cn.work.suyuan.ui.MainActivity
+import cn.work.suyuan.logic.network.api.MainPageService
 import cn.work.suyuan.ui.dialog.FileChooseDialog
 import cn.work.suyuan.util.DateUtil
 import cn.work.suyuan.util.FileUtils
@@ -28,6 +21,7 @@ import cn.work.suyuan.util.InjectorUtil
 import cn.work.suyuan.util.SinglePopUtil
 import kotlinx.android.synthetic.main.fragment_send_manage.*
 import kotlinx.android.synthetic.main.layout_send_manage_fm.*
+import java.io.File
 
 
 class SingleSendFragment : BaseFragment() {
@@ -71,7 +65,22 @@ class SingleSendFragment : BaseFragment() {
                     viewModel.getProduct()
                 }
                 llActionImFiles -> {
-                    FileUtils.searchFile(activity)
+                    fileChooseDialog.setData(MainPageService.getFileType(),
+                        object : FileChooseDialog.FileClick {
+                            override fun fileClick(fileName: String, filePath: String) {
+                                val list = FileUtils.queryFiles(activity, fileName)
+                                fileChooseDialog.setData(list, object : FileChooseDialog.FileClick {
+                                    override fun fileClick(fileName: String, filePath: String) {
+                                        Log.e("选择了文件",fileName)
+                                        val file = File(filePath)
+                                        viewModel.upLoadFile(file)
+                                    }
+
+                                })
+                            }
+
+                        })
+//                    FileUtils.queryFiles(activity)
                 }
 //                    fileChooseDialog.setData(FileUtils.queryFiles(),object :FileChooseDialog.FileClick{
 //                        override fun fileClick(fileName: String, filePath: String) {

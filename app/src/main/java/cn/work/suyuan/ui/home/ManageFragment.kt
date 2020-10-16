@@ -48,7 +48,7 @@ class ManageFragment : BaseFragment() {
         super.onActivityCreated(savedInstanceState)
         homeMgRecycler.layoutManager = LinearLayoutManager(requireContext())
         homeMgRecycler.adapter = homeAdapter
-        ll_date.visibility = View.GONE
+        layout_choose_date.visibility = View.GONE
         iv_action1.setImageResource(R.mipmap.action_add)
         iv_action2.setImageResource(R.mipmap.action_edit)
         iv_action3.setImageResource(R.mipmap.action_delete)

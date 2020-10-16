@@ -28,6 +28,7 @@ import androidx.fragment.app.Fragment
 import cn.work.suyuan.common.callback.RequestLifecycle
 import cn.work.suyuan.common.extensions.logD
 import cn.work.suyuan.event.MessageEvent
+import cn.work.suyuan.event.StringEvent
 import cn.work.suyuan.ui.dialog.EditPackDialog
 import cn.work.suyuan.ui.dialog.HomeNormalDialog
 import org.greenrobot.eventbus.EventBus

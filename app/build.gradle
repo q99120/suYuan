@@ -44,6 +44,10 @@ dependencies {
     implementation 'androidx.appcompat:appcompat:1.2.0'
     implementation 'androidx.constraintlayout:constraintlayout:2.0.2'
     implementation 'androidx.camera:camera-camera2:1.0.0-beta10'
+//    implementation project(':easyPhotos')
+
+
+
     testImplementation 'junit:junit:4.13'
     androidTestImplementation 'androidx.test.ext:junit:1.1.2'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.3.0'
@@ -92,7 +96,8 @@ dependencies {
 
     implementation 'com.contrarywind:Android-PickerView:4.1.9'
 
-    implementation 'com.leon:lfilepickerlibrary:1.8.0'
+//    implementation 'com.leon:lfilepickerlibrary:1.8.0'
+    implementation 'com.github.HuanTanSheng:EasyPhotos:3.0.6'
 
 
 

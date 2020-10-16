@@ -6,6 +6,7 @@ import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
 import android.database.Cursor
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
 import android.provider.MediaStore
@@ -20,17 +21,22 @@ import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
 import cn.work.suyuan.common.ui.BaseActivity
 import cn.work.suyuan.event.RefreshEvent
+import cn.work.suyuan.event.StringEvent
 import cn.work.suyuan.ui.home.HomePageFragment
 import cn.work.suyuan.ui.mine.MineFragment
 import cn.work.suyuan.ui.packmanage.PackManageFragment
 import cn.work.suyuan.ui.send.SendManageFragment
 import cn.work.suyuan.ui.send.SendPackViewModel
 import cn.work.suyuan.util.InjectorUtil
+import com.huantansheng.easyphotos.EasyPhotos
+import com.huantansheng.easyphotos.models.album.entity.Photo
 import kotlinx.android.synthetic.main.activity_main.*
 import kotlinx.android.synthetic.main.layout_bottom_navigation_bar.*
 import org.greenrobot.eventbus.EventBus
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
+import java.io.File
+import java.util.ArrayList
 
 
 class MainActivity : BaseActivity() {
@@ -269,12 +275,19 @@ class MainActivity : BaseActivity() {
     }
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
         super.onActivityResult(requestCode, resultCode, data)
+        if (data == null) return
         if (resultCode == Activity.RESULT_OK) {
             if (requestCode == 1007){
                 Log.e("12121", data.toString())
-                if (data!=null){
                     val uri: Uri = data.data!!
                     val path = getFilePathFromContentUri(uri,contentResolver)
+            }
+            if (requestCode == 103){
+
+                val resultPhotos: ArrayList<Photo>? =
+                    data.getParcelableArrayListExtra(EasyPhotos.RESULT_PHOTOS)
+                for (f in resultPhotos!!) {
+                    EventBus.getDefault().post(StringEvent(103,f.uri.toString(),f.path))
                 }
             }
         }

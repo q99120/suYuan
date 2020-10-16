@@ -24,7 +24,7 @@
                 android:id="@+id/ivCheckTitle"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginStart="13dp"
+                android:layout_marginStart="30dp"
                 android:src="@mipmap/uncheck" />
 
 
@@ -86,17 +86,23 @@
 
         </LinearLayout>
 
+        <View
+            android:background="#F0F0F0"
+            android:layout_width="match_parent"
+            android:layout_height="1dp"/>
+
         <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/recyclerPackList"
             android:background="@color/white"
             android:layout_marginEnd="20dp"
-            android:layout_marginStart="13dp"
+            android:layout_marginStart="30dp"
             android:layout_width="match_parent"
             android:layout_height="0dp"
             android:layout_weight="1"/>
 
         <TextView
             android:layout_marginTop="20dp"
-            android:layout_marginStart="13dp"
+            android:layout_marginStart="30dp"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="共6条记录"

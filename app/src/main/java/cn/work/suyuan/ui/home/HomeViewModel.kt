@@ -178,8 +178,47 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
     }
 
     fun setTracing() {
-        TODO("Not yet implemented")
     }
+
+
+    private val uploadHeadRequest = MutableLiveData<String>()
+    fun uploadHead(string: String) {
+        uploadHeadRequest.value = MainPageService.upLoadHead(string)
+    }
+    val uploadHeadLiveData  = Transformations.switchMap(uploadHeadRequest) {
+        liveData {
+            val result = try {
+                val body: RequestBody = RequestBody.create(parse("application/json; charset=utf-8"), it)
+                val recommend = repository.getUser(body)
+                Result.success(recommend)
+            } catch (e: Exception) {
+                Log.e("获取错误信息",e.toString())
+                Result.failure<UserInfo>(e)
+            }
+            emit(result)
+        }
+    }
+
+
+    /**
+     * 修改用户信息
+     */
+    private val updateUserRequest = MutableLiveData<String>()
+    fun updateUser(type: Int, cover: Int, nickName: String, sex: Int, descs: String, age: Int) {
+        updateUserRequest.value = MainPageService.updateUserInfo(type,cover,nickName,sex,descs,age)
+    }
+    val updateUserLiveData  = Transformations.switchMap(updateUserRequest) {
+        liveData {
+            val result = try {
+                val body: RequestBody = RequestBody.create(parse("application/json; charset=utf-8"), it)
+                val recommend = repository.editProcess(body)
+                Result.success(recommend)
+            } catch (e: Exception) {
+                Log.e("获取错误信息",e.toString())
+                Result.failure<NormalData>(e)
+            }
+            emit(result)
+        }}
 
 
 }

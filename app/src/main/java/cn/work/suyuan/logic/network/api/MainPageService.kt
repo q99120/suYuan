@@ -16,20 +16,23 @@
 
 package cn.work.suyuan.logic.network.api
 
-import androidx.lifecycle.MutableLiveData
+import android.util.Log
 import cn.work.suyuan.logic.model.HomeData
 import cn.work.suyuan.logic.model.NormalData
 import cn.work.suyuan.logic.model.TokenData
 import cn.work.suyuan.logic.model.UserInfo
 import cn.work.suyuan.util.APUtils
+import cn.work.suyuan.util.FileUtils
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
 import org.json.JSONObject
 import retrofit2.Call
-import retrofit2.http.*
+import retrofit2.http.Body
+import retrofit2.http.Multipart
+import retrofit2.http.POST
+import retrofit2.http.Part
 import java.io.File
-import java.util.*
 
 /**
  * 主页界面，主要包含：（首页，社区，通知，我的）对应的 API 接口。
@@ -266,11 +269,11 @@ interface MainPageService {
         //修改用户信息
         fun updateUserInfo(
             type: Int,
-            cover: String,
+            cover: Int,
             nickname: String,
-            sex: String,
+            sex: Int,
             descs: String,
-            age: String
+            age: Int
         ): String? {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.editUserInfo")
@@ -355,14 +358,32 @@ interface MainPageService {
         /**
          * 上传头像
          */
-        fun upLoadHead(file: File): String {
+        fun upLoadHead(string: String): String {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.comFile")
             val param = JSONObject()
             //这里对文件进行base64编码
-            param.put("file", file)
+//            val bStream = ByteArrayOutputStream()
+//            bitmap.compress(Bitmap.CompressFormat.PNG, 100, bStream)
+//            val bytes = bStream.toByteArray()
+//            val str = Base64.encodeToString(bytes, Base64.NO_WRAP)
+            Log.e("文件编码",string)
+            param.put("file", string)
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
+        }
+
+
+        //获取生产流程
+        val array1 = arrayOf("txt","xls","xlsx","csv")
+        val array2 = arrayOf("1","2","3","4")
+        fun getFileType(): MutableList<FileUtils.FileParam> {
+            val list = mutableListOf<FileUtils.FileParam>()
+            for (a in array1.indices){
+                val bean = FileUtils.FileParam(array1[a], array2[a])
+                list.add(bean)
+            }
+            return list
         }
 
 

@@ -1,30 +1,26 @@
 package cn.work.suyuan.ui.mine
 
+import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
-import androidx.core.net.toUri
-import androidx.fragment.app.Fragment
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import cn.work.suyuan.R
+import cn.work.suyuan.common.extensions.setOnClickListener
+import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
-import cn.work.suyuan.common.ui.BaseViewPagerFragment
 import cn.work.suyuan.event.MessageEvent
-import cn.work.suyuan.event.RefreshEvent
-import cn.work.suyuan.event.SwitchPagesEvent
-import cn.work.suyuan.logic.model.TabEntity
+import cn.work.suyuan.event.StringEvent
 import cn.work.suyuan.ui.home.HomeViewModel
-import cn.work.suyuan.ui.home.ManageFragment
-import cn.work.suyuan.ui.home.TraceabilityFragment
-import cn.work.suyuan.ui.home.TracingFragment
+import cn.work.suyuan.util.FileUtils
 import cn.work.suyuan.util.InjectorUtil
 import cn.work.suyuan.widget.GlideEngine
-import com.flyco.tablayout.listener.CustomTabEntity
+import com.huantansheng.easyphotos.EasyPhotos
 import kotlinx.android.synthetic.main.fragment_mine.*
-import org.greenrobot.eventbus.EventBus
 
 class MineFragment: BaseFragment() {
 
@@ -42,7 +38,21 @@ class MineFragment: BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewModel.getUser()
+        initView()
         observer()
+    }
+
+    private fun initView() {
+
+        setOnClickListener(llEditHead){
+            when(this){
+                llEditHead->{
+                    EasyPhotos.createAlbum(activity,true,GlideEngine.getInstance()).
+                    setFileProviderAuthority("cn.work.suyuan.fileprovider")
+                        .start(103)
+                }
+            }
+        }
     }
 
     private fun observer() {
@@ -56,6 +66,36 @@ class MineFragment: BaseFragment() {
             GlideEngine.getInstance().loadPhoto(requireContext(),
                 Uri.parse(userData.cover),ivMineHead)
         })
+
+        viewModel.uploadHeadLiveData.observe(viewLifecycleOwner, Observer {
+            val rp = it.getOrNull()?:return@Observer
+            Log.e("获取id11",rp.msg.toString())
+            rp.msg.toast()
+            if (rp.code == 200){
+                updateUser(1,rp.data.lid.toInt(),"",0,"",0) }
+        })
+        viewModel.updateUserLiveData.observe(viewLifecycleOwner, Observer {
+            val rp = it.getOrNull()?:return@Observer
+            rp.msg.toast()
+        })
+
+
+    }
+
+    private fun updateUser(type: Int,cover:Int,nickName:String,sex:Int,descs:String,age:Int) {
+         viewModel.updateUser(type,cover,nickName,sex,descs,age)
+    }
+
+    override fun onMessageEvent(messageEvent: MessageEvent) {
+        super.onMessageEvent(messageEvent)
+        if (messageEvent is StringEvent )
+        if (messageEvent.code == 103) {
+            GlideEngine.getInstance().loadPhoto(activity,Uri.parse(messageEvent.message),ivMineHead)
+            Log.e("获取路径1",messageEvent.path)
+            val base64Result = FileUtils.imageToBase64(messageEvent.path)
+//            xinghao.setImageBitmap(FileUtils.base64ToBitmap(base64Result))
+            viewModel.uploadHead(base64Result!!)
+        }
     }
 
 

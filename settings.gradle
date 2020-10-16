@@ -1,2 +1,3 @@
+include ':easyPhotos'
 include ':app'
 rootProject.name = "ShuoYuan"

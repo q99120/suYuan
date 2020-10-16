@@ -19,6 +19,7 @@ import cn.work.suyuan.util.InjectorUtil
 import com.bigkoo.pickerview.builder.TimePickerBuilder
 import com.bigkoo.pickerview.view.TimePickerView
 import kotlinx.android.synthetic.main.fragment_home_child.*
+import kotlinx.android.synthetic.main.layout_choose_date.*
 import kotlinx.android.synthetic.main.layout_page_action.*
 import kotlinx.android.synthetic.main.layoutadtitle.*
 
@@ -56,7 +57,7 @@ class TraceabilityFragment : BaseFragment() {
         tvTitle4.text = "操作人"
         tvTitle5.text = "生产时间"
 
-        ll_date.visibility = View.VISIBLE
+        layout_choose_date.visibility = View.VISIBLE
        observer()
     }
 
@@ -70,12 +71,12 @@ class TraceabilityFragment : BaseFragment() {
         pickerView1 = TimePickerBuilder(activity)
         { date, v ->
             startTime =  DateUtil.getDateAndTime(date.time)
-            tvChooseStartTime.text = DateUtil.getDateAndTime(date.time)
+            tvChooseDateLeft.text = DateUtil.getDateAndTime(date.time)
         }.isCenterLabel(true).setType(pickArray).build()
         pickerView2 = TimePickerBuilder(activity)
         { date, v ->
             endTime =  DateUtil.getDateAndTime(date.time)
-            tvEndTime.text = DateUtil.getDateAndTime(date.time)
+            tvChooseDateRight.text = DateUtil.getDateAndTime(date.time)
         }.isCenterLabel(true).setType(pickArray).build()
 
         traceAdapter.addChildClickViewIds(R.id.ivCheckOut)
@@ -96,7 +97,7 @@ class TraceabilityFragment : BaseFragment() {
         }
 
 
-        setOnClickListener(llAction1, llAction2, llAction3,rlStartTime,rlEndDate,tv_search) {
+        setOnClickListener(llAction1, llAction2, llAction3,llChooseDateLeft,llChooseDateRight,tv_search) {
             arrayId = arrayOfNulls(mapId.size)
             when (this) {
                 llAction1 -> { traceRefresh()}
@@ -109,8 +110,8 @@ class TraceabilityFragment : BaseFragment() {
                         viewModel.deleteTrace(arrayId)
                     } else "请先勾选".toast()
                 }
-                rlStartTime->{ pickerView1.show() }
-               rlEndDate->{pickerView2.show()}
+                llChooseDateLeft->{ pickerView1.show() }
+                llChooseDateRight->{pickerView2.show()}
                 tv_search->{
                     page = 1
                     viewModel.getTrace(startTime,endTime,edit_search_bar.text.toString(),page)

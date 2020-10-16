@@ -15,18 +15,20 @@
             android:layout_marginLeft="20dp">
 
             <LinearLayout
+                android:id="@+id/llEditHead"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_alignParentLeft="true"
+                android:layout_alignParentStart="true"
                 android:gravity="bottom">
 
                 <ImageView
                     android:id="@+id/ivMineHead"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
+                    android:layout_width="80dp"
+                    android:layout_height="80dp"
                     android:src="@mipmap/ic_launcher" />
 
                 <ImageView
+                    android:id="@+id/xinghao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:src="@drawable/xinghao" />

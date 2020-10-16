@@ -39,7 +39,7 @@ class SendRecordFragment: BaseFragment(){
         tvTitle4.text = "经销商"
         tvTitle5.text = "日期"
         tvTitle6.text = "IP"
-        ll_date.visibility = View.VISIBLE
+        layout_choose_date.visibility = View.VISIBLE
         observer()
     }
 
