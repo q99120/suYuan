@@ -6,70 +6,149 @@
     android:orientation="vertical"
     tools:context=".ui.MainActivity">
 
-   <TextView
-       android:layout_width="wrap_content"
-       android:layout_height="wrap_content"
-       android:textSize="21sp"
-       android:layout_marginTop="80dp"
-       android:layout_marginLeft="50dp"
-       android:textColor="#202020"
-       android:text="欢迎来到溯源APP平台"/>
 
-
-    <TextView
-        android:layout_marginTop="65dp"
-        android:layout_marginLeft="50dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="账号"
-        android:textColor="#ff202020"
-        android:textSize="17sp" />
-
-    <EditText
-        android:id="@+id/editAccount"
-        android:padding="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:hint="请输入账号..."
-        android:textSize="14sp"
-        android:textColor="#CCCCCC"/>
-
-
-
-    <TextView
-        android:layout_marginTop="15dp"
-        android:layout_marginLeft="50dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:text="密码"
-        android:textColor="#ff202020"
-        android:textSize="17sp" />
-
-    <EditText
-        android:id="@+id/editPassword"
-        android:padding="10dp"
-        android:layout_marginTop="10dp"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_marginLeft="50dp"
-        android:hint="请输入密码..."
-        android:textSize="14sp"
-        android:textColor="#CCCCCC"/>
-
-
-    <Button
-        android:id="@+id/btnLogin"
-        android:layout_marginRight="45dp"
-        android:layout_marginLeft="45dp"
-        android:layout_marginTop="30dp"
-        android:textSize="16sp"
-        android:textColor="@color/white"
-        android:text="登录"
-        android:background="@drawable/shape_login"
+    <LinearLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content"/>
+        android:layout_height="0dp"
+        android:layout_weight="1"
+        android:orientation="vertical">
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="50dp"
+            android:layout_marginTop="80dp"
+            android:text="欢迎来到溯源APP平台"
+            android:textColor="#202020"
+            android:textSize="21sp" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="45dp"
+            android:layout_marginTop="65dp"
+            android:text="账号"
+            android:textColor="#ff202020"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/editAccount"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="45dp"
+            android:background="@null"
+            android:hint="请输入账号..."
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="45dp"
+            android:background="#F0F0F0" />
+
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="15dp"
+            android:text="密码"
+            android:textColor="#ff202020"
+            android:textSize="17sp" />
+
+        <EditText
+            android:id="@+id/editPassword"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="45dp"
+            android:background="@null"
+            android:hint="请输入密码..."
+            android:paddingTop="10dp"
+            android:paddingBottom="10dp"
+            android:textColor="@color/black"
+            android:textSize="14sp" />
+
+        <View
+            android:layout_width="match_parent"
+            android:layout_height="1dp"
+            android:layout_marginStart="45dp"
+            android:layout_marginTop="10dp"
+            android:layout_marginEnd="45dp"
+            android:background="#F0F0F0" />
+
+        <Button
+            android:id="@+id/btnLogin"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginLeft="45dp"
+            android:layout_marginTop="30dp"
+            android:layout_marginRight="45dp"
+            android:background="@drawable/shape_login"
+            android:text="登录"
+            android:textColor="@color/white"
+            android:textSize="16sp" />
+    </LinearLayout>
+
+    <LinearLayout
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+        <View
+            android:layout_width="20dp"
+            android:layout_height="1dp"
+            android:background="#CCCCCC" />
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="5dp"
+            android:text="其它登录方式"
+            android:textColor="#ff787878"
+            android:textSize="15sp" />
+
+        <View
+            android:layout_marginStart="5dp"
+            android:layout_width="20dp"
+            android:layout_height="1dp"
+            android:background="#CCCCCC" />
+
+    </LinearLayout>
+
+    <LinearLayout
+        android:layout_marginBottom="50dp"
+        android:layout_marginTop="30dp"
+        android:gravity="center"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content">
+
+       <ImageView
+           android:id="@+id/ivWx"
+           android:layout_marginEnd="38dp"
+           android:layout_width="wrap_content"
+           android:layout_height="wrap_content"
+           android:src="@mipmap/ivwx"/>
+
+        <ImageView
+            android:id="@+id/ivQq"
+            android:layout_marginStart="38dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/ivqq"/>
+
+    </LinearLayout>
+
 
 
 </LinearLayout>

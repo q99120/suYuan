@@ -12,7 +12,7 @@
         <RelativeLayout
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginLeft="20dp">
+            android:layout_marginStart="20dp">
 
             <LinearLayout
                 android:id="@+id/llEditHead"
@@ -25,34 +25,55 @@
                     android:id="@+id/ivMineHead"
                     android:layout_width="80dp"
                     android:layout_height="80dp"
-                    android:src="@mipmap/ic_launcher" />
+                    android:src="@mipmap/headhead" />
 
                 <ImageView
+                    android:padding="10dp"
                     android:id="@+id/xinghao"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/xinghao" />
+                    android:src="@mipmap/minedit" />
 
             </LinearLayout>
 
             <ImageView
+                android:id="@+id/ivSetting"
+                android:padding="20dp"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:layout_alignParentEnd="true"
-                android:layout_marginEnd="20dp"
                 android:src="@mipmap/mine_tips" />
 
         </RelativeLayout>
 
-        <TextView
-            android:layout_marginTop="35dp"
-            android:layout_marginStart="20dp"
+        <LinearLayout
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="昵称"
-            android:textColor="#ffcccccc"
-            android:textSize="14sp"
-            />
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="昵称"
+                android:textColor="#ffcccccc"
+                android:textSize="14sp"
+                />
+
+            <ImageView
+                android:layout_marginLeft="15dp"
+                android:padding="10dp"
+                android:id="@+id/editNickeName"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/minedit" />
+        </LinearLayout>
+
+
 
 
         <TextView
@@ -61,21 +82,39 @@
             android:layout_marginStart="20dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="低调前行的小青年"
             android:textColor="#ff202020"
             android:textSize="16sp"
             />
 
 
-        <TextView
-            android:layout_marginTop="35dp"
-            android:layout_marginStart="20dp"
+        <LinearLayout
+            android:layout_marginTop="15dp"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="性别"
-            android:textColor="#ffcccccc"
-            android:textSize="14sp"
-            />
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="性别"
+                android:textColor="#ffcccccc"
+                android:textSize="14sp"
+                />
+
+            <ImageView
+                android:layout_marginStart="15dp"
+                android:padding="10dp"
+                android:id="@+id/editSex"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/minedit" />
+        </LinearLayout>
+
+
 
 
         <TextView
@@ -91,15 +130,34 @@
 
 
 
-        <TextView
-            android:layout_marginTop="35dp"
-            android:layout_marginStart="20dp"
+        <LinearLayout
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="年龄"
-            android:textColor="#ffcccccc"
-            android:textSize="14sp"
-            />
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="年龄"
+                android:textColor="#ffcccccc"
+                android:textSize="14sp"
+                />
+
+            <ImageView
+                android:layout_marginStart="15dp"
+                android:padding="10dp"
+                android:id="@+id/editAge"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/minedit" />
+        </LinearLayout>
+
+
 
 
         <TextView
@@ -114,15 +172,33 @@
             />
 
 
-        <TextView
-            android:layout_marginTop="35dp"
-            android:layout_marginStart="20dp"
+        <LinearLayout
+            android:layout_marginTop="25dp"
+            android:layout_marginStart="10dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:text="签名"
-            android:textColor="#ffcccccc"
-            android:textSize="14sp"
-            />
+            android:layout_height="wrap_content">
+
+
+            <TextView
+                android:padding="10dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:text="签名"
+                android:textColor="#ffcccccc"
+                android:textSize="14sp"
+                />
+
+            <ImageView
+                android:layout_marginStart="15dp"
+                android:padding="10dp"
+                android:id="@+id/editDescribe"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/minedit" />
+        </LinearLayout>
+
 
 
         <TextView
@@ -138,7 +214,7 @@
 
 
         <Button
-            android:enabled="false"
+            android:id="@+id/btnExit"
             android:textSize="16sp"
             android:textColor="@color/white"
             android:layout_marginTop="50dp"

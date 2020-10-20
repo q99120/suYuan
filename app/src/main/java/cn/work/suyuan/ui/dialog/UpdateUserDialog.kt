@@ -25,7 +25,13 @@ class UpdateUserDialog : Dialog {
     }
 
     private fun initView() {
-
+        tvFinish.setOnClickListener {
+            tvFinish.setOnClickListener {
+                upUserCallBack.upUser(editAgeName.text.toString())
+            dismiss()}
+            llFinish2.setOnClickListener { upUserCallBack.upUser(editDescribe.text.toString())
+            dismiss()}
+        }
 
     }
 
@@ -33,6 +39,7 @@ class UpdateUserDialog : Dialog {
         upUserCallBack = param
         when (flag) {
             1 -> {
+                editAgeName.inputType = InputType.TYPE_CLASS_TEXT
                 llNameAge.visibility  = View.VISIBLE
             }
             2 -> {

@@ -30,7 +30,7 @@ class FileChooseDialog : Dialog {
     }
 
    fun setData(flag:Int,queryFiles: MutableList<FileUtils.FileParam>, param: FileClick) {
-       if (flag == 1) tvFileTitle.text = "文件格式选择" else tvFileTitle.text = "文件选择"
+       if (flag == 1) tvFileTitle.text = "文件格式选择" else if (flag == 2)tvFileTitle.text = "文件选择" else tvFileTitle.text = "性别选择"
        fileClicks = param
        recyclerFileList.layoutManager = LinearLayoutManager(context)
        recyclerFileList.adapter = spinnerAdapter
@@ -48,6 +48,9 @@ class FileChooseDialog : Dialog {
                btnConfirm->{
                    fileClicks.fileClick(spinnerAdapter.data[dialogPosition].fileName,spinnerAdapter.data[dialogPosition].filePath)
                    if (flag == 2){
+                       dismiss()
+                   }else if (flag == 3){
+                       fileClicks.fileClick(spinnerAdapter.data[dialogPosition].fileName,spinnerAdapter.data[dialogPosition].filePath)
                        dismiss()
                    }
                }

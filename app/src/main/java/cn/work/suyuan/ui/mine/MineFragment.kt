@@ -15,8 +15,12 @@ import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
 import cn.work.suyuan.event.MessageEvent
 import cn.work.suyuan.event.StringEvent
+import cn.work.suyuan.ui.LoginActivity
+import cn.work.suyuan.ui.dialog.FileChooseDialog
 import cn.work.suyuan.ui.dialog.UpdateUserDialog
 import cn.work.suyuan.ui.home.HomeViewModel
+import cn.work.suyuan.util.APUtils
+import cn.work.suyuan.util.ActivityCollector
 import cn.work.suyuan.util.FileUtils
 import cn.work.suyuan.util.InjectorUtil
 import cn.work.suyuan.widget.GlideEngine
@@ -49,14 +53,26 @@ class MineFragment : BaseFragment() {
 
     private fun initView() {
 
-        setOnClickListener(llEditHead, tvNickName) {
+        setOnClickListener( tvNickName,ivSetting,btnExit,ivMineHead,xinghao,editNickeName,editSex,editAge,editDescribe) {
             when (this) {
-                llEditHead -> {
+                ivMineHead -> {
+                  PhotoViewActivity.start(activity,userCover)
+                }
+                editSex->{
+                    fileChooseDialog.setData(3,viewModel.getSex(),object :FileChooseDialog.FileClick{
+                        override fun fileClick(fileName: String, filePath: String) {
+                            tvSex.text = fileName
+                            viewModel.updateUser(3,0,"",filePath.toInt(),"",1)
+                        }
+
+                    })
+                }
+                xinghao -> {
                     EasyPhotos.createAlbum(activity, true, GlideEngine.getInstance())
                         .setFileProviderAuthority("cn.work.suyuan.fileprovider")
                         .start(103)
                 }
-                tvNickName -> {
+                editNickeName -> {
                     updateUserDialog.updateData(1, object : UpdateUserDialog.UpUserCallBack {
                         override fun upUser(result: String) {
                             tvNickName.text = result
@@ -64,7 +80,7 @@ class MineFragment : BaseFragment() {
                         }
                     })
                 }
-                tvDecs -> {
+                editDescribe -> {
                     updateUserDialog.updateData(2, object : UpdateUserDialog.UpUserCallBack {
                         override fun upUser(result: String) {
                             tvDecs.text = result
@@ -72,25 +88,44 @@ class MineFragment : BaseFragment() {
                         }
                     })
                 }
-                tvAge -> {
+                editAge -> {
                     updateUserDialog.updateData(3, object : UpdateUserDialog.UpUserCallBack {
                         override fun upUser(result: String) {
-                            tvNickName.text = result
+                            tvAge.text = result
                             viewModel.updateUser(7,0,result,1,"",result.toInt())
                         }
                     })
+                }
+                ivSetting->SettingActivity.start(activity)
+                btnExit->{
+                    APUtils.remove("tokens")
+                    LoginActivity.start(activity)
+                    activity.finish()
                 }
             }
         }
     }
 
+    var userCover = ""
     private fun observer() {
         viewModel.userLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
             val userData = rp.data
+            userCover = userData.cover
             tvNickName.text = userData.nickname
             tvDecs.text = userData.descs
             tvAge.text = userData.age.toString()
+            when (userData.sex) {
+                0 -> {
+                    tvSex.text="男"
+                }
+                1 -> {
+                    tvSex.text = "女"
+                }
+                else -> {
+                    tvSex.text = "保密"
+                }
+            }
             tvSex.text = userData.sex.toString()
             GlideEngine.getInstance().loadPhoto(
                 requireContext(),
@@ -133,7 +168,6 @@ class MineFragment : BaseFragment() {
                     .loadPhoto(activity, Uri.parse(messageEvent.message), ivMineHead)
                 Log.e("获取路径1", messageEvent.path)
                 val base64Result = FileUtils.imageToBase64(messageEvent.path)
-//            xinghao.setImageBitmap(FileUtils.base64ToBitmap(base64Result))
                 viewModel.uploadHead(base64Result!!)
             }
     }
