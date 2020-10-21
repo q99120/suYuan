@@ -22,12 +22,12 @@
         android:orientation="vertical">
 
         <ImageView
+            android:layout_marginRight="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="18dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:id="@+id/iv_action1"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="25dp"
-            android:paddingTop="25dp"
-            android:paddingRight="25dp"
             android:src="@mipmap/action_refresh" />
 
 
@@ -35,7 +35,7 @@
             android:id="@+id/tv_action1"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:paddingBottom="20dp"
             android:text="刷新数据"
             android:textColor="#ff202020"
@@ -50,18 +50,18 @@
         android:layout_marginTop="15dp"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:layout_marginLeft="15dp"
+        android:layout_marginStart="15dp"
         android:background="#F4F9FF"
         android:gravity="center"
         android:orientation="vertical">
 
         <ImageView
             android:id="@+id/iv_action2"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="25dp"
-            android:paddingTop="25dp"
-            android:paddingRight="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="18dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@mipmap/action_reset" />
 
 
@@ -69,7 +69,7 @@
             android:id="@+id/tv_action2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:paddingBottom="20dp"
             android:text="重置数据"
             android:textColor="#ff202020"
@@ -91,11 +91,11 @@
 
         <ImageView
             android:id="@+id/iv_action3"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingLeft="25dp"
-            android:paddingTop="25dp"
-            android:paddingRight="25dp"
+            android:layout_marginRight="25dp"
+            android:layout_marginLeft="25dp"
+            android:layout_marginTop="18dp"
+            android:layout_width="25dp"
+            android:layout_height="25dp"
             android:src="@mipmap/action_delete" />
 
 
@@ -103,7 +103,7 @@
             android:id="@+id/tv_action3"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginTop="10dp"
+            android:layout_marginTop="12dp"
             android:paddingBottom="20dp"
             android:text="删除数据"
             android:textColor="#ff202020"

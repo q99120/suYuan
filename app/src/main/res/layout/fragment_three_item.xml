@@ -15,6 +15,7 @@
         app:layout_constraintTop_toTopOf="parent" />
 
     <include
+        android:visibility="gone"
         android:layout_marginTop="15dp"
         android:id="@+id/layoutSearchView"
         layout="@layout/layout_search_view"
@@ -32,23 +33,14 @@
         app:layout_constraintTop_toBottomOf="@+id/layoutSearchView" />
 
     <include
-        android:id="@+id/layoutAdTitle"
-        layout="@layout/layoutadtitle"
+        android:id="@+id/layoutadtitle"
+        layout="@layout/layout_three_item"
         android:layout_width="match_parent"
         android:layout_height="0dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/layout_page_action"
-        />
-
-    <include
-        android:visibility="invisible"
-        android:id="@+id/layoutEmptyView"
-        layout="@layout/layout_empty_view"
-        android:layout_width="match_parent"
-        android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
-        app:layout_constraintTop_toBottomOf="@+id/layout_page_action"
-        />
+        app:layout_constraintVertical_bias="0.0"
+        tools:layout_editor_absoluteX="0dp" />
 
 
 </androidx.constraintlayout.widget.ConstraintLayout>

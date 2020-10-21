@@ -16,13 +16,18 @@ import cn.work.suyuan.ui.adapter.HomeNormalAdapter
 import cn.work.suyuan.ui.adapter.TraceAdapter
 import cn.work.suyuan.util.DateUtil
 import cn.work.suyuan.util.InjectorUtil
+import cn.work.suyuan.util.NormalUi
+import cn.work.suyuan.util.PageUtil
 import com.bigkoo.pickerview.builder.TimePickerBuilder
 import com.bigkoo.pickerview.view.TimePickerView
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
 import kotlinx.android.synthetic.main.fragment_home_child.*
 import kotlinx.android.synthetic.main.layout_choose_date.*
 import kotlinx.android.synthetic.main.layout_page_action.*
 import kotlinx.android.synthetic.main.layout_search_view.*
 import kotlinx.android.synthetic.main.layoutadtitle.*
+import kotlinx.android.synthetic.main.smart_refresh_recly.*
 
 /**
  * 朔源信息
@@ -101,8 +106,15 @@ class TraceabilityFragment : BaseFragment() {
         setOnClickListener(llAction1, llAction2, llAction3,llChooseDateLeft,llChooseDateRight,tv_search) {
             arrayId = arrayOfNulls(mapId.size)
             when (this) {
-                llAction1 -> { traceRefresh()}
-                llAction2 -> { }
+                llAction1 -> {
+                    currentPage = 1
+                    traceRefresh()}
+                llAction2 -> {
+                    startTime = ""
+                    endTime = ""
+                    edit_search_bar.text.clear()
+                    traceRefresh()
+                }
                 llAction3 -> {
                     val lists = mutableListOf<Int>()
                     if (mapId.isNotEmpty()) {
@@ -114,25 +126,42 @@ class TraceabilityFragment : BaseFragment() {
                 llChooseDateLeft->{ pickerView1.show() }
                 llChooseDateRight->{pickerView2.show()}
                 tv_search->{
-                    page = 1
-                    viewModel.getTrace(startTime,endTime,edit_search_bar.text.toString(),page)
+                   currentPage = 1
+                    traceRefresh()
                 }
             }
         }
     }
 
     private fun traceRefresh() {
-        viewModel.getTrace(startTime,endTime,"",page)
+        viewModel.getTrace(startTime,endTime,edit_search_bar.text.toString(),currentPage)
     }
 
     private fun observer() {
+        smartRefresh.setOnLoadMoreListener {
+            smartRefresh.finishLoadMore(1000)
+            if (currentPage<totalPage){
+               next()
+                traceRefresh()
+            }else{
+                "没有更多数据了".toast()
+                smartRefresh.finishLoadMore(true)
+            }
+        }
         viewModel.traceLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull()?:return@Observer
+            Log.e("获取当前页",rp.data.toString())
             val response = rp.data.data
+            totalPage = rp.data.total
             if (response.isNotEmpty()) {
-                traceAdapter.setList(response)
+                layoutVisBle(true)
+                if (currentPage == 1){
+                    traceAdapter.setList(response)
+                }else{
+                    traceAdapter.addData(response)
+                }
             }else{
-//                homeMgRecycler.visibility = View.INVISIBLE
+                layoutVisBle(false)
             }
         })
 
@@ -148,6 +177,16 @@ class TraceabilityFragment : BaseFragment() {
         })
     }
 
+    private fun layoutVisBle(b: Boolean) {
+        if (b) {
+            layoutAdTitle.visibility = View.VISIBLE
+            layoutEmptyView.visibility = View.INVISIBLE
+        } else {
+            layoutAdTitle.visibility = View.INVISIBLE
+            layoutEmptyView.visibility = View.VISIBLE
+        }
+    }
+
 
     override fun loadDataOnce() {
         super.loadDataOnce()
@@ -160,4 +199,13 @@ class TraceabilityFragment : BaseFragment() {
 
 
 
+
+    var currentPage = 1
+    var totalPage = 1
+
+
+    fun next():Int{
+        currentPage+=1
+        return currentPage
+    }
 }

@@ -1,20 +1,10 @@
 <?xml version="1.0" encoding="utf-8"?>
-<HorizontalScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="@color/white">
 
-    <LinearLayout
-        android:layout_width="wrap_content"
-        android:layout_height="match_parent"
-        android:orientation="vertical">
-
-
-
-    <androidx.constraintlayout.widget.ConstraintLayout
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content">
 
         <ImageView
             android:id="@+id/ivCheckTitle"
@@ -44,7 +34,7 @@
             android:id="@+id/tvTitle2"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
+            android:layout_marginStart="55dp"
             android:text="流程名称"
             android:textColor="#007CFF"
             android:textSize="16sp"
@@ -59,44 +49,9 @@
             android:text="排序"
             android:textColor="#007CFF"
             android:textSize="16sp"
-            app:layout_constraintLeft_toRightOf="@+id/tvTitle2"
-            app:layout_constraintTop_toTopOf="@+id/tvTitle2" />
-
-        <TextView
-            android:id="@+id/tvTitle4"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="45dp"
-            android:text="排序"
-            android:textColor="#007CFF"
-            android:textSize="16sp"
-            app:layout_constraintLeft_toRightOf="@+id/tvTitle3"
-            app:layout_constraintTop_toTopOf="@+id/tvTitle3" />
-
-        <TextView
-            android:id="@+id/tvTitle5"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="40dp"
-            android:paddingEnd="100dp"
-            android:text="排序"
-            android:textColor="#007CFF"
-            android:textSize="16sp"
-            app:layout_constraintLeft_toRightOf="@+id/tvTitle4"
-            app:layout_constraintTop_toTopOf="@+id/tvTitle4" />
-
-        <TextView
-            android:id="@+id/tvTitle6"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginStart="105dp"
-            android:layout_marginEnd="80dp"
-            android:text="排序"
-            android:textColor="#007CFF"
-            android:textSize="16sp"
-            app:layout_constraintLeft_toRightOf="@+id/tvTitle5"
+            android:layout_marginEnd="30dp"
             app:layout_constraintRight_toRightOf="parent"
-            app:layout_constraintTop_toTopOf="@+id/tvTitle5" />
+            app:layout_constraintTop_toTopOf="@+id/tvTitle2" />
 
 
         <View
@@ -109,15 +64,14 @@
             app:layout_constraintTop_toBottomOf="@+id/ivCheckTitle" />
 
 
+        <androidx.recyclerview.widget.RecyclerView
+            android:id="@+id/homeMgRecycler"
+            android:layout_width="match_parent"
+            android:layout_height="0dp"
+            android:background="@color/white"
+            app:layout_constraintBottom_toBottomOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/tvTitleLine" />
+
+
     </androidx.constraintlayout.widget.ConstraintLayout>
 
-        <include
-            android:layout_height="match_parent"
-            android:layout_width="match_parent"
-            layout="@layout/smart_refresh_recly"/>
-
-
-
-
-</LinearLayout>
-</HorizontalScrollView>

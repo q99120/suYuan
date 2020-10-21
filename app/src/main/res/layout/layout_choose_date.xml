@@ -24,7 +24,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="开始日期"
+                android:hint="开始日期"
                 android:textColor="#ffffffff"
                 android:textSize="16sp" />
 
@@ -63,7 +63,7 @@
                 android:layout_width="0dp"
                 android:layout_height="wrap_content"
                 android:layout_weight="1"
-                android:text="结束日期"
+                android:hint="结束日期"
                 android:textColor="#ffffffff"
                 android:textSize="16sp" />
 

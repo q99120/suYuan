@@ -20,11 +20,12 @@ import kotlinx.android.synthetic.main.layout_choose_date.*
 import kotlinx.android.synthetic.main.layout_page_action.*
 import kotlinx.android.synthetic.main.layout_search_view.*
 import kotlinx.android.synthetic.main.layoutadtitle.*
+import kotlinx.android.synthetic.main.smart_refresh_recly.*
 
 /**
  * 发货记录
  */
-class SendRecordFragment: BaseFragment(){
+class SendRecordFragment : BaseFragment() {
 
     val traceAdapter = TraceAdapter()
     private val viewModel by lazy {
@@ -33,7 +34,12 @@ class SendRecordFragment: BaseFragment(){
             InjectorUtil.getSendViewModelFactory()
         ).get(SendPackViewModel::class.java)
     }
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         return super.onCreateView(inflater.inflate(R.layout.fragment_home_child, container, false))
     }
 
@@ -53,6 +59,7 @@ class SendRecordFragment: BaseFragment(){
         initView()
         observer()
     }
+
     var selectPosition = -1
     var mapId: MutableMap<Int, Int> = mutableMapOf()
     private lateinit var arrayId: Array<Int?>
@@ -78,7 +85,14 @@ class SendRecordFragment: BaseFragment(){
             }
         }
 
-        setOnClickListener(llAction1, llAction2, llAction3,llChooseDateLeft,llChooseDateRight,tv_search) {
+        setOnClickListener(
+            llAction1,
+            llAction2,
+            llAction3,
+            llChooseDateLeft,
+            llChooseDateRight,
+            tv_search
+        ) {
             arrayId = arrayOfNulls(mapId.size)
             when (this) {
                 llAction3 -> {
@@ -87,14 +101,14 @@ class SendRecordFragment: BaseFragment(){
                         for (m in mapId) {
                             lists.add(m.value)
                         }
-                        for (l in 0 until lists.size){
+                        for (l in 0 until lists.size) {
                             arrayId[l] = lists[l]
                         }
                         viewModel.deleteSendRecord(arrayId)
                     } else "请先勾选".toast()
                 }
-                llChooseDateLeft->{
-                    DateUtil.showDate(activity,true,object :DateUtil.ChooseDate{
+                llChooseDateLeft -> {
+                    DateUtil.showDate(activity, true, object : DateUtil.ChooseDate {
                         override fun getTime(result: String) {
                             startTime = result
                             tvChooseDateLeft.text = result
@@ -102,8 +116,8 @@ class SendRecordFragment: BaseFragment(){
 
                     })
                 }
-                llChooseDateRight->{
-                    DateUtil.showDate(activity,true,object :DateUtil.ChooseDate{
+                llChooseDateRight -> {
+                    DateUtil.showDate(activity, true, object : DateUtil.ChooseDate {
                         override fun getTime(result: String) {
                             endTime = result
                             tvChooseDateRight.text = result
@@ -111,7 +125,7 @@ class SendRecordFragment: BaseFragment(){
 
                     })
                 }
-                tv_search-> refreshRecord(startTime,endTime,productCode,1)
+                tv_search -> refreshRecord(startTime, endTime, productCode, 1)
 
             }
         }
@@ -119,31 +133,55 @@ class SendRecordFragment: BaseFragment(){
 
     private fun observer() {
         viewModel.sendRecordLiveData.observe(viewLifecycleOwner, Observer {
-            val rp = it.getOrNull()?:return@Observer
+            val rp = it.getOrNull() ?: return@Observer
             val data = rp.data.data
-            if (data.isNotEmpty()){
-                traceAdapter.setList(data)
-            }else traceAdapter.setEmptyView(R.layout.layout_empty_view)
+            totalPage = rp.data.total
+            if (data.isNotEmpty()) {
+                layoutVisBle(true)
+                if (currentPage == 1) {
+                    traceAdapter.setList(data)
+                } else {
+                    traceAdapter.addData(data)
+                }
+            } else layoutVisBle(false)
+
         })
         viewModel.deleteSendRecordLiveData.observe(viewLifecycleOwner, Observer {
-            val rp = it.getOrNull()?:return@Observer
+            val rp = it.getOrNull() ?: return@Observer
             rp.msg.toast()
-            refreshRecord(startTime,endTime,productCode,1)
+            refreshRecord(startTime, endTime, productCode, 1)
         })
     }
 
+    private fun layoutVisBle(b: Boolean) {
+        if (b) {
+            layoutAdTitle.visibility = View.VISIBLE
+            layoutEmptyView.visibility = View.INVISIBLE
+        } else {
+            layoutAdTitle.visibility = View.INVISIBLE
+            layoutEmptyView.visibility = View.VISIBLE
+        }
+
+    }
+
     private fun refreshRecord(startTime: String, endTime: String, productCode: String, page: Int) {
-        viewModel.sendRecord(startTime,endTime,productCode,page)
+        viewModel.sendRecord(startTime, endTime, productCode, page)
     }
 
     override fun loadDataOnce() {
         super.loadDataOnce()
-        refreshRecord(startTime,endTime,productCode,1)
+        refreshRecord(startTime, endTime, productCode, 1)
     }
 
     companion object {
         fun newInstance() = SendRecordFragment()
     }
 
+    private var currentPage = 1
+    private var totalPage = 1
+    fun next(): Int {
+        currentPage += 1
+        return currentPage
+    }
 
 }

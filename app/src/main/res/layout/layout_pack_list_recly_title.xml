@@ -91,14 +91,18 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerPackList"
-            android:background="@color/white"
-            android:layout_marginEnd="20dp"
-            android:layout_marginStart="30dp"
+        <include android:layout_height="match_parent"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            layout="@layout/smart_refresh_recly"/>
+
+<!--        <androidx.recyclerview.widget.RecyclerView-->
+<!--            android:id="@+id/recyclerPackList"-->
+<!--            android:background="@color/white"-->
+<!--            android:layout_marginEnd="20dp"-->
+<!--            android:layout_marginStart="30dp"-->
+<!--            android:layout_width="match_parent"-->
+<!--            android:layout_height="0dp"-->
+<!--            android:layout_weight="1"/>-->
 
         <TextView
             android:layout_marginTop="20dp"

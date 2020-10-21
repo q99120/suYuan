@@ -20,11 +20,13 @@ import cn.work.suyuan.util.DateUtil
 import cn.work.suyuan.util.InjectorUtil
 import com.bigkoo.pickerview.builder.TimePickerBuilder
 import com.bigkoo.pickerview.view.TimePickerView
-import kotlinx.android.synthetic.main.fragment_home_child.*
+import com.scwang.smart.refresh.layout.api.RefreshLayout
+import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
+import kotlinx.android.synthetic.main.fragment_pack_record.*
 import kotlinx.android.synthetic.main.layout_choose_date.*
-import kotlinx.android.synthetic.main.layout_pack_record_recly_title.*
 import kotlinx.android.synthetic.main.layout_page_action.*
 import kotlinx.android.synthetic.main.layout_search_view.*
+import kotlinx.android.synthetic.main.smart_refresh_recly.*
 
 /**
  * 装箱记录
@@ -53,7 +55,7 @@ class BoxRecordFragment : BaseFragment() {
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         edit_search_bar.hint = "请输入条码"
-        tvChooseDateLeft.text = "选择日期"
+        tvChooseDateLeft.hint = "选择日期"
         llChooseDateRight.visibility = View.INVISIBLE
 
 
@@ -66,13 +68,31 @@ class BoxRecordFragment : BaseFragment() {
 
     override fun loadDataOnce() {
         super.loadDataOnce()
-        viewModel.getBoxRecord("", "2020-10-09", 0, 1)
+        refreshPack()
+    }
+
+    private fun refreshPack() {
+        viewModel.getBoxRecord(edit_search_bar.text.toString(), tvChooseDateLeft.text.toString(), 0, currentPage)
     }
 
 
     private fun initViews() {
-        recyclerPackRecord.layoutManager = LinearLayoutManager(activity)
-        recyclerPackRecord.adapter = boxRecordAdapter
+        smartRefresh.setOnLoadMoreListener(object :OnLoadMoreListener{
+            override fun onLoadMore(refreshLayout: RefreshLayout) {
+                smartRefresh.finishLoadMore(2000)
+                if (currentPage<totalPage){
+                    next()
+                    refreshPack()
+                }else{
+                    smartRefresh.finishLoadMore(true)
+                    "没有更多数据了".toast()
+                }
+            }
+        })
+
+
+        homeMgRecycler.layoutManager = LinearLayoutManager(activity)
+        homeMgRecycler.adapter = boxRecordAdapter
         boxRecordAdapter.addChildClickViewIds(R.id.ivCheckOut)
         boxRecordAdapter.setOnItemChildClickListener { adapters, view, position ->
             when (view.id) {
@@ -97,9 +117,13 @@ class BoxRecordFragment : BaseFragment() {
         { date, v ->
             tvChooseDateLeft.text = DateUtil.getDate(date.time)
         }.isCenterLabel(true).setType(array).build()
-        setOnClickListener(llChooseDateLeft, llAction1, llAction2, llAction3) {
+        setOnClickListener(llChooseDateLeft, llAction1, llAction2, llAction3,tv_search) {
             arrayId = arrayOfNulls(mapId.size)
             when (this) {
+                llAction1->{
+                    currentPage = 1
+                    refreshPack()
+                }
                 llAction2 -> {
                     if (mapId.isNotEmpty()) {
                         if (mapId.size > 1) {
@@ -126,6 +150,7 @@ class BoxRecordFragment : BaseFragment() {
                 llChooseDateLeft -> {
                     pvTime.show()
                 }
+                    tv_search->refreshPack()
             }
         }
     }
@@ -134,10 +159,17 @@ class BoxRecordFragment : BaseFragment() {
         viewModel.boxRecordLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
             if (rp.code == 200) {
+                totalPage = rp.data.total
                 if (rp.data.data.isNotEmpty()) {
-                    boxRecordAdapter.setList(rp.data.data)
-//                    traceAdapter.setfmStatus(3)
-                } else { rp.msg.toast() } } })
+                    layoutReclyTitle.visibility = View.VISIBLE
+                    layoutEmptyView.visibility = View.INVISIBLE
+                    if (currentPage == 1){
+                       boxRecordAdapter.setList(rp.data.data)
+                    }else{
+                        boxRecordAdapter.addData(rp.data.data)
+                    }
+                } else {  layoutReclyTitle.visibility = View.INVISIBLE
+                    layoutEmptyView.visibility = View.VISIBLE } } })
         viewModel.deleteRecordLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
             rp.msg.toast()
@@ -162,4 +194,14 @@ class BoxRecordFragment : BaseFragment() {
     }
 
     lateinit var pvTime: TimePickerView
+
+    private var currentPage = 1
+    private var totalPage = 1
+    fun next(): Int {
+        currentPage += 1
+        return currentPage
+    }
+
+
+
 }

@@ -189,6 +189,7 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
  */
     private val getBoxRecordRequest = MutableLiveData<String>()
     fun getBoxRecord(product: String, time: String, level: Int, page: Int) {
+        Log.e("获取装箱记录",MainPageService.packRecord(product,time,level,page))
         getBoxRecordRequest.value = MainPageService.packRecord(product,time,level,page)
     }
     val boxRecordLiveData = Transformations.switchMap(getBoxRecordRequest) {

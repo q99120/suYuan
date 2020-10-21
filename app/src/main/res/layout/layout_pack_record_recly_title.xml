@@ -81,16 +81,18 @@
             android:layout_width="match_parent"
             android:layout_height="1dp"/>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/recyclerPackRecord"
-            android:background="@color/white"
+        <include
+            layout="@layout/smart_refresh_recly"
             android:layout_marginEnd="20dp"
             android:layout_marginStart="30dp"
             android:layout_width="match_parent"
-            android:layout_height="0dp"
-            android:layout_weight="1"/>
+            android:layout_height="match_parent"
+            />
+
+
 
         <TextView
+            android:id="@+id/tvRecordSize"
             android:layout_marginTop="20dp"
             android:layout_marginStart="30dp"
             android:layout_width="match_parent"
