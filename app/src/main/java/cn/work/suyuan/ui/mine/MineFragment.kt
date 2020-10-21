@@ -1,6 +1,6 @@
 package cn.work.suyuan.ui.mine
 
-import android.graphics.BitmapFactory
+import android.content.Intent
 import android.net.Uri
 import android.os.Bundle
 import android.util.Log
@@ -20,7 +20,6 @@ import cn.work.suyuan.ui.dialog.FileChooseDialog
 import cn.work.suyuan.ui.dialog.UpdateUserDialog
 import cn.work.suyuan.ui.home.HomeViewModel
 import cn.work.suyuan.util.APUtils
-import cn.work.suyuan.util.ActivityCollector
 import cn.work.suyuan.util.FileUtils
 import cn.work.suyuan.util.InjectorUtil
 import cn.work.suyuan.widget.GlideEngine
@@ -44,9 +43,12 @@ class MineFragment : BaseFragment() {
         return super.onCreateView(inflater.inflate(R.layout.fragment_mine, container, false))
     }
 
+    val intents = Intent()
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        viewModel.getUser()
+        if (APUtils.getInt("loginFlag",0) == 0){
+            viewModel.getUser()
+        }
         initView()
         observer()
     }

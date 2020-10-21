@@ -29,8 +29,7 @@ class ScanQrCodeActivity:QRCodeView.Delegate,BaseActivity() {
     private fun initView() {
         iv_back.setOnClickListener { finish() }
         btnConfirm.setOnClickListener {
-            qrCallBack.qrData(QRresult)
-            finish()
+
         }
     }
 
@@ -64,13 +63,19 @@ class ScanQrCodeActivity:QRCodeView.Delegate,BaseActivity() {
     }
 
     var QRresult =  ""
+    var isSuccess = false
     override fun onScanQRCodeSuccess(result: String?) {
         QRresult = result.toString()
         Log.e("扫描结果", "result:$result")
-//        title = "扫描结果为：$result"
         tvQrResult.text = result
+        isSuccess = true
 //        vibrate()
-        mZXingView.startSpot() // 开始识别
+        if (isSuccess){
+            isSuccess = false
+            mZXingView.stopSpot() // 成功后停止识别
+            qrCallBack.qrData(QRresult)
+            finish()
+        }
     }
 
     override fun onCameraAmbientBrightnessChanged(isDark: Boolean) {

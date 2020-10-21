@@ -13,6 +13,7 @@ import cn.work.suyuan.logic.network.api.MainPageService
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONArray
 import java.io.File
 
 class SendPackViewModel(private val repository: SendPackRepository) : ViewModel() {
@@ -69,7 +70,7 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
         level: Int,
         productId: Int,
         distributorId: Int,
-        productCode: String,
+        productCode: JSONArray,
         productTime: String,
         productFile: String
     ) {
@@ -148,8 +149,8 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
      */
     private val doPackSingBoxRequest = MutableLiveData<String>()
     fun doPackSingBox(
-        product: String,
-        carton: String,
+        product: JSONArray,
+        carton: JSONArray,
         product_time: String,
         file: String,
         level: Int,
@@ -257,7 +258,7 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
      * 取消发货记录
      */
     private val cancelSendRequest = MutableLiveData<String>()
-    fun cancelSendPack(level: Int, product: String, productTime: String, productFile: String) {
+    fun cancelSendPack(level: Int, product: JSONArray, productTime: String, productFile: String) {
         cancelSendRequest.value = MainPageService.sendCancel(level,product,productTime,productFile)
     }
     val cancelSendLiveData = Transformations.switchMap(cancelSendRequest) {

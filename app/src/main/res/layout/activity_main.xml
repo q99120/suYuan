@@ -44,8 +44,8 @@
 
             <ImageView
                 android:id="@+id/ivUserHead"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
+                android:layout_width="20dp"
+                android:layout_height="20dp"
                 android:src="@drawable/sel_btn_mine"/>
 
         </LinearLayout>

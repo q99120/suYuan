@@ -69,7 +69,7 @@ object APUtils {
     /*
         默认 0
      */
-    fun getInt(key: String): Int {
+    fun getInt(key: String, i: Int): Int {
         return sp.getInt(key, 0)
     }
 

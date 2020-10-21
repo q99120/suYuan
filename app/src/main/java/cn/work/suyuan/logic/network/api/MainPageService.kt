@@ -27,6 +27,7 @@ import com.google.gson.Gson
 import okhttp3.MediaType
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONArray
 import org.json.JSONObject
 import retrofit2.Call
 import retrofit2.http.Body
@@ -106,7 +107,11 @@ interface MainPageService {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.goodsCateDel")
             val param = JSONObject()
-            param.put("id",gson.toJson(arrayId))
+            val jsonArray = JSONArray()
+            for (a in arrayId){
+                jsonArray.put(a)
+            }
+            param.put("id",jsonArray)
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }
@@ -137,7 +142,7 @@ interface MainPageService {
         fun manageTrace(
             category_id: Int,
             uname: String,
-            product: String,
+            product: JSONArray,
             product_time: String,
             file: String
         ): String {
@@ -176,7 +181,11 @@ interface MainPageService {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.goodsDel")
             val param = JSONObject()
-            param.put("id", gson.toJson(arrayId))
+            val jsonArray = JSONArray()
+            for (a in arrayId){
+                jsonArray.put(a)
+            }
+            param.put("id",jsonArray)
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }
@@ -209,7 +218,7 @@ interface MainPageService {
             level: Int,
             productId: Int,
             distributorId: Int,
-            productCode: String,
+            productCode: JSONArray,
             productTime: String,
             productFile: String
         ): String? {
@@ -246,7 +255,7 @@ interface MainPageService {
         }
 
         //取消发货
-        fun sendCancel(level: Int, product: String, product_time: String, file: String): String {
+        fun sendCancel(level: Int, product: JSONArray, product_time: String, file: String): String {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.ConsignmentCancelAdd")
             val param = JSONObject()
@@ -263,7 +272,11 @@ interface MainPageService {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.consignmentInfoDel")
             val param = JSONObject()
-            param.put("id", gson.toJson(arrayId))
+           val jsonArray = JSONArray()
+            for (a in arrayId){
+                jsonArray.put(a)
+            }
+            param.put("id",jsonArray)
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }
@@ -292,8 +305,8 @@ interface MainPageService {
 
         //装箱
         fun packIng(
-            product: String,
-            carton: String,
+            product: JSONArray,
+            carton: JSONArray,
             product_time: String,
             file: String,
             level: Int,
@@ -343,7 +356,11 @@ interface MainPageService {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.encasementInfoDel")
             val param = JSONObject()
-            param.put("id", gson.toJson(arrayId))
+           val jsonArray = JSONArray()
+            for (a in arrayId){
+                jsonArray.put(a)
+            }
+            param.put("id",jsonArray)
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }

@@ -5,13 +5,9 @@ import android.app.Activity
 import android.content.ContentResolver
 import android.content.Context
 import android.content.Intent
-import android.database.Cursor
-import android.graphics.BitmapFactory
 import android.net.Uri
 import android.os.Bundle
-import android.provider.MediaStore
 import android.provider.MediaStore.MediaColumns
-import android.provider.Settings
 import android.util.Log
 import android.view.View
 import androidx.fragment.app.FragmentManager
@@ -29,7 +25,7 @@ import cn.work.suyuan.ui.home.HomeViewModel
 import cn.work.suyuan.ui.mine.MineFragment
 import cn.work.suyuan.ui.packmanage.PackManageFragment
 import cn.work.suyuan.ui.send.SendManageFragment
-import cn.work.suyuan.ui.send.SendPackViewModel
+import cn.work.suyuan.util.APUtils
 import cn.work.suyuan.util.ActivityCollector.removeAll
 import cn.work.suyuan.util.InjectorUtil
 import cn.work.suyuan.util.NormalUi
@@ -41,9 +37,7 @@ import kotlinx.android.synthetic.main.layout_bottom_navigation_bar.*
 import org.greenrobot.eventbus.EventBus
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.io.File
 import java.util.ArrayList
-import kotlin.system.exitProcess
 
 
 class MainActivity : BaseActivity() {
@@ -61,20 +55,28 @@ class MainActivity : BaseActivity() {
     private var sendManageFragment: SendManageFragment? = null
     private var mineFragment: MineFragment? = null
 
-
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
-        viewModel.getUser()
+        val flag = intent.getIntExtra("intentFlag", 0)
+        APUtils.putInt("loginFlag",flag)
+        if (flag == 0) {
+            viewModel.getUser()
+        } else if (flag == 1) {
+            val nickName = intent.getStringExtra("userName")
+            val headUrl = intent.getStringExtra("userHead")
+            tvUserName.text = nickName
+            GlideEngine.getInstance().loadPhoto(this, Uri.parse(headUrl), ivUserHead)
+        }
         observer()
     }
 
     private fun observer() {
         viewModel.userLiveData.observe(this, Observer {
-           val rp = it.getOrNull()?:return@Observer
+            val rp = it.getOrNull() ?: return@Observer
             val response = rp.data
             tvUserName.text = response.nickname
-            GlideEngine.getInstance().loadPhoto(this,Uri.parse(response.cover),ivUserHead)
+            GlideEngine.getInstance().loadPhoto(this, Uri.parse(response.cover), ivUserHead)
         })
     }
 
@@ -127,61 +129,6 @@ class MainActivity : BaseActivity() {
 
     private fun setTabSelection(index: Int) {
 
-        /**
-         *  when (index) {
-        0 -> {
-        ivHomePage.isSelected = true
-        tvHomePage.isSelected = true
-        if (homePageFragment == null) {
-        homePageFragment = HomePageFragment.newInstance()
-        add(R.id.homeActivityFragContainer, homePageFragment!!)
-        } else {
-        show(homePageFragment!!)
-        }
-        }
-        1 -> {
-        ivCommunity.isSelected = true
-        tvCommunity.isSelected = true
-        if (communityFragment == null) {
-        communityFragment = CommunityFragment()
-        add(R.id.homeActivityFragContainer, communityFragment!!)
-        } else {
-        show(communityFragment!!)
-        }
-        }
-        2 -> {
-        ivNotification.isSelected = true
-        tvNotification.isSelected = true
-        if (notificationFragment == null) {
-        notificationFragment = NotificationFragment()
-        add(R.id.homeActivityFragContainer, notificationFragment!!)
-        } else {
-        show(notificationFragment!!)
-        }
-        }
-        3 -> {
-        ivMine.isSelected = true
-        tvMine.isSelected = true
-        if (mineFragment == null) {
-        mineFragment = MineFragment.newInstance()
-        add(R.id.homeActivityFragContainer, mineFragment!!)
-        } else {
-        show(mineFragment!!)
-        }
-        }
-        else -> {
-        ivHomePage.isSelected = true
-        tvHomePage.isSelected = true
-        if (homePageFragment == null) {
-        homePageFragment = HomePageFragment.newInstance()
-        add(R.id.homeActivityFragContainer, homePageFragment!!)
-        } else {
-        show(homePageFragment!!)
-        }
-        }
-        }
-        }.commitAllowingStateLoss()
-         */
         fragmentManager.beginTransaction().apply {
             clearAllSelected()
             hideFragments(this)
@@ -282,8 +229,25 @@ class MainActivity : BaseActivity() {
     }
 
     companion object {
-        fun start(context: Context) {
-            context.startActivity(Intent(context, MainActivity::class.java))
+        fun start(flag: Int, context: Context, userName: String, userHead: String) {
+            val intent = Intent(context, MainActivity::class.java)
+            intent.putExtra("intentFlag", flag)
+            when (flag) {
+                0 -> {
+                    context.startActivity(intent)
+                }
+                1 -> {
+                    intent.putExtra("userName", userName)
+                    intent.putExtra("userHead", userHead)
+                    context.startActivity(intent)
+                }
+                2 -> {
+                    //预留微信
+                }
+                3 -> context.startActivity(intent)
+
+            }
+
         }
     }
 
@@ -291,17 +255,17 @@ class MainActivity : BaseActivity() {
         super.onActivityResult(requestCode, resultCode, data)
         if (data == null) return
         if (resultCode == Activity.RESULT_OK) {
-            if (requestCode == 1007){
+            if (requestCode == 1007) {
                 Log.e("12121", data.toString())
-                    val uri: Uri = data.data!!
-                    val path = getFilePathFromContentUri(uri,contentResolver)
+                val uri: Uri = data.data!!
+                val path = getFilePathFromContentUri(uri, contentResolver)
             }
-            if (requestCode == 103){
+            if (requestCode == 103) {
 
                 val resultPhotos: ArrayList<Photo>? =
                     data.getParcelableArrayListExtra(EasyPhotos.RESULT_PHOTOS)
                 for (f in resultPhotos!!) {
-                    EventBus.getDefault().post(StringEvent(103,f.uri.toString(),f.path))
+                    EventBus.getDefault().post(StringEvent(103, f.uri.toString(), f.path))
                 }
             }
         }
@@ -330,6 +294,7 @@ class MainActivity : BaseActivity() {
             processBackPressed()
         }
     }
+
     private var backPressTime = 0L
 
     private fun processBackPressed() {

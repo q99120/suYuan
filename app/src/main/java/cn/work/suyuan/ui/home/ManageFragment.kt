@@ -57,6 +57,7 @@ class ManageFragment : BaseFragment() {
         iv_action1.setImageResource(R.mipmap.action_add)
         iv_action2.setImageResource(R.mipmap.action_edit)
         iv_action3.setImageResource(R.mipmap.action_delete)
+        llAction4.visibility = View.VISIBLE
         tv_action1.text = "添加数据"
         tv_action2.text = "编辑数据"
         tv_action3.text = "删除数据"
@@ -93,7 +94,7 @@ class ManageFragment : BaseFragment() {
             }
         }
 
-        setOnClickListener(llAction1, llAction2, llAction3) {
+        setOnClickListener(llAction1, llAction2, llAction3,llAction4) {
             arrayId = arrayOfNulls(mapId.size)
             when (this) {
                 llAction1 -> {
@@ -129,6 +130,7 @@ class ManageFragment : BaseFragment() {
                         viewModel.deleteProcess(arrayId)
                     } else "请先勾选".toast()
                 }
+                llAction4->viewModel.onRefresh()
             }
         }
     }
@@ -151,7 +153,15 @@ class ManageFragment : BaseFragment() {
         viewModel.dataListLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
             val response = rp.data
-            if (response.isNotEmpty()) homeAdapter.setList(response) else NormalUi.getEmptyDataView(homeMgRecycler,inflater)
+            if (response.isNotEmpty())
+            {
+                layoutadtitle.visibility = View.VISIBLE
+                layoutEmptyView.visibility = View.INVISIBLE
+                homeAdapter.setList(response)
+            } else {
+                layoutadtitle.visibility = View.INVISIBLE
+                layoutEmptyView.visibility = View.VISIBLE
+            }
         })
 
         viewModel.addProcessLiveData.observe(viewLifecycleOwner, Observer {
@@ -172,7 +182,7 @@ class ManageFragment : BaseFragment() {
         //删除流程
         viewModel.deleteProcessLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
-            Log.e("删除流程",rp.msg.toString())
+            Log.e("删除流程",rp.data.toString())
             homeAdapter.setCheckVis(false)
             rp.msg.toast()
             mapId.clear()

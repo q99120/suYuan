@@ -59,7 +59,7 @@ class BatchSendFragment: BaseFragment(){
                 tvActionQr->{
                     ScanQrCodeActivity.start(activity, object : ScanQrCodeActivity.QrCallBack {
                         override fun qrData(result: String) {
-                            editQrCode.append(result)
+                            editQrCode.append(result+"\n")
                         }
                     })
                 }

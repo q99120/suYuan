@@ -15,6 +15,7 @@ import cn.work.suyuan.util.FileUtils
 import okhttp3.MediaType.*
 import okhttp3.MultipartBody
 import okhttp3.RequestBody
+import org.json.JSONArray
 import java.io.File
 
 
@@ -86,6 +87,7 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
 
     private var deleteProcessRequest = MutableLiveData<String>()
     fun deleteProcess(arrayId: Array<Int?>) {
+        Log.e("查询数组jiegou",MainPageService.deleteProcess(arrayId))
         deleteProcessRequest.value = MainPageService.deleteProcess(arrayId)
     }
 
@@ -97,7 +99,6 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
                 val recommend = repository.deleteProcess(body)
                 Result.success(recommend)
             } catch (e: Exception) {
-                Log.e("返回错误企管科", e.toString())
                 Result.failure<NormalData>(e)
             }
             emit(result)
@@ -245,7 +246,7 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
     fun setTracing(
         category_id: Int,
         uname: String,
-        product: String,
+        product: JSONArray,
         product_time: String,
         file: String
     ) {

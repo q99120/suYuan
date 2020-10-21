@@ -86,13 +86,13 @@ class SinglePackFragment :BaseFragment(){
                 tvActionQr -> {
                     ScanQrCodeActivity.start(activity,object :ScanQrCodeActivity.QrCallBack{
                         override fun qrData(result: String) {
-                            etProductQr.append(result)
+                            etProductQr.append(result+"\n")
                         }
                     })
                 }
                 BigBoxActionQr -> ScanQrCodeActivity.start(activity,object :ScanQrCodeActivity.QrCallBack {
                     override fun qrData(result: String) {
-                        etBoxQr.append(result)
+                        etBoxQr.append(result+"\n")
                     } })
                 tvPackTime->DateUtil.showDate(activity,true,object :DateUtil.ChooseDate{
                     override fun getTime(result: String) {

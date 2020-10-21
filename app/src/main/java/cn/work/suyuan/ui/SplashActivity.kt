@@ -25,7 +25,7 @@ class SplashActivity :BaseActivity(){
         CoroutineScope(job).launch {
             delay(splashDuration)
             if (APUtils.getString("tokens")!="")  {
-                MainActivity.start(this@SplashActivity)
+                MainActivity.start(0,this@SplashActivity,"","")
             }else{
                 LoginActivity.start(this@SplashActivity)
             }

@@ -54,7 +54,7 @@ class CancelPackFragment: BaseFragment(){
                     btnCancel-> viewModel.cancelSendPack(2,SuYuanUtil.getEditProduct(editQrCode.text.toString()),productTime,productFile)
                 tvActionQr->ScanQrCodeActivity.start(activity,object :ScanQrCodeActivity.QrCallBack{
                     override fun qrData(result: String) {
-                        editQrCode.append(result)
+                        editQrCode.append(result+"\n")
                     }
                 })
             }
