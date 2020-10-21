@@ -16,6 +16,7 @@ import cn.work.suyuan.ui.send.SendPackViewModel
 import cn.work.suyuan.util.DateUtil
 import cn.work.suyuan.util.FileUtils
 import cn.work.suyuan.util.InjectorUtil
+import cn.work.suyuan.util.SuYuanUtil
 import kotlinx.android.synthetic.main.fragment_cancel_send.*
 import kotlinx.android.synthetic.main.fragment_pack_manage.*
 import kotlinx.android.synthetic.main.layout_import_file.*
@@ -53,6 +54,7 @@ class BoxInboxFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        tvPackTime.text = DateUtil.getCurrentTime(true)
         initClicks()
         observer()
     }
@@ -79,14 +81,14 @@ class BoxInboxFragment : BaseFragment() {
                 tvActionQr -> {
                     ScanQrCodeActivity.start(activity, object : ScanQrCodeActivity.QrCallBack {
                         override fun qrData(result: String) {
-                            etProductQr.setText(result)
+                            etProductQr.append(result)
                         }
                     })
                 }
                 BigBoxActionQr -> ScanQrCodeActivity.start(activity,
                     object : ScanQrCodeActivity.QrCallBack {
                         override fun qrData(result: String) {
-                            etBoxQr.setText(result)
+                            etBoxQr.append(result)
                         }
                     })
                 tvPackTime -> DateUtil.showDate(activity, true, object : DateUtil.ChooseDate {
@@ -103,10 +105,11 @@ class BoxInboxFragment : BaseFragment() {
 
                 })
 
-                btnDonePack -> viewModel.doPackSingBox(
-                    etProductQr.text.toString(), etBoxQr.text.toString(), productTime,
-                    productFile, 2, ""
-                )
+
+                btnDonePack->viewModel.doPackSingBox(
+                    SuYuanUtil.getEditProduct(etProductQr.text.toString()),
+                    SuYuanUtil.getEditProduct(etBoxQr.text.toString()),productTime,
+                    productFile,2,"")
             }
         }
     }

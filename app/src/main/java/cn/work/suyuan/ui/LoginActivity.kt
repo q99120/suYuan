@@ -12,6 +12,7 @@ import cn.work.suyuan.common.ui.BaseActivity
 import cn.work.suyuan.ui.home.HomeViewModel
 import cn.work.suyuan.util.APUtils
 import cn.work.suyuan.util.InjectorUtil
+import cn.work.suyuan.util.ResponseHandler
 import com.tencent.mm.opensdk.modelmsg.SendAuth
 import com.tencent.mm.opensdk.openapi.IWXAPI
 import com.tencent.mm.opensdk.openapi.WXAPIFactory
@@ -55,12 +56,18 @@ class LoginActivity:BaseActivity() {
 
     private fun observer() {
         viewModel.loginLiveData.observe(this, Observer {
-            val rp = it.getOrNull() ?: return@Observer
+            val rp = it.getOrNull()
+            if (rp == null) {
+                ResponseHandler.getFailureTips(it.exceptionOrNull()).toast()
+               return@Observer
+            }
             if (rp.code == 200) {
                 val token = rp.data.token
                 APUtils.putString("tokens", token)
                 MainActivity.start(this)
                 finish()
+            }else{
+                rp.msg.toast()
             }
 
         })

@@ -11,13 +11,12 @@ import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
 import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
-import cn.work.suyuan.util.DateUtil
-import cn.work.suyuan.util.FileUtils
-import cn.work.suyuan.util.InjectorUtil
-import cn.work.suyuan.util.SinglePopUtil
+import cn.work.suyuan.ui.ScanQrCodeActivity
+import cn.work.suyuan.util.*
 import kotlinx.android.synthetic.main.fragment_send_manage.*
 import kotlinx.android.synthetic.main.layout_import_file.*
 import kotlinx.android.synthetic.main.layout_send_manage_fm.*
+import kotlinx.android.synthetic.main.layoutflowwater.view.*
 import java.io.File
 
 /**
@@ -54,9 +53,16 @@ class BatchSendFragment: BaseFragment(){
             btnSend,
             tvChooseProduct,
             tvTracingTime,
-            llActionImFiles
+            llActionImFiles,tvActionQr
         ) {
             when (this) {
+                tvActionQr->{
+                    ScanQrCodeActivity.start(activity, object : ScanQrCodeActivity.QrCallBack {
+                        override fun qrData(result: String) {
+                            editQrCode.append(result)
+                        }
+                    })
+                }
                 tvChooseDistributor -> {
                     viewModel.getDistributor()
                 }
@@ -67,7 +73,8 @@ class BatchSendFragment: BaseFragment(){
                     FileUtils.CallBackFile{
                     override fun backFile(file: File) { viewModel.upLoadFile(file) } })
                 btnSend -> {
-//                    viewModel.batchSend(productId, agentId, distributorId, productCode, productTime, productFile)
+                    val array = arrayOf(flowWaterBegin.text.toString(),flowWaterStop.text.toString())
+                    viewModel.batchSend(productId, agentId, array, productTime, productFile, 2)
                 }
                 tvTracingTime -> {
                     DateUtil.showDate(activity, true, object : DateUtil.ChooseDate {
@@ -85,7 +92,7 @@ class BatchSendFragment: BaseFragment(){
     private var productId = -1
     private var agentId = -1
     private var productCode = ""
-    private var productTime = ""
+    private var productTime = DateUtil.getCurrentTime(true)
     private var productFile = ""
     private fun observer() {
         viewModel.distributorLiveData.observe(viewLifecycleOwner, Observer {

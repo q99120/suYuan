@@ -13,6 +13,7 @@ import cn.work.suyuan.common.ui.BaseFragment
 import cn.work.suyuan.ui.ScanQrCodeActivity
 import cn.work.suyuan.util.FileUtils
 import cn.work.suyuan.util.InjectorUtil
+import cn.work.suyuan.util.SuYuanUtil
 import kotlinx.android.synthetic.main.fragment_cancel_send.*
 import kotlinx.android.synthetic.main.fragment_cancel_send.editQrCode
 import kotlinx.android.synthetic.main.fragment_cancel_send.tvSendQrTitle
@@ -50,10 +51,10 @@ class CancelPackFragment: BaseFragment(){
             when(this){
                 btnImportFile-> FileUtils.upLoadFiles(activity,fileChooseDialog,object : FileUtils.CallBackFile{
                     override fun backFile(file: File) { viewModel.upLoadFile(file) } })
-                    btnCancel-> viewModel.cancelSendPack(2,editQrCode.text.toString(),productTime,productFile)
+                    btnCancel-> viewModel.cancelSendPack(2,SuYuanUtil.getEditProduct(editQrCode.text.toString()),productTime,productFile)
                 tvActionQr->ScanQrCodeActivity.start(activity,object :ScanQrCodeActivity.QrCallBack{
                     override fun qrData(result: String) {
-                        editQrCode.setText(result)
+                        editQrCode.append(result)
                     }
                 })
             }

@@ -66,7 +66,7 @@ interface MainPageService {
         val gson = Gson()
         private fun getServiceHead(manageServiceJson: JSONObject, interfaceData: String) {
             manageServiceJson.put("requestId", 2)
-            manageServiceJson.put("timestamp", "1592816311")
+            manageServiceJson.put("timestamp", System.currentTimeMillis()/1000)
             manageServiceJson.put("token", APUtils.getString("tokens"))
             manageServiceJson.put("interface", interfaceData)
         }

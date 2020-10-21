@@ -2,4 +2,16 @@
     <string name="app_name">溯源</string>
     <string name="notice">注：支持导入 XLS(XLSX)、CSV、TXT(utf8编码)三种格式文档,大小3M以内。</string>
     <string name="press_again_to_exit">再按一次退出%1$s</string>
+
+
+    <!-- 网络 -->
+    <string name="network_error" translatable="false">"Network Error "</string>
+    <string name="error_view_tip" translatable="false">Tap the screen to try again</string>
+    <string name="json_data_error" translatable="false">"Data analysis exception "</string>
+    <string name="network_connect_error" translatable="false">"normal network connection "</string>
+    <string name="network_connect_timeout" translatable="false">"Network connection timed out "</string>
+    <string name="network_response_code_error" translatable="false">"Server status code is normal "</string>
+    <string name="unknown_error" translatable="false">unknown error occurred</string>
+    <string name="no_route_to_host" translatable="false">No Route to Host</string>
+
 </resources>

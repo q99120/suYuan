@@ -41,6 +41,7 @@ class SingleSpinnerDialog : Dialog {
         show()
 
         adapters.setOnItemClickListener { adapter, view, position ->
+            adapters.setCheck(position)
             homeNormalClick.dialogClick(adapters.data[position].fileName,adapters.data[position].filePath.toInt())
        }
     }

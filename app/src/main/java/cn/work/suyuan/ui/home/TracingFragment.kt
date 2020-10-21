@@ -1,6 +1,7 @@
 package cn.work.suyuan.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -15,6 +16,8 @@ import cn.work.suyuan.ui.dialog.SingleSpinnerDialog
 import cn.work.suyuan.util.DateUtil
 import cn.work.suyuan.util.FileUtils
 import cn.work.suyuan.util.InjectorUtil
+import cn.work.suyuan.util.SuYuanUtil
+import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_home_tracing.*
 import kotlinx.android.synthetic.main.layout_import_file.*
 import kotlinx.android.synthetic.main.layout_tracing_fm.*
@@ -58,10 +61,15 @@ class TracingFragment  : BaseFragment(){
     var categoryId = 1
     var tracingTime = ""
     var productFile = ""
+    lateinit var  arrayCode:Array<String?>
     private fun initViews() {
+        tvTracingTime.text = DateUtil.getCurrentTime(true)
         setOnClickListener(btnConfirm,tvChooseCate,tvTracingTime,llActionImFiles,tvActionQr){
             when(this){
-                btnConfirm->{viewModel.setTracing(categoryId,editUName.text.toString(),editProductName.text.toString(),tracingTime,productFile)}
+                btnConfirm->
+                {
+                    viewModel.setTracing(categoryId,editUName.text.toString(),SuYuanUtil.getEditProduct(editProductName.text.toString()),tracingTime,productFile)
+                }
                 tvChooseCate->{spinnerDialog.initSpinner(viewModel.getCate(),object :SingleSpinnerDialog.HomeNormalClick{
                     override fun dialogClick(processName: String, sort: Int) {
                         tvChooseCate.text = processName
@@ -76,12 +84,14 @@ class TracingFragment  : BaseFragment(){
                     FileUtils.upLoadFiles(activity,fileChooseDialog,object :
                     FileUtils.CallBackFile{
                     override fun backFile(file: File) { viewModel.upLoadFile(file) } })}
-                tvActionQr->ScanQrCodeActivity.start(activity, object : ScanQrCodeActivity.QrCallBack{
+                tvActionQr->{
+                    ScanQrCodeActivity.start(activity, object : ScanQrCodeActivity.QrCallBack{
                     override fun qrData(result: String) {
-                        editProductName.setText(result)
+                        editProductName.append(result+"\n")
                     }
 
-                })
+                })  }
+
             }
         }
 

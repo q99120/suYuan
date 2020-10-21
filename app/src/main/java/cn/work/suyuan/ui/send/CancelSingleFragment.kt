@@ -14,6 +14,7 @@ import cn.work.suyuan.common.ui.BaseFragment
 import cn.work.suyuan.ui.ScanQrCodeActivity
 import cn.work.suyuan.util.FileUtils
 import cn.work.suyuan.util.InjectorUtil
+import cn.work.suyuan.util.SuYuanUtil
 import kotlinx.android.synthetic.main.fragment_cancel_send.*
 import kotlinx.android.synthetic.main.fragment_cancel_send.editQrCode
 import kotlinx.android.synthetic.main.fragment_cancel_send.tvSendQrTitle
@@ -50,26 +51,15 @@ class CancelSingleFragment: BaseFragment(){
     private fun initView() {
         setOnClickListener(btnImportFile, btnCancel, tvActionQr) {
             when (this) {
-                btnImportFile -> FileUtils.upLoadFiles(
-                    activity,
-                    fileChooseDialog,
-                    object : FileUtils.CallBackFile {
-                        override fun backFile(file: File) {
-                            viewModel.upLoadFile(file)
-                        }
-                    })
-                btnCancel -> viewModel.cancelSendPack(
-                    1,
-                    editQrCode.text.toString(),
-                    productTime,
-                    productFile
-                )
-                tvActionQr -> ScanQrCodeActivity.start(activity,
-                    object : ScanQrCodeActivity.QrCallBack {
-                        override fun qrData(result: String) {
-                            editQrCode.setText(result)
-                        }
-                    })
+                btnImportFile-> FileUtils.upLoadFiles(activity,fileChooseDialog,object : FileUtils.CallBackFile{
+                    override fun backFile(file: File) { viewModel.upLoadFile(file) } })
+                btnCancel-> viewModel.cancelSendPack(1,
+                    SuYuanUtil.getEditProduct(editQrCode.text.toString()),productTime,productFile)
+                tvActionQr->ScanQrCodeActivity.start(activity,object :ScanQrCodeActivity.QrCallBack{
+                    override fun qrData(result: String) {
+                        editQrCode.append(result)
+                    }
+                })
             }
         }
     }

@@ -113,7 +113,10 @@
         android:layout_marginStart="60dp"
         android:layout_marginTop="20dp"
         android:layout_marginEnd="20dp"
-        android:text="请填写外箱条码..."
+        android:padding="5dp"
+        android:gravity="left"
+        android:background="@drawable/shape_edit_bg"
+        android:hint="请填写外箱条码..."
         app:layout_constraintTop_toBottomOf="@+id/tvSendQrTitle" />
 
 

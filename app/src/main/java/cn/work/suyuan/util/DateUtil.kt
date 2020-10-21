@@ -81,6 +81,11 @@ object DateUtil {
         pickerView.show()
     }
 
+    fun getCurrentTime(isMin:Boolean):String{
+       val timeStamp =  System.currentTimeMillis()
+        return if (isMin) getDateAndTime(timeStamp) else getDate(timeStamp)
+    }
+
     interface ChooseDate{
            fun getTime(result:String)
     }

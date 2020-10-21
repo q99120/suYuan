@@ -10,13 +10,14 @@ import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
 import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
-import cn.work.suyuan.util.DateUtil
-import cn.work.suyuan.util.FileUtils
-import cn.work.suyuan.util.InjectorUtil
-import cn.work.suyuan.util.SinglePopUtil
+import cn.work.suyuan.ui.ScanQrCodeActivity
+import cn.work.suyuan.util.*
 import kotlinx.android.synthetic.main.fragment_send_manage.*
 import kotlinx.android.synthetic.main.layout_import_file.*
 import kotlinx.android.synthetic.main.layout_send_manage_fm.*
+import kotlinx.android.synthetic.main.layout_send_manage_fm.tvActionQr
+import kotlinx.android.synthetic.main.layout_send_manage_fm.tvTracingTime
+import kotlinx.android.synthetic.main.layout_tracing_fm.*
 import java.io.File
 
 /**
@@ -42,6 +43,7 @@ class PackSendFragment: BaseFragment(){
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        tvTracingTime.text = DateUtil.getCurrentTime(true)
         tvSendQrTitle.text = "外箱条码"
         layoutFloWater.visibility = View.GONE
         initViews()
@@ -55,9 +57,16 @@ class PackSendFragment: BaseFragment(){
             btnSend,
             tvChooseProduct,
             tvTracingTime,
-            llActionImFiles
+            llActionImFiles,tvActionQr
         ) {
             when (this) {
+                tvActionQr->{
+                    ScanQrCodeActivity.start(activity, object : ScanQrCodeActivity.QrCallBack {
+                        override fun qrData(result: String) {
+                            editQrCode.append(result)
+                        }
+                    })
+                }
                 tvChooseDistributor -> {
                     viewModel.getDistributor()
                 }
@@ -68,7 +77,7 @@ class PackSendFragment: BaseFragment(){
                     FileUtils.CallBackFile{
                     override fun backFile(file: File) { viewModel.upLoadFile(file) } })
                 btnSend -> {
-                    viewModel.sendProduct(2, productId, distributorId, productCode, productTime, productFile)
+                    viewModel.sendProduct(2, productId, distributorId, SuYuanUtil.getEditProduct(editQrCode.text.toString()), productTime, productFile)
                 }
                 tvTracingTime -> {
                     DateUtil.showDate(activity, true, object : DateUtil.ChooseDate {
@@ -86,7 +95,7 @@ class PackSendFragment: BaseFragment(){
     private var productId = -1
     private var distributorId = -1
     private var productCode = ""
-    private var productTime = ""
+    private var productTime = DateUtil.getCurrentTime(true)
     private var productFile = ""
     private fun observer() {
         viewModel.distributorLiveData.observe(viewLifecycleOwner, Observer {
@@ -122,7 +131,7 @@ class PackSendFragment: BaseFragment(){
             val rp = it.getOrNull() ?: return@Observer
             rp.msg.toast()
             if (rp.code == 200)
-                productFile = rp.data.toString()
+                productFile = rp.data
             tvImportFile.text = "导入文件成功"
 
 

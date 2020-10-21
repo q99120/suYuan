@@ -140,6 +140,7 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
                 val recommend = repository.loginAndTrace(body)
                 Result.success(recommend)
             } catch (e: Exception) {
+                Log.e("登录错误",e.toString())
                 Result.failure<TokenData>(e)
             }
             emit(result)
@@ -248,6 +249,7 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
         product_time: String,
         file: String
     ) {
+        Log.e("流程追溯", MainPageService.manageTrace(category_id, uname, product, product_time, file))
         setTracingRequest.value =
             MainPageService.manageTrace(category_id, uname, product, product_time, file)
     }
