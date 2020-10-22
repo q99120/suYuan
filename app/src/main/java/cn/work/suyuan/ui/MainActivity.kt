@@ -20,6 +20,7 @@ import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseActivity
 import cn.work.suyuan.event.RefreshEvent
 import cn.work.suyuan.event.StringEvent
+import cn.work.suyuan.ui.dialog.ExitDialog
 import cn.work.suyuan.ui.home.HomePageFragment
 import cn.work.suyuan.ui.home.HomeViewModel
 import cn.work.suyuan.ui.mine.MineFragment
@@ -58,8 +59,11 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
+        if (APUtils.getInt("agentLevel", 0) != 0) {
+            layoutBottomView.visibility = View.GONE
+        }
         val flag = intent.getIntExtra("intentFlag", 0)
-        APUtils.putInt("loginFlag",flag)
+        APUtils.putInt("loginFlag", flag)
         if (flag == 0) {
             viewModel.getUser()
         } else if (flag == 1) {
@@ -83,8 +87,7 @@ class MainActivity : BaseActivity() {
 
     override fun setupViews() {
         super.setupViews()
-        setTabSelection(0)
-        setOnClickListener(ll_home, ll_pack, ll_send, ll_mine) {
+        setOnClickListener(ll_home, ll_pack, ll_send, ll_mine, llHead) {
             when (this) {
                 ll_home -> {
                     notificationUiRefresh(0)
@@ -102,8 +105,25 @@ class MainActivity : BaseActivity() {
                     notificationUiRefresh(3)
                     setTabSelection(3)
                 }
+                llHead -> {
+                    if (APUtils.getInt("agentLevel", 0) != 0) {
+                        exitDialog.setClick(object : ExitDialog.HomeNormalClick {
+                            override fun dialogClick() {
+                                APUtils.remove("tokens")
+                                LoginActivity.start(this@MainActivity)
+                                finish()
+                            }
+                        })
+                    }
+                }
+
             }
         }
+        if (APUtils.getInt("agentLevel", 0) != 0) {
+            setTabSelection(2)
+            return
+        }
+        setTabSelection(0)
     }
 
     private fun notificationUiRefresh(selectionIndex: Int) {
@@ -306,6 +326,10 @@ class MainActivity : BaseActivity() {
             removeAll()
             super.onBackPressed()
         }
+    }
+
+    private val exitDialog by lazy {
+        ExitDialog(this)
     }
 
 

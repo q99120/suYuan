@@ -179,13 +179,18 @@ interface MainPageService {
          */
         fun deleteTrace(arrayId: Array<Int?>): String {
             val manageServiceJson = JSONObject()
-            getServiceHead(manageServiceJson, "shop.goodsDel")
             val param = JSONObject()
             val jsonArray = JSONArray()
             for (a in arrayId){
                 jsonArray.put(a)
             }
             param.put("id",jsonArray)
+            if (APUtils.getInt("agentLevel",0)==0){
+                getServiceHead(manageServiceJson, "shop.goodsDel")
+            } else{
+                getServiceHead(manageServiceJson, "shop.consignmentInfoDelLower")
+                param.put("agent_level",APUtils.getInt("agentLevel",1))
+            }
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }
@@ -194,10 +199,16 @@ interface MainPageService {
         /**
          * 获取经销商
          */
-        fun getDistributor(): String? {
+        fun getDistributor(flag:Int): String? {
             val manageServiceJson = JSONObject()
-            getServiceHead(manageServiceJson, "shop.getAgent")
             val param = JSONObject()
+            if (flag == 1){
+                getServiceHead(manageServiceJson, "shop.getAgent")
+            }else{
+                getServiceHead(manageServiceJson, "shop.getAgentLower")
+                param.put("level",APUtils.getInt("agentLevel",0))
+                param.put("id",APUtils.getInt("agentId",0))
+            }
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }
@@ -213,7 +224,7 @@ interface MainPageService {
             return manageServiceJson.toString()
         }
 
-        //发货
+        //单个整箱发货
         fun sendProduct(
             level: Int,
             productId: Int,
@@ -223,7 +234,6 @@ interface MainPageService {
             productFile: String
         ): String? {
             val manageServiceJson = JSONObject()
-            getServiceHead(manageServiceJson, "shop.consignmentAdd")
             val param = JSONObject()
             param.put("product_id", productId)
             param.put("agent_id", distributorId)
@@ -231,6 +241,12 @@ interface MainPageService {
             param.put("product_time", productTime)
             param.put("file", productFile)
             param.put("level", level)
+            if (APUtils.getInt("agentLevel",0)==0){
+                getServiceHead(manageServiceJson, "shop.consignmentAdd")
+            } else{
+                getServiceHead(manageServiceJson, "shop.consignmentAddLower")
+                param.put("agent_level",APUtils.getInt("agentLevel",1))
+            }
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }
@@ -243,13 +259,19 @@ interface MainPageService {
             page: Int
         ): String? {
             val manageServiceJson = JSONObject()
-            getServiceHead(manageServiceJson, "shop.consignmentInfo")
             val param = JSONObject()
             param.put("start_time", startTime)
             param.put("end_time", endTime)
             param.put("product", productCode)
             param.put("page", page)
             param.put("limit", 10)
+            if (APUtils.getInt("agentLevel",0)==0){
+                getServiceHead(manageServiceJson, "shop.consignmentInfo")
+            } else{
+                getServiceHead(manageServiceJson, "shop.consignmentInfoLower")
+                param.put("agent_level",APUtils.getInt("agentLevel",1))
+                param.put("agent_id",APUtils.getInt("agentId",1))
+            }
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }
@@ -257,12 +279,18 @@ interface MainPageService {
         //取消发货
         fun sendCancel(level: Int, product: JSONArray, product_time: String, file: String): String {
             val manageServiceJson = JSONObject()
-            getServiceHead(manageServiceJson, "shop.ConsignmentCancelAdd")
             val param = JSONObject()
             param.put("level", level)
             param.put("product", product)
             param.put("product_time", product_time)
             param.put("file", file)
+            if (APUtils.getInt("agentLevel",0)==0){
+                getServiceHead(manageServiceJson, "shop.ConsignmentCancelAdd")
+            } else{
+                getServiceHead(manageServiceJson, "shop.ConsignmentCancelAddLower")
+                param.put("agent_level",APUtils.getInt("agentLevel",1))
+                param.put("agent_id",APUtils.getInt("agentId",1))
+            }
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }
@@ -411,7 +439,6 @@ interface MainPageService {
             level: Int
         ): String {
             val manageServiceJson = JSONObject()
-            getServiceHead(manageServiceJson, "shop.consignmentAddAll")
             val param = JSONObject()
             param.put("product_id", product_id)
             param.put("agent_id", agent_id)
@@ -419,6 +446,12 @@ interface MainPageService {
             param.put("product_time", product_time)
             param.put("file", file)
             param.put("level", level)
+            if (APUtils.getInt("agentLevel",0)==0){
+                getServiceHead(manageServiceJson, "shop.consignmentAddAll")
+            } else{
+                getServiceHead(manageServiceJson, "shop.consignmentAddAllLower")
+                param.put("agent_level",APUtils.getInt("agentLevel",1))
+            }
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }

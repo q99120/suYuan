@@ -76,6 +76,8 @@ class LoginActivity:BaseActivity(),IUiListener {
             if (rp.code == 200) {
                 val token = rp.data.token
                 APUtils.putString("tokens", token)
+                APUtils.putInt("agentId",rp.data.agent_info.agent_id)
+                APUtils.putInt("agentLevel",rp.data.agent_info.agent_level)
                 MainActivity.start(0, this, "", "")
                 finish()
             } else {

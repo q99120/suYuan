@@ -15,6 +15,7 @@ import cn.work.suyuan.common.ui.BaseFragment
 import cn.work.suyuan.ui.adapter.BoxListAdapter
 import cn.work.suyuan.ui.adapter.BoxRecordAdapter
 import cn.work.suyuan.ui.dialog.EditPackDialog
+import cn.work.suyuan.ui.dialog.ExitDialog
 import cn.work.suyuan.ui.send.SendPackViewModel
 import cn.work.suyuan.util.DateUtil
 import cn.work.suyuan.util.InjectorUtil
@@ -141,11 +142,15 @@ class BoxRecordFragment : BaseFragment() {
                         for (m in mapId) {
                             lists.add(m.value)
                         }
-                        for (l in 0 until lists.size) {
-                            arrayId[l] = lists[l]
+                        for (i in 0 until lists.size){
+                            arrayId[i] = lists[i]
                         }
-                        viewModel.deleteBoxRecord(arrayId)
-                    } else "请先勾选".toast()
+                        exitDialog.setClick("确认删除","确定删除选中的内容吗",object : ExitDialog.HomeNormalClick{
+                            override fun dialogClick() {
+                                viewModel.deleteBoxRecord(arrayId)
+                            }
+                        })
+                    } else "请先选择要删除的内容".toast()
                 }
                 llChooseDateLeft -> {
                     pvTime.show()

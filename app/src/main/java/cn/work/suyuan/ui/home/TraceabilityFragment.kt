@@ -14,6 +14,7 @@ import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
 import cn.work.suyuan.ui.adapter.HomeNormalAdapter
 import cn.work.suyuan.ui.adapter.TraceAdapter
+import cn.work.suyuan.ui.dialog.ExitDialog
 import cn.work.suyuan.util.DateUtil
 import cn.work.suyuan.util.InjectorUtil
 import cn.work.suyuan.util.NormalUi
@@ -118,10 +119,18 @@ class TraceabilityFragment : BaseFragment() {
                 llAction3 -> {
                     val lists = mutableListOf<Int>()
                     if (mapId.isNotEmpty()) {
-                        for (m in mapId) { lists.add(m.value) }
-                        for (l in 0 until lists.size){ arrayId[l] = lists[l] }
-                        viewModel.deleteTrace(arrayId)
-                    } else "请先勾选".toast()
+                        for (m in mapId) {
+                            lists.add(m.value)
+                        }
+                        for (i in 0 until lists.size){
+                            arrayId[i] = lists[i]
+                        }
+                        exitDialog.setClick("确认删除","确定删除选中的内容吗",object : ExitDialog.HomeNormalClick{
+                            override fun dialogClick() {
+                                viewModel.deleteTrace(arrayId)
+                            }
+                        })
+                    } else "请先选择要删除的内容".toast()
                 }
                 llChooseDateLeft->{ pickerView1.show() }
                 llChooseDateRight->{pickerView2.show()}

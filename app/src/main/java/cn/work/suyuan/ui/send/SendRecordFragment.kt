@@ -1,6 +1,7 @@
 package cn.work.suyuan.ui.send
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,6 +13,7 @@ import cn.work.suyuan.common.extensions.setOnClickListener
 import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
 import cn.work.suyuan.ui.adapter.TraceAdapter
+import cn.work.suyuan.ui.dialog.ExitDialog
 import cn.work.suyuan.ui.home.HomeViewModel
 import cn.work.suyuan.util.DateUtil
 import cn.work.suyuan.util.InjectorUtil
@@ -101,11 +103,15 @@ class SendRecordFragment : BaseFragment() {
                         for (m in mapId) {
                             lists.add(m.value)
                         }
-                        for (l in 0 until lists.size) {
-                            arrayId[l] = lists[l]
+                        for (i in 0 until lists.size){
+                            arrayId[i] = lists[i]
                         }
-                        viewModel.deleteSendRecord(arrayId)
-                    } else "请先勾选".toast()
+                        exitDialog.setClick("确认删除","确定删除选中的内容吗",object : ExitDialog.HomeNormalClick{
+                            override fun dialogClick() {
+                                viewModel.deleteSendRecord(arrayId)
+                            }
+                        })
+                    } else "请先选择要删除的内容".toast()
                 }
                 llChooseDateLeft -> {
                     DateUtil.showDate(activity, true, object : DateUtil.ChooseDate {
@@ -137,6 +143,7 @@ class SendRecordFragment : BaseFragment() {
             val data = rp.data.data
             totalPage = rp.data.total
             if (data.isNotEmpty()) {
+                Log.e("获取发货记录",rp.data.data.toString())
                 layoutVisBle(true)
                 if (currentPage == 1) {
                     traceAdapter.setList(data)

@@ -26,7 +26,9 @@ import kotlinx.android.synthetic.main.layout_send_manage_fm.tvTracingTime
 import kotlinx.android.synthetic.main.layout_tracing_fm.*
 import java.io.File
 
-
+/**
+ * 单个发货
+ */
 class SingleSendFragment : BaseFragment() {
     private val viewModel by lazy {
         ViewModelProvider(
@@ -70,7 +72,7 @@ class SingleSendFragment : BaseFragment() {
                     })
                 }
                 tvChooseDistributor -> {
-                    viewModel.getDistributor()
+                    if (APUtils.getInt("agentLevel",0)!=0) viewModel.getDistributor(2) else viewModel.getDistributor(1)
                 }
                 tvChooseProduct -> {
                     viewModel.getProduct()

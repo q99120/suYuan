@@ -3,6 +3,7 @@ package cn.work.suyuan.logic.model
 data class TokenData(val data: Data) : Model() {
     data class Data(
         val token: String,
+        val agent_info:AgentInfo,
         val total: Int,
         val per_page: Int,
         val current_page: Int,
@@ -23,6 +24,7 @@ data class TokenData(val data: Data) : Model() {
             val name:String,
             val title:String
         )
+        data class AgentInfo(val agent_id:Int,val agent_level:Int)
     }
 }
 

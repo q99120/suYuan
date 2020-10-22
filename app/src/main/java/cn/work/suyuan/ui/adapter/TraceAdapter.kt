@@ -30,7 +30,7 @@ class TraceAdapter :
             holder.setText(R.id.tvTitle4,"经销商")
             holder.setText(R.id.tvTitle5,"日期")
             holder.setText(R.id.tvTitle6,"IP")
-            holder.setText(R.id.tvLabel1, item.nickname.toString())
+            holder.setText(R.id.tvLabel1, item.nickname)
             holder.setText(R.id.tvLabel2, item.product)
             holder.setText(R.id.tvLabel3, item.name)
             holder.setText(R.id.tvLabel4, item.nickname)

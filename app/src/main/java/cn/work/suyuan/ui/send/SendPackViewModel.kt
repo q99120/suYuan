@@ -21,10 +21,9 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
      * 获取经销商
      */
     private val distributorRequest = MutableLiveData<String>()
-    fun getDistributor() {
-        distributorRequest.value = MainPageService.getDistributor()
+    fun getDistributor(flag:Int) {
+        distributorRequest.value = MainPageService.getDistributor(flag)
     }
-
     val distributorLiveData = Transformations.switchMap(distributorRequest) {
         liveData {
             val result = try {
@@ -320,5 +319,10 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
             emit(result)
         }
     }
+
+    /**
+     * 获取一二级经销商
+     */
+
 
 }

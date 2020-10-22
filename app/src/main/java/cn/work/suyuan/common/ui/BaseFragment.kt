@@ -30,6 +30,7 @@ import cn.work.suyuan.common.extensions.logD
 import cn.work.suyuan.event.MessageEvent
 import cn.work.suyuan.event.StringEvent
 import cn.work.suyuan.ui.dialog.EditPackDialog
+import cn.work.suyuan.ui.dialog.ExitDialog
 import cn.work.suyuan.ui.dialog.FileChooseDialog
 import cn.work.suyuan.ui.dialog.HomeNormalDialog
 import org.greenrobot.eventbus.EventBus
@@ -243,5 +244,9 @@ open class BaseFragment : Fragment(), RequestLifecycle {
      val fileChooseDialog by lazy {
         FileChooseDialog(requireContext())
     }
+    val exitDialog by lazy {
+        ExitDialog(requireContext())
+    }
+
 
 }

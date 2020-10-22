@@ -20,6 +20,7 @@ import cn.work.suyuan.ui.adapter.HomeNormalAdapter
 import cn.work.suyuan.ui.adapter.HomeThreeItemAdapter
 import cn.work.suyuan.ui.dialog.EditNoMoreDialog
 import cn.work.suyuan.ui.dialog.EditNoMorePop
+import cn.work.suyuan.ui.dialog.ExitDialog
 import cn.work.suyuan.ui.dialog.HomeNormalDialog
 import cn.work.suyuan.util.InjectorUtil
 import cn.work.suyuan.util.NormalUi
@@ -122,13 +123,15 @@ class ManageFragment : BaseFragment() {
                         for (m in mapId) {
                             lists.add(m.value)
                         }
-
                         for (i in 0 until lists.size){
                             arrayId[i] = lists[i]
                         }
-
-                        viewModel.deleteProcess(arrayId)
-                    } else "请先勾选".toast()
+                        exitDialog.setClick("确认删除","确定删除选中的内容吗",object :ExitDialog.HomeNormalClick{
+                            override fun dialogClick() {
+                                viewModel.deleteProcess(arrayId)
+                            }
+                        })
+                    } else "请先选择要删除的内容".toast()
                 }
                 llAction4->viewModel.onRefresh()
             }

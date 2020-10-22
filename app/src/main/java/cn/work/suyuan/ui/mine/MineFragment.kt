@@ -16,6 +16,7 @@ import cn.work.suyuan.common.ui.BaseFragment
 import cn.work.suyuan.event.MessageEvent
 import cn.work.suyuan.event.StringEvent
 import cn.work.suyuan.ui.LoginActivity
+import cn.work.suyuan.ui.dialog.ExitDialog
 import cn.work.suyuan.ui.dialog.FileChooseDialog
 import cn.work.suyuan.ui.dialog.UpdateUserDialog
 import cn.work.suyuan.ui.home.HomeViewModel
@@ -46,7 +47,7 @@ class MineFragment : BaseFragment() {
     val intents = Intent()
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        if (APUtils.getInt("loginFlag",0) == 0){
+        if (APUtils.getInt("loginFlag", 0) == 0) {
             viewModel.getUser()
         }
         initView()
@@ -55,19 +56,32 @@ class MineFragment : BaseFragment() {
 
     private fun initView() {
 
-        setOnClickListener( tvNickName,ivSetting,btnExit,ivMineHead,xinghao,editNickeName,editSex,editAge,editDescribe) {
+        setOnClickListener(
+            tvNickName,
+            ivSetting,
+            btnExit,
+            ivMineHead,
+            xinghao,
+            editNickeName,
+            editSex,
+            editAge,
+            editDescribe
+        ) {
             when (this) {
                 ivMineHead -> {
-                  PhotoViewActivity.start(activity,userCover)
+                    PhotoViewActivity.start(activity, userCover)
                 }
-                editSex->{
-                    fileChooseDialog.setData(3,viewModel.getSex(),object :FileChooseDialog.FileClick{
-                        override fun fileClick(fileName: String, filePath: String) {
-                            tvSex.text = fileName
-                            viewModel.updateUser(3,0,"",filePath.toInt(),"",1)
-                        }
+                editSex -> {
+                    fileChooseDialog.setData(
+                        3,
+                        viewModel.getSex(),
+                        object : FileChooseDialog.FileClick {
+                            override fun fileClick(fileName: String, filePath: String) {
+                                tvSex.text = fileName
+                                viewModel.updateUser(3, 0, "", filePath.toInt(), "", 1)
+                            }
 
-                    })
+                        })
                 }
                 xinghao -> {
                     EasyPhotos.createAlbum(activity, true, GlideEngine.getInstance())
@@ -78,7 +92,7 @@ class MineFragment : BaseFragment() {
                     updateUserDialog.updateData(1, object : UpdateUserDialog.UpUserCallBack {
                         override fun upUser(result: String) {
                             tvNickName.text = result
-                            viewModel.updateUser(2,0,result,1,"",1)
+                            viewModel.updateUser(2, 0, result, 1, "", 1)
                         }
                     })
                 }
@@ -86,7 +100,7 @@ class MineFragment : BaseFragment() {
                     updateUserDialog.updateData(2, object : UpdateUserDialog.UpUserCallBack {
                         override fun upUser(result: String) {
                             tvDecs.text = result
-                            viewModel.updateUser(4,0,"",1,result,1)
+                            viewModel.updateUser(4, 0, "", 1, result, 1)
                         }
                     })
                 }
@@ -94,15 +108,20 @@ class MineFragment : BaseFragment() {
                     updateUserDialog.updateData(3, object : UpdateUserDialog.UpUserCallBack {
                         override fun upUser(result: String) {
                             tvAge.text = result
-                            viewModel.updateUser(7,0,result,1,"",result.toInt())
+                            viewModel.updateUser(7, 0, result, 1, "", result.toInt())
                         }
                     })
                 }
-                ivSetting->SettingActivity.start(activity)
-                btnExit->{
-                    APUtils.remove("tokens")
-                    LoginActivity.start(activity)
-                    activity.finish()
+                ivSetting -> SettingActivity.start(activity)
+                btnExit -> {
+                    exitDialog.setClick(object : ExitDialog.HomeNormalClick {
+                        override fun dialogClick() {
+                            APUtils.remove("tokens")
+                            LoginActivity.start(activity)
+                            activity.finish()
+                        }
+
+                    })
                 }
             }
         }
@@ -119,7 +138,7 @@ class MineFragment : BaseFragment() {
             tvAge.text = userData.age.toString()
             when (userData.sex) {
                 0 -> {
-                    tvSex.text="男"
+                    tvSex.text = "男"
                 }
                 1 -> {
                     tvSex.text = "女"

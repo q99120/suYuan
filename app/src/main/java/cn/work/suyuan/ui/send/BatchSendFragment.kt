@@ -64,7 +64,7 @@ class BatchSendFragment: BaseFragment(){
                     })
                 }
                 tvChooseDistributor -> {
-                    viewModel.getDistributor()
+                    if (APUtils.getInt("agentLevel",0)!=0) viewModel.getDistributor(2) else viewModel.getDistributor(1)
                 }
                 tvChooseProduct -> {
                     viewModel.getProduct()
