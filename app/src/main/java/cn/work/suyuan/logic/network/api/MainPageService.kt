@@ -16,7 +16,6 @@
 
 package cn.work.suyuan.logic.network.api
 
-import android.util.Log
 import cn.work.suyuan.logic.model.HomeData
 import cn.work.suyuan.logic.model.NormalData
 import cn.work.suyuan.logic.model.TokenData
@@ -144,7 +143,10 @@ interface MainPageService {
             uname: String,
             product: JSONArray,
             product_time: String,
-            file: String
+            file: String,
+            content: String,
+            batch: String,
+            orderNum: String,
         ): String {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.goodsAdd")
@@ -154,6 +156,9 @@ interface MainPageService {
             param.put("product", product)
             param.put("product_time", product_time)
             param.put("file", file)
+            param.put("content", content)
+            param.put("batch", batch)
+            param.put("order_num", orderNum)
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }

@@ -248,11 +248,14 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
         uname: String,
         product: JSONArray,
         product_time: String,
-        file: String
+        file: String,
+        content: String,
+        batch: String,
+        orderNum: String
     ) {
-        Log.e("流程追溯", MainPageService.manageTrace(category_id, uname, product, product_time, file))
+//        Log.e("流程追溯", MainPageService.manageTrace(category_id, uname, product, product_time, file,content,batch,orderNum))
         setTracingRequest.value =
-            MainPageService.manageTrace(category_id, uname, product, product_time, file)
+            MainPageService.manageTrace(category_id, uname, product, product_time, file,content,batch,orderNum)
     }
 
     val setTracingLiveData = Transformations.switchMap(setTracingRequest) {

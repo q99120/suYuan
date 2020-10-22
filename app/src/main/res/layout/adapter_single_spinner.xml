@@ -7,13 +7,16 @@
     <TextView
         android:layout_marginStart="25dp"
         android:id="@+id/tvPopItemTitle"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:paddingTop="20dp"
         android:paddingBottom="20dp"
         android:text="销售一大区"
         android:textColor="#202020"
         android:textSize="14sp"
+        android:layout_marginEnd="15dp"
+        android:singleLine="false"
+        app:layout_constraintRight_toLeftOf="@+id/ivPopItemCheck"
         app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 

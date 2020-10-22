@@ -1,7 +1,6 @@
 package cn.work.suyuan.ui.home
 
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -17,7 +16,6 @@ import cn.work.suyuan.util.DateUtil
 import cn.work.suyuan.util.FileUtils
 import cn.work.suyuan.util.InjectorUtil
 import cn.work.suyuan.util.SuYuanUtil
-import com.google.gson.Gson
 import kotlinx.android.synthetic.main.fragment_home_tracing.*
 import kotlinx.android.synthetic.main.layout_import_file.*
 import kotlinx.android.synthetic.main.layout_tracing_fm.*
@@ -68,7 +66,8 @@ class TracingFragment  : BaseFragment(){
             when(this){
                 btnConfirm->
                 {
-                    viewModel.setTracing(categoryId,editUName.text.toString(),SuYuanUtil.getEditProduct(editProductName.text.toString()),tracingTime,productFile)
+                    viewModel.setTracing(categoryId,editUName.text.toString(),SuYuanUtil.getEditProduct(editProductName.text.toString()),tracingTime,productFile
+                    ,richEditText.text.toString(),editProductNum.text.toString(),editOrderNum.text.toString())
                 }
                 tvChooseCate->{spinnerDialog.initSpinner(viewModel.getCate(),object :SingleSpinnerDialog.HomeNormalClick{
                     override fun dialogClick(processName: String, sort: Int) {

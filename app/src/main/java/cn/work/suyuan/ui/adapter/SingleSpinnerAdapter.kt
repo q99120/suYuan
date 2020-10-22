@@ -29,7 +29,7 @@ class SingleSpinnerAdapter :
     var selectPosition = -1
     fun setCheck(position:Int){
         selectPosition = position
-        notifyItemChanged(selectPosition)
+        notifyDataSetChanged()
     }
 
 }
