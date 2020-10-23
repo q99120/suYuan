@@ -64,6 +64,11 @@ object DateUtil {
         return sdf.format(Date(dateMillis))
     }
 
+    fun getDateAndTimeMil(dateMillis: Long): String {
+        val sdf = SimpleDateFormat("yyyy-MM-dd HH:mm", Locale.getDefault())
+        return sdf.format(Date(dateMillis * 1000))
+    }
+
     private fun getDateAndHourMinuteTime(dateMillis: Long): String {
         val sdf = SimpleDateFormat("HH:mm", Locale.getDefault())
         return sdf.format(Date(dateMillis))

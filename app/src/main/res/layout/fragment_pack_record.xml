@@ -35,9 +35,23 @@
         android:id="@+id/layoutReclyTitle"
         app:layout_constraintTop_toBottomOf="@+id/layout_page_action"
         android:layout_height="0dp"
-        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintBottom_toTopOf="@+id/tvRecordSize"
         android:layout_width="match_parent"
         layout="@layout/layout_pack_record_recly_title"/>
+
+
+    <TextView
+        android:id="@+id/tvRecordSize"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:background="@color/white"
+        android:paddingStart="30dp"
+        android:paddingTop="5dp"
+        android:paddingBottom="10dp"
+        android:textColor="@color/black"
+        android:textSize="16sp"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 
     <include
         android:visibility="invisible"

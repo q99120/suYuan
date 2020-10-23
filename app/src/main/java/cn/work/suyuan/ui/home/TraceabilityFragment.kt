@@ -1,5 +1,6 @@
 package cn.work.suyuan.ui.home
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -24,6 +25,9 @@ import com.bigkoo.pickerview.view.TimePickerView
 import com.scwang.smart.refresh.layout.api.RefreshLayout
 import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
 import kotlinx.android.synthetic.main.fragment_home_child.*
+import kotlinx.android.synthetic.main.fragment_home_child.layoutEmptyView
+import kotlinx.android.synthetic.main.fragment_home_child.tvRecordSize
+import kotlinx.android.synthetic.main.fragment_pack_list.*
 import kotlinx.android.synthetic.main.layout_choose_date.*
 import kotlinx.android.synthetic.main.layout_page_action.*
 import kotlinx.android.synthetic.main.layout_search_view.*
@@ -57,6 +61,7 @@ class TraceabilityFragment : BaseFragment() {
         initViews()
         homeMgRecycler.layoutManager = LinearLayoutManager(requireContext())
         homeMgRecycler.adapter = traceAdapter
+        traceAdapter.setfmStatus(1)
         tvTitle6.visibility = View.GONE
         tvTitle1.text = "ID"
         tvTitle2.text = "流程名称"
@@ -161,7 +166,7 @@ class TraceabilityFragment : BaseFragment() {
             val rp = it.getOrNull()?:return@Observer
             Log.e("获取当前页",rp.data.toString())
             val response = rp.data.data
-            totalPage = rp.data.total
+            totalPage = rp.data.last_page
             if (response.isNotEmpty()) {
                 layoutVisBle(true)
                 if (currentPage == 1){
@@ -169,6 +174,7 @@ class TraceabilityFragment : BaseFragment() {
                 }else{
                     traceAdapter.addData(response)
                 }
+                upPage(rp.data.total,rp.data.last_page)
             }else{
                 layoutVisBle(false)
             }
@@ -216,5 +222,11 @@ class TraceabilityFragment : BaseFragment() {
     fun next():Int{
         currentPage+=1
         return currentPage
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun upPage(total: Int, lastPage: Int) {
+        smartRefresh.isEnabled = totalPage >= 2
+        tvRecordSize.text = "第$currentPage/${lastPage}页,共${total}条数据"
     }
 }

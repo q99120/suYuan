@@ -7,6 +7,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
 import cn.work.suyuan.logic.model.HomeData
 import cn.work.suyuan.logic.model.NormalData
+import cn.work.suyuan.logic.model.SendRecord
 import cn.work.suyuan.logic.model.TokenData
 import cn.work.suyuan.logic.network.SendPackRepository
 import cn.work.suyuan.logic.network.api.MainPageService
@@ -42,7 +43,10 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
      * 获取产品
      */
     private val productRequest = MutableLiveData<String>()
+    var i = 1
     fun getProduct() {
+        i=i++
+        Log.e("getproduct",i.toString())
         productRequest.value = MainPageService.getProduct()
     }
 
@@ -207,6 +211,29 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
         }
     }
 
+
+    /*
+*装箱记录
+*/
+    private val getBoxRecordRequest0 = MutableLiveData<String>()
+    fun getBoxRecord0(product: String, time: String, level: Int, page: Int) {
+        Log.e("获取装箱记录",MainPageService.packRecord(product,time,level,page))
+        getBoxRecordRequest0.value = MainPageService.packRecord(product,time,level,page)
+    }
+    val boxRecordLiveData0 = Transformations.switchMap(getBoxRecordRequest0) {
+        liveData {
+            val result = try {
+                val body: RequestBody =
+                    RequestBody.create(MediaType.parse("application/json; charset=utf-8"), it)
+                val recommend = repository.getSendRecord2(body)
+                Result.success(recommend)
+            } catch (e: Exception) {
+                Log.e("获取错误", e.toString())
+                Result.failure<SendRecord>(e)
+            }
+            emit(result)
+        }
+    }
 
     /**
      * 编辑装箱记录

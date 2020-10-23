@@ -43,6 +43,13 @@ class SendPackRepository private constructor(private val network: SuYuanNetwork)
         response
     }
 
+
+    suspend fun getSendRecord2(body: RequestBody)= withContext(Dispatchers.IO){
+        val response = network.getSendRecord2(body)
+        response
+    }
+
+
     suspend fun doPackOne(body: RequestBody)= withContext(Dispatchers.IO){
         val response = network.processManage(body)
         response

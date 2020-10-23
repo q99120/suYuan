@@ -63,7 +63,7 @@ class SuYuanNetwork {
     suspend fun getUser(body: RequestBody) = mainPageService.getUser(body).await()
     suspend fun getDistributor(body: RequestBody) = mainPageService.getHomeManageData(body).await()
     suspend fun upLoadFile(part: MultipartBody.Part) = mainPageService.upLoadFile(part).await()
-
+    suspend fun getSendRecord2(body: RequestBody)= mainPageService.sendRecord2(body).await()
 
     companion object {
 

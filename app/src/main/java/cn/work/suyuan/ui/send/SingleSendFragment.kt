@@ -9,21 +9,18 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
+import cn.work.suyuan.Const.singPopFlag
 import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
 import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
-import cn.work.suyuan.logic.network.api.MainPageService
 import cn.work.suyuan.ui.ScanQrCodeActivity
-import cn.work.suyuan.ui.dialog.FileChooseDialog
 import cn.work.suyuan.util.*
 import kotlinx.android.synthetic.main.fragment_send_manage.*
 import kotlinx.android.synthetic.main.layout_import_file.*
-import kotlinx.android.synthetic.main.layout_pack_mg.*
 import kotlinx.android.synthetic.main.layout_send_manage_fm.*
 import kotlinx.android.synthetic.main.layout_send_manage_fm.tvActionQr
 import kotlinx.android.synthetic.main.layout_send_manage_fm.tvTracingTime
-import kotlinx.android.synthetic.main.layout_tracing_fm.*
 import java.io.File
 
 /**
@@ -47,6 +44,7 @@ class SingleSendFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        singPopFlag = 1
         tvSendQrTitle.text = "产品条码"
         layoutFloWater.visibility = View.GONE
         tvTracingTime.text = DateUtil.getCurrentTime(true)
@@ -95,6 +93,7 @@ class SingleSendFragment : BaseFragment() {
         }
     }
 
+    lateinit var popUtil: SinglePopUtil
     private var productId = -1
     private var distributorId = -1
     private var productCode = ""
@@ -103,27 +102,27 @@ class SingleSendFragment : BaseFragment() {
     private fun observer() {
         viewModel.distributorLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
-            val popUtil = SinglePopUtil(requireContext(), object : SinglePopUtil.popClick {
+                popUtil = SinglePopUtil(requireContext(), object : SinglePopUtil.popClick {
                 override fun clickPop(type: String, pi: Int) {
                     tvChooseDistributor.text = type
                     distributorId = pi
                 }
-
             })
             popUtil.setData(rp.data, 1)
-            popUtil.showAsDropDown(tvChooseDistributor)
+            popUtil.showAsDropDown(tvChooseDistributor,0,50)
         })
         viewModel.productLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
-            val popUtil = SinglePopUtil(requireContext(), object : SinglePopUtil.popClick {
-                override fun clickPop(type: String, pi: Int) {
-                    tvChooseProduct.text = type
-                    productId = pi
-                }
+            Log.e("金卡金卡的角色","111")
+                popUtil = SinglePopUtil(requireContext(), object : SinglePopUtil.popClick {
+                    override fun clickPop(type: String, pi: Int) {
+                        tvChooseProduct.text = type
+                        productId = pi
+                    }
 
-            })
-            popUtil.setData(rp.data, 2)
-            popUtil.showAsDropDown(tvChooseProduct)
+                })
+                popUtil.setData(rp.data, 2)
+                popUtil.showAsDropDown(tvChooseProduct,0,50)
         })
         viewModel.sendProductLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer

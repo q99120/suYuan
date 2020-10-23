@@ -3,6 +3,7 @@ package cn.work.suyuan.ui.adapter
 import cn.work.suyuan.R
 import cn.work.suyuan.logic.model.HomeData
 import cn.work.suyuan.logic.model.TokenData
+import cn.work.suyuan.util.DateUtil
 import com.chad.library.adapter.base.BaseQuickAdapter
 import com.chad.library.adapter.base.viewholder.BaseViewHolder
 import kotlinx.android.synthetic.main.layoutadtitle.*
@@ -20,7 +21,7 @@ class TraceAdapter :
             holder.setText(R.id.tvLabel2, item.category_name)
             holder.setText(R.id.tvLabel3, item.product)
             holder.setText(R.id.tvLabel4, item.uname)
-            holder.setText(R.id.tvLabel5, item.product_time)
+            holder.setText(R.id.tvLabel5, DateUtil.getDateAndTimeMil(item.product_time.toLong()))
             holder.setVisible(R.id.tvLabel4,true)
             holder.setVisible(R.id.tvLabel5,true)
         }else if (fmStatus == 2){
@@ -34,7 +35,7 @@ class TraceAdapter :
             holder.setText(R.id.tvLabel2, item.product)
             holder.setText(R.id.tvLabel3, item.name)
             holder.setText(R.id.tvLabel4, item.nickname)
-            holder.setText(R.id.tvLabel5, item.product_time)
+            holder.setText(R.id.tvLabel5, DateUtil.getDateAndTimeMil(item.product_time.toLong()))
             holder.setText(R.id.tvLabel6, item.ip)
             holder.setVisible(R.id.tvLabel4,true)
             holder.setVisible(R.id.tvLabel5,true)
@@ -48,7 +49,7 @@ class TraceAdapter :
             holder.setText(R.id.tvLabel1, item.id.toString())
             holder.setText(R.id.tvLabel2, item.nickname)
             holder.setText(R.id.tvLabel3, item.carton)
-            holder.setText(R.id.tvLabel4, item.product_time)
+            holder.setText(R.id.tvLabel4, DateUtil.getDateAndTimeMil(item.product_time.toLong()))
             holder.setText(R.id.tvLabel5, item.ip)
             holder.setVisible(R.id.tvLabel4,true)
             holder.setVisible(R.id.tvLabel5,true)

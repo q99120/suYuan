@@ -97,6 +97,8 @@
                 android:text="箱内产品条码"
                 android:textColor="@color/black"
                 android:textSize="13sp" />
+
+
         </LinearLayout>
 
         <LinearLayout

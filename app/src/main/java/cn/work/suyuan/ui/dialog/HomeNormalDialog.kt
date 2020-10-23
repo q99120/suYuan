@@ -64,6 +64,8 @@ class HomeNormalDialog : Dialog {
 
 
 
+
+
     interface HomeNormalClick {
         fun dialogClick(processName: String, sort: Int)
     }

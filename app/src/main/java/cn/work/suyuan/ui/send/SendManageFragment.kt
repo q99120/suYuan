@@ -12,11 +12,11 @@ import kotlinx.android.synthetic.main.fragment_three_container.*
 import kotlinx.android.synthetic.main.layout_other_page_title_bar.*
 
 class SendManageFragment: BaseViewPagerFragment2() , OnTabSelectListener {
-    override val pageTitles: Array<String> = arrayOf("单个发货","整箱发货","发货记录","批量发货","取消整箱发货","取消单个发货")
+    override val pageTitles: Array<String> = arrayOf("单个发货","整箱发货","批量发货","发货记录","取消整箱发货","取消单个发货")
 
     override val createFragments: Array<Fragment> =
-        arrayOf(SingleSendFragment.newInstance(),PackSendFragment.newInstance(), SendRecordFragment.newInstance(),BatchSendFragment.newInstance()
-        ,CancelPackFragment.newInstance(),CancelSingleFragment.newInstance())
+        arrayOf(SingleSendFragment.newInstance(),PackSendFragment.newInstance(),BatchSendFragment.newInstance()
+            , SendRecordFragment.newInstance(),CancelPackFragment.newInstance(),CancelSingleFragment.newInstance())
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return super.onCreateView(inflater.inflate(R.layout.fragment_three_container, container, false))

@@ -175,10 +175,6 @@ class LoginActivity:BaseActivity(),IUiListener {
                     mTencent.setAccessToken(token, expires)
                     mTencent.openId = openId
                     "登录成功".toast()
-
-                    /**
-                     * 获取用户昵称，头像等信息
-                     */
                     /**
                      * 获取用户昵称，头像等信息
                      */

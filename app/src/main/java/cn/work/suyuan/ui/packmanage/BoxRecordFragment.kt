@@ -14,8 +14,10 @@ import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
 import cn.work.suyuan.ui.adapter.BoxListAdapter
 import cn.work.suyuan.ui.adapter.BoxRecordAdapter
+import cn.work.suyuan.ui.adapter.NormalStringAdapter
 import cn.work.suyuan.ui.dialog.EditPackDialog
 import cn.work.suyuan.ui.dialog.ExitDialog
+import cn.work.suyuan.ui.dialog.NormalStringDialog
 import cn.work.suyuan.ui.send.SendPackViewModel
 import cn.work.suyuan.util.DateUtil
 import cn.work.suyuan.util.InjectorUtil
@@ -73,28 +75,26 @@ class BoxRecordFragment : BaseFragment() {
     }
 
     private fun refreshPack() {
-        viewModel.getBoxRecord(edit_search_bar.text.toString(), tvChooseDateLeft.text.toString(), 0, currentPage)
+        viewModel.getBoxRecord0(edit_search_bar.text.toString(), tvChooseDateLeft.text.toString(), 0, currentPage)
     }
 
 
     private fun initViews() {
-        smartRefresh.setOnLoadMoreListener(object :OnLoadMoreListener{
-            override fun onLoadMore(refreshLayout: RefreshLayout) {
-                smartRefresh.finishLoadMore(2000)
-                if (currentPage<totalPage){
-                    next()
-                    refreshPack()
-                }else{
-                    smartRefresh.finishLoadMore(true)
-                    "没有更多数据了".toast()
-                }
+        smartRefresh.setOnLoadMoreListener {
+            smartRefresh.finishLoadMore(2000)
+            if (currentPage < totalPage) {
+                next()
+                refreshPack()
+            } else {
+                smartRefresh.finishLoadMore(true)
+                "没有更多数据了".toast()
             }
-        })
+        }
 
 
         homeMgRecycler.layoutManager = LinearLayoutManager(activity)
         homeMgRecycler.adapter = boxRecordAdapter
-        boxRecordAdapter.addChildClickViewIds(R.id.ivCheckOut)
+        boxRecordAdapter.addChildClickViewIds(R.id.ivCheckOut,R.id.tvLabel3)
         boxRecordAdapter.setOnItemChildClickListener { adapters, view, position ->
             when (view.id) {
                 R.id.ivCheckOut -> {
@@ -108,6 +108,10 @@ class BoxRecordFragment : BaseFragment() {
                     }
                     if (mapId.size == 1) selectPosition = position
                     boxRecordAdapter.notifyItemChanged(position)
+                }
+                R.id.tvLabel3->{
+                    val data = boxRecordAdapter.data[position].product
+                    normalStringDialog.setDatas(data)
                 }
             }
         }
@@ -131,7 +135,7 @@ class BoxRecordFragment : BaseFragment() {
                             "满员了不能编辑了".toast()
                         } else {
                             dialogAction(3, boxRecordAdapter.data[selectPosition].id,
-                                boxRecordAdapter.data[selectPosition].product,
+                                boxRecordAdapter.data[selectPosition].product[0],
                                 boxRecordAdapter.data[selectPosition].carton)
                         }
                     } else "请先勾选".toast()
@@ -161,10 +165,10 @@ class BoxRecordFragment : BaseFragment() {
     }
 
     private fun observer() {
-        viewModel.boxRecordLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.boxRecordLiveData0.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
             if (rp.code == 200) {
-                totalPage = rp.data.total
+                totalPage = rp.data.last_page
                 if (rp.data.data.isNotEmpty()) {
                     layoutReclyTitle.visibility = View.VISIBLE
                     layoutEmptyView.visibility = View.INVISIBLE
@@ -174,7 +178,9 @@ class BoxRecordFragment : BaseFragment() {
                         boxRecordAdapter.addData(rp.data.data)
                     }
                 } else {  layoutReclyTitle.visibility = View.INVISIBLE
-                    layoutEmptyView.visibility = View.VISIBLE } } })
+                    layoutEmptyView.visibility = View.VISIBLE }
+                upPage()
+            } })
         viewModel.deleteRecordLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
             rp.msg.toast()
@@ -183,6 +189,12 @@ class BoxRecordFragment : BaseFragment() {
             val rp = it.getOrNull() ?: return@Observer
             rp.msg.toast()
         })
+    }
+
+    private fun upPage() {
+        smartRefresh.isEnabled = totalPage >= 2
+        tvRecordSize.text = "第" + currentPage+ "/"+ totalPage+"页,共"+boxRecordAdapter.data.size+"条数据"
+
     }
 
     private fun dialogAction(index: Int, id: Int, product: String, carton: String) {
@@ -205,6 +217,10 @@ class BoxRecordFragment : BaseFragment() {
     fun next(): Int {
         currentPage += 1
         return currentPage
+    }
+
+    private val normalStringDialog by lazy {
+        NormalStringDialog(requireContext())
     }
 
 

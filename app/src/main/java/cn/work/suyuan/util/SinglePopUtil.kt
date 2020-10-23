@@ -3,18 +3,17 @@ package cn.work.suyuan.util
 import android.content.Context
 import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
+import android.util.Log
 import android.view.LayoutInflater
-import android.view.View
 import android.view.ViewGroup
 import android.widget.PopupWindow
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import cn.work.suyuan.Const
 import cn.work.suyuan.R
 import cn.work.suyuan.logic.model.HomeData
 import cn.work.suyuan.ui.adapter.SingleSpinnerAdapter
-import com.chad.library.adapter.base.BaseQuickAdapter
-import com.chad.library.adapter.base.listener.OnItemClickListener
 
 class SinglePopUtil(context: Context, param: popClick) : PopupWindow(context) {
 
@@ -50,7 +49,8 @@ class SinglePopUtil(context: Context, param: popClick) : PopupWindow(context) {
     }
 
     var flags = 1
-    fun setData(data: MutableList<HomeData.Data>,flag:Int) {
+    fun setData(data: MutableList<HomeData.Data>, flag: Int) {
+        Log.e("结合数据",Const.singPopFlag.toString())
         flags = flag
         singleSpinnerAdapter.setType(flag)
           singleSpinnerAdapter.setList(data)

@@ -1,6 +1,8 @@
 package cn.work.suyuan.ui.packmanage
 
+import android.annotation.SuppressLint
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,11 +14,12 @@ import cn.work.suyuan.common.extensions.setOnClickListener
 import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
 import cn.work.suyuan.ui.adapter.BoxListAdapter
+import cn.work.suyuan.ui.adapter.BoxRecordAdapter
 import cn.work.suyuan.ui.send.SendPackViewModel
 import cn.work.suyuan.util.InjectorUtil
-import com.scwang.smart.refresh.layout.api.RefreshLayout
-import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
 import kotlinx.android.synthetic.main.fragment_pack_list.*
+import kotlinx.android.synthetic.main.fragment_pack_list.layoutEmptyView
+import kotlinx.android.synthetic.main.fragment_pack_list.tvRecordSize
 import kotlinx.android.synthetic.main.layout_pack_list_recly_title.*
 import kotlinx.android.synthetic.main.layout_search_view.*
 import kotlinx.android.synthetic.main.smart_refresh_recly.*
@@ -48,9 +51,9 @@ class BoxListFragment : BaseFragment() {
 
 
     var boxFlag = 1
-    val adapter = BoxListAdapter()
+    val adapter = BoxRecordAdapter()
     private fun initView() {
-        getBoxList("","2020-10-09",boxFlag,1)
+        refreshData()
 
         setTextTitle("ID","小箱条码","箱内产品条码","产品数量","归属大箱条码","发货时间")
         homeMgRecycler.layoutManager = LinearLayoutManager(activity)
@@ -90,10 +93,11 @@ class BoxListFragment : BaseFragment() {
     }
 
     private fun observer() {
-        viewModel.boxRecordLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.boxRecordLiveData0.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull()?:return@Observer
             if (rp.code == 200){
-                totalPage = rp.data.total
+                totalPage = rp.data.last_page
+                Log.e("获取lastpage",totalPage.toString())
                 if ((rp.data.data).isNotEmpty()){
                     layoutRecyclerView.visibility = View.VISIBLE
                     layoutEmptyView.visibility = View.INVISIBLE
@@ -104,8 +108,10 @@ class BoxListFragment : BaseFragment() {
                     }
                 }else {
                     layoutRecyclerView.visibility = View.INVISIBLE
-                    layoutEmptyView.visibility = View.VISIBLE
+                    layoutEmptyView
+                        .visibility = View.VISIBLE
                 }
+                upPage(rp.data.total,rp.data.last_page)
             }
         })
     }
@@ -117,7 +123,7 @@ class BoxListFragment : BaseFragment() {
     }
 
     private fun getBoxList(product: String, time: String, flag: Int, page: Int) {
-        viewModel.getBoxRecord(product,time,flag,page)
+        viewModel.getBoxRecord0(product,time,flag,page)
     }
 
     companion object {
@@ -127,7 +133,7 @@ class BoxListFragment : BaseFragment() {
     private var currentPage = 1
     private var totalPage = 1
 
-    fun refreshData(){
+    private fun refreshData(){
         getBoxList(edit_search_bar.text.toString(),"",boxFlag,currentPage)
     }
 
@@ -136,18 +142,22 @@ class BoxListFragment : BaseFragment() {
         return currentPage
     }
 
-    fun initRefresh(){
-        smartRefresh.setOnLoadMoreListener(object :OnLoadMoreListener{
-            override fun onLoadMore(refreshLayout: RefreshLayout) {
-                smartRefresh.finishLoadMore(2000)
-                if (currentPage<totalPage){
-                    next()
-                    refreshData()
-                }else{
-                    smartRefresh.finishLoadMore(true)
-                    "没有更多数据了".toast()
-                }
+    private fun initRefresh(){
+        smartRefresh.setOnLoadMoreListener {
+            smartRefresh.finishLoadMore(2000)
+            if (currentPage < totalPage) {
+                next()
+                refreshData()
+            } else {
+                smartRefresh.finishLoadMore(true)
+                "没有更多数据了".toast()
             }
-        })
+        }
+    }
+
+    @SuppressLint("SetTextI18n")
+    private fun upPage(total: Int, lastPage: Int) {
+        smartRefresh.isEnabled = totalPage >= 2
+        tvRecordSize.text = "第$currentPage/${lastPage}页,共${total}条数据"
     }
 }

@@ -21,7 +21,7 @@ class WXEntryActivity : AppCompatActivity(), IWXAPIEventHandler {
                 val code = (baseResp as SendAuth.Resp).code
                 //获取accesstoken
                 getAccessToken(code)
-                Log.d("fantasychongwxlogin", code.toString() + "")
+                Log.e("fantasychongwxlogin", code.toString() + "")
             }
             BaseResp.ErrCode.ERR_AUTH_DENIED -> finish()
             BaseResp.ErrCode.ERR_USER_CANCEL -> finish()

@@ -1,6 +1,6 @@
 package cn.work.suyuan.logic.model
 
-data class TokenData(val data: Data) : Model() {
+data class SendRecord(val data: Data) : Model() {
     data class Data(
         val token: String,
         val agent_info:AgentInfo,
@@ -13,9 +13,8 @@ data class TokenData(val data: Data) : Model() {
         data class DataArrays(
             var isCheck: Boolean,
             val id: Int,
-            val uname: String,
             val category_id: Int,
-            val product: String,
+            val product: MutableList<String>,
             val product_time: String,
             val addtime:String,
             val category_name: String,
@@ -23,7 +22,8 @@ data class TokenData(val data: Data) : Model() {
             val ip: String,
             val nickname: String,
             val name:String,
-            val title:String
+            val title:String,
+            val count:Int
         )
         data class AgentInfo(val agent_id:Int,val agent_level:Int)
     }

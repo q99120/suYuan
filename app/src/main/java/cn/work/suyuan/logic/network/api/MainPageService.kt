@@ -16,10 +16,7 @@
 
 package cn.work.suyuan.logic.network.api
 
-import cn.work.suyuan.logic.model.HomeData
-import cn.work.suyuan.logic.model.NormalData
-import cn.work.suyuan.logic.model.TokenData
-import cn.work.suyuan.logic.model.UserInfo
+import cn.work.suyuan.logic.model.*
 import cn.work.suyuan.util.APUtils
 import cn.work.suyuan.util.FileUtils
 import com.google.gson.Gson
@@ -61,6 +58,12 @@ interface MainPageService {
     @POST("api/v1/")
     fun upLoadFile(@Part part1: MultipartBody.Part): Call<NormalData>
 
+
+    /**
+     * zhuangxiangjilu
+     */
+    @POST("api/v1/")
+    fun sendRecord2(@Body body: RequestBody): Call<SendRecord>
 
     companion object {
         val gson = Gson()

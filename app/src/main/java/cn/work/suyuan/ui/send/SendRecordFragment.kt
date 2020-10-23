@@ -1,5 +1,6 @@
 package cn.work.suyuan.ui.send
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -8,6 +9,7 @@ import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.LinearLayoutManager
+import cn.work.suyuan.Const
 import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
 import cn.work.suyuan.common.extensions.toast
@@ -47,6 +49,7 @@ class SendRecordFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        Const.singPopFlag = 4
         edit_search_bar.hint = "请输入条码"
         homeMgRecycler.layoutManager = LinearLayoutManager(requireContext())
         homeMgRecycler.adapter = traceAdapter
@@ -141,7 +144,7 @@ class SendRecordFragment : BaseFragment() {
         viewModel.sendRecordLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
             val data = rp.data.data
-            totalPage = rp.data.total
+            totalPage = rp.data.last_page
             if (data.isNotEmpty()) {
                 Log.e("获取发货记录",rp.data.data.toString())
                 layoutVisBle(true)
@@ -150,6 +153,7 @@ class SendRecordFragment : BaseFragment() {
                 } else {
                     traceAdapter.addData(data)
                 }
+                upPage(rp.data.total,rp.data.last_page)
             } else layoutVisBle(false)
 
         })
@@ -191,4 +195,9 @@ class SendRecordFragment : BaseFragment() {
         return currentPage
     }
 
+    @SuppressLint("SetTextI18n")
+    private fun upPage(total: Int, lastPage: Int) {
+        smartRefresh.isEnabled = totalPage >= 2
+        tvRecordSize.text = "第$currentPage/${lastPage}页,共${total}条数据"
+    }
 }

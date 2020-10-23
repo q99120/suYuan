@@ -8,5 +8,6 @@ object Const {
     const val wxAppId: String = "wx533ec3358aa409d5"
     const val wxAppKey: String = "a32d86cec81c0aa81b82d910dccdf8c7"
 
+    var singPopFlag = 1
 
 }
