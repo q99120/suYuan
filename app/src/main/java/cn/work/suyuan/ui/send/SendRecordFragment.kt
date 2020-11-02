@@ -49,7 +49,6 @@ class SendRecordFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        Const.singPopFlag = 4
         edit_search_bar.hint = "请输入条码"
         homeMgRecycler.layoutManager = LinearLayoutManager(requireContext())
         homeMgRecycler.adapter = traceAdapter
@@ -61,8 +60,12 @@ class SendRecordFragment : BaseFragment() {
         tvTitle5.text = "日期"
         tvTitle6.text = "IP"
         layout_choose_date.visibility = View.VISIBLE
-        initView()
-        observer()
+    }
+
+    override fun onInvisible() {
+    }
+
+    override fun initData() {
     }
 
     var selectPosition = -1
@@ -200,4 +203,10 @@ class SendRecordFragment : BaseFragment() {
         smartRefresh.isEnabled = totalPage >= 2
         tvRecordSize.text = "第$currentPage/${lastPage}页,共${total}条数据"
     }
+
+    override fun onResume() {
+        super.onResume()
+        observer()
+    }
+
 }

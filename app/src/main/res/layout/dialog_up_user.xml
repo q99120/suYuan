@@ -7,7 +7,7 @@
 
     <LinearLayout
         android:id="@+id/llNameAge"
-        android:visibility="gone"
+        android:visibility="visible"
         android:layout_marginTop="20dp"
         android:background="@drawable/shape_search_bar"
         app:layout_constraintTop_toTopOf="parent"
@@ -20,7 +20,6 @@
             android:id="@+id/editAgeName"
             android:layout_marginEnd="10dp"
             android:padding="15dp"
-            android:maxLength="14"
             android:layout_weight="1"
             android:layout_width="0dp"
             android:textColor="@color/black"
@@ -31,6 +30,7 @@
 
 
         <TextView
+            android:id="@+id/textSize"
             android:layout_marginEnd="20dp"
             android:text="8/14"
             android:textColor="@color/black"
@@ -40,8 +40,8 @@
 
         <TextView
             android:id="@+id/tvFinish"
-            android:layout_marginEnd="20dp"
             android:text="完成"
+            android:padding="20dp"
             android:textColor="@color/black"
             android:textSize="18sp"
             android:layout_width="wrap_content"

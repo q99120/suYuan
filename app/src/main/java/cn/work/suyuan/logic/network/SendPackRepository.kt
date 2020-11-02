@@ -34,6 +34,7 @@ class SendPackRepository private constructor(private val network: SuYuanNetwork)
 
 
     suspend fun getDistributor(body: RequestBody)= withContext(Dispatchers.IO){
+        Log.e("livedata","222")
         val response = network.getDistributor(body)
         response
     }

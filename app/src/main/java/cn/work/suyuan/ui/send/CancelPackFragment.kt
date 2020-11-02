@@ -40,7 +40,14 @@ class CancelPackFragment: BaseFragment(){
         tvSendQrTitle.text = "外箱条码"
         editQrCode.hint = "外箱条码"
         initView()
-        observer()
+
+    }
+
+    override fun onInvisible() {
+
+    }
+
+    override fun initData() {
     }
 
     var productFile = ""
@@ -79,5 +86,9 @@ class CancelPackFragment: BaseFragment(){
         fun newInstance() = CancelPackFragment()
     }
 
+    override fun onResume() {
+        super.onResume()
+        observer()
+    }
 
 }

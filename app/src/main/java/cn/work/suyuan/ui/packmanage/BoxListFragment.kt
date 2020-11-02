@@ -13,15 +13,20 @@ import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
 import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
-import cn.work.suyuan.ui.adapter.BoxListAdapter
 import cn.work.suyuan.ui.adapter.BoxRecordAdapter
+import cn.work.suyuan.ui.dialog.ExitDialog
+import cn.work.suyuan.ui.dialog.NormalStringDialog
 import cn.work.suyuan.ui.send.SendPackViewModel
 import cn.work.suyuan.util.InjectorUtil
 import kotlinx.android.synthetic.main.fragment_pack_list.*
 import kotlinx.android.synthetic.main.fragment_pack_list.layoutEmptyView
 import kotlinx.android.synthetic.main.fragment_pack_list.tvRecordSize
 import kotlinx.android.synthetic.main.layout_pack_list_recly_title.*
+import kotlinx.android.synthetic.main.layout_page_action.*
 import kotlinx.android.synthetic.main.layout_search_view.*
+import kotlinx.android.synthetic.main.layout_search_view.edit_search_bar
+import kotlinx.android.synthetic.main.layout_search_view.tv_search
+import kotlinx.android.synthetic.main.layout_search_view.view.*
 import kotlinx.android.synthetic.main.smart_refresh_recly.*
 
 /**
@@ -49,8 +54,18 @@ class BoxListFragment : BaseFragment() {
         observer()
     }
 
+    override fun onInvisible() {
+
+    }
+
+    override fun initData() {
+
+    }
+
 
     var boxFlag = 1
+    private lateinit var arrayId: Array<Int?>
+    var mapId: MutableMap<Int, Int> = mutableMapOf()
     val adapter = BoxRecordAdapter()
     private fun initView() {
         refreshData()
@@ -58,7 +73,8 @@ class BoxListFragment : BaseFragment() {
         setTextTitle("ID","小箱条码","箱内产品条码","产品数量","归属大箱条码","发货时间")
         homeMgRecycler.layoutManager = LinearLayoutManager(activity)
         homeMgRecycler.adapter = adapter
-        setOnClickListener(tvSmallBox, tvBigBox,tv_search) {
+        setOnClickListener(tvSmallBox, tvBigBox,tv_search,llAction1,llAction3,llAction2) {
+            arrayId = arrayOfNulls(mapId.size)
             when (this) {
                 tvSmallBox -> {
                     currentPage = 1
@@ -78,6 +94,46 @@ class BoxListFragment : BaseFragment() {
                 }
                 tv_search->{
                     refreshData()
+                }
+                llAction1->refreshData()
+                llAction2->edit_search_bar.text.clear()
+                llAction3 -> {
+                    val lists = mutableListOf<Int>()
+                    if (mapId.isNotEmpty()) {
+                        for (m in mapId) {
+                            lists.add(m.value)
+                        }
+                        for (i in 0 until lists.size){
+                            arrayId[i] = lists[i]
+                        }
+                        exitDialog.setClick("确认删除","确定删除选中的内容吗",object : ExitDialog.HomeNormalClick{
+                            override fun dialogClick() {
+                                viewModel.deleteBoxRecord(arrayId,boxFlag)
+                            }
+                        })
+                    } else "请先选择要删除的内容".toast()
+                }
+            }
+        }
+
+
+        adapter.addChildClickViewIds(R.id.ivCheckTitle,R.id.tvLabel3)
+        adapter.setOnItemChildClickListener { adapters, view, position ->
+            when (view.id) {
+                R.id.ivCheckTitle -> {
+                    val data = adapter.data[position]
+                    if (!data.isCheck) {
+                        data.isCheck = true
+                        mapId[position] = adapter.data[position].id
+                    } else if (data.isCheck) {
+                        data.isCheck = false
+                        mapId.remove(position)
+                    }
+                    adapter.notifyItemChanged(position)
+                }
+                R.id.tvLabel3->{
+                    val data = adapter.data[position].product
+                    normalStringDialog.setDatas(data)
                 }
             }
         }
@@ -113,6 +169,12 @@ class BoxListFragment : BaseFragment() {
                 }
                 upPage(rp.data.total,rp.data.last_page)
             }
+        })
+        viewModel.deleteRecordLiveData.observe(viewLifecycleOwner, Observer {
+            val rp = it.getOrNull() ?: return@Observer
+            rp.msg.toast()
+            refreshData()
+            mapId.clear()
         })
     }
 
@@ -159,5 +221,9 @@ class BoxListFragment : BaseFragment() {
     private fun upPage(total: Int, lastPage: Int) {
         smartRefresh.isEnabled = totalPage >= 2
         tvRecordSize.text = "第$currentPage/${lastPage}页,共${total}条数据"
+    }
+
+    private val normalStringDialog by lazy {
+        NormalStringDialog(requireContext())
     }
 }

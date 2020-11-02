@@ -29,11 +29,11 @@ class BoxRecordAdapter :
 
 
 //        if (!isInVisible)  holder.setImageResource(R.id.ivCheckOut,R.mipmap.uncheck)
-//        if (item.isCheck ){
-//            holder.setImageResource(R.id.ivCheckOut,R.mipmap.checkin)
-//        }else{
-//           holder.setImageResource(R.id.ivCheckOut,R.mipmap.uncheck)
-//        }
+        if (item.isCheck ){
+            holder.setImageResource(R.id.ivCheckTitle,R.mipmap.checkin)
+        }else{
+           holder.setImageResource(R.id.ivCheckTitle,R.mipmap.uncheck)
+        }
     }
 
 

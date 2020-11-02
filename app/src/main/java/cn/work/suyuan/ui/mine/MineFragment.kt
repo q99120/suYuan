@@ -54,6 +54,12 @@ class MineFragment : BaseFragment() {
         observer()
     }
 
+    override fun onInvisible() {
+    }
+
+    override fun initData() {
+    }
+
     private fun initView() {
 
         setOnClickListener(

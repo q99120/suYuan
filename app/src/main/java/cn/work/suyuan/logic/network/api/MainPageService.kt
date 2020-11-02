@@ -207,10 +207,10 @@ interface MainPageService {
         /**
          * 获取经销商
          */
-        fun getDistributor(flag:Int): String? {
+        fun getDistributor(): String? {
             val manageServiceJson = JSONObject()
             val param = JSONObject()
-            if (flag == 1){
+            if (APUtils.getInt("agentLevel",0)==0){
                 getServiceHead(manageServiceJson, "shop.getAgent")
             }else{
                 getServiceHead(manageServiceJson, "shop.getAgentLower")
@@ -342,7 +342,7 @@ interface MainPageService {
         //装箱
         fun packIng(
             product: JSONArray,
-            carton: JSONArray,
+            carton: String,
             product_time: String,
             file: String,
             level: Int,
@@ -388,7 +388,7 @@ interface MainPageService {
         }
 
         //装箱记录删除
-        fun deletePackRecord(arrayId: Array<Int?>): String {
+        fun deletePackRecord(arrayId: Array<Int?>, level: Int): String {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.encasementInfoDel")
             val param = JSONObject()
@@ -397,6 +397,7 @@ interface MainPageService {
                 jsonArray.put(a)
             }
             param.put("id",jsonArray)
+            param.put("level",level)
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }
@@ -450,7 +451,11 @@ interface MainPageService {
             val param = JSONObject()
             param.put("product_id", product_id)
             param.put("agent_id", agent_id)
-            param.put("product", gson.toJson(product))
+            val jsonArray = JSONArray()
+            for (a in product){
+                jsonArray.put(a)
+            }
+            param.put("product", jsonArray)
             param.put("product_time", product_time)
             param.put("file", file)
             param.put("level", level)

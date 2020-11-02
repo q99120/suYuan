@@ -22,8 +22,8 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
      * 获取经销商
      */
     private val distributorRequest = MutableLiveData<String>()
-    fun getDistributor(flag:Int) {
-        distributorRequest.value = MainPageService.getDistributor(flag)
+    fun getDistributor() {
+        distributorRequest.value = MainPageService.getDistributor()
     }
     val distributorLiveData = Transformations.switchMap(distributorRequest) {
         liveData {
@@ -68,37 +68,57 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
     /**
      * 单/整箱发货
      */
+    var levels = 0
     private val sendProductRequest = MutableLiveData<String>()
-    fun sendProduct(
-        level: Int,
-        productId: Int,
-        distributorId: Int,
-        productCode: JSONArray,
-        productTime: String,
-        productFile: String
-    ) {
-        sendProductRequest.value = MainPageService.sendProduct(
-            level,
-            productId,
-            distributorId,
-            productCode,
-            productTime,
-            productFile
-        )
+    fun sendProduct(level: Int, productId: Int, distributorId: Int, productCode: JSONArray, productTime: String, productFile: String)
+    {
+        levels = level
+       sendProductRequest.value = MainPageService.sendProduct(level, productId, distributorId, productCode, productTime, productFile)
+        Log.e("发货管理",MainPageService.sendProduct(level, productId, distributorId, productCode, productTime, productFile).toString())
     }
 
     val sendProductLiveData = Transformations.switchMap(sendProductRequest) {
         liveData {
-            val result = try {
-                val body: RequestBody =
-                    RequestBody.create(MediaType.parse("application/json; charset=utf-8"), it)
-                val recommend = repository.getDistributor(body)
-                Result.success(recommend)
-            } catch (e: Exception) {
-                Log.e("获取错误", e.toString())
-                Result.failure<HomeData>(e)
-            }
+                Log.e("为什么传这里?","111")
+                val result = try {
+                    val body: RequestBody =
+                        RequestBody.create(MediaType.parse("application/json; charset=utf-8"), it)
+                    val recommend = repository.getDistributor(body)
+                    Result.success(recommend)
+                } catch (e: Exception) {
+                    Log.e("发货错误", e.toString())
+                    Result.failure<HomeData>(e)
+                }
             emit(result)
+        }
+    }
+
+
+    /**
+     * 单/整箱发货
+     */
+    private val sendProductRequest2 = MutableLiveData<String>()
+    fun sendProduct2(level: Int, productId: Int, distributorId: Int, productCode: JSONArray, productTime: String, productFile: String)
+    {
+        levels = level
+        sendProductRequest2.value = MainPageService.sendProduct(level, productId, distributorId, productCode, productTime, productFile)
+        Log.e("发货管理",MainPageService.sendProduct(level, productId, distributorId, productCode, productTime, productFile).toString())
+    }
+
+    val sendProductLiveData2 = Transformations.switchMap(sendProductRequest2) {
+        liveData {
+            if (levels == 2) {
+                val result = try {
+                    val body: RequestBody =
+                        RequestBody.create(MediaType.parse("application/json; charset=utf-8"), it)
+                    val recommend = repository.getDistributor(body)
+                    Result.success(recommend)
+                } catch (e: Exception) {
+                    Log.e("发货错误", e.toString())
+                    Result.failure<HomeData>(e)
+                }
+                emit(result)
+            }
         }
     }
 
@@ -153,7 +173,7 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
     private val doPackSingBoxRequest = MutableLiveData<String>()
     fun doPackSingBox(
         product: JSONArray,
-        carton: JSONArray,
+        carton: String,
         product_time: String,
         file: String,
         level: Int,
@@ -161,6 +181,7 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
     ) {
         doPackSingBoxRequest.value =
             MainPageService.packIng(product, carton, product_time, file, level, ip)
+        Log.e("单个装箱传值", MainPageService.packIng(product, carton, product_time, file, level, ip))
     }
 
     val doPackSingBoxLiveData = Transformations.switchMap(doPackSingBoxRequest) {
@@ -171,6 +192,7 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
                 val recommend = repository.doPackOne(body)
                 Result.success(recommend)
             } catch (e: Exception) {
+                Log.e("单个装箱失败",e.toString())
                 Result.failure<NormalData>(e)
             }
             emit(result)
@@ -261,8 +283,9 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
      * 删除装箱记录
      */
     val deleteRequest = MutableLiveData<String>()
-    fun deleteBoxRecord(arrayId: Array<Int?>) {
-        deleteRequest.value = MainPageService.deletePackRecord(arrayId)
+    fun deleteBoxRecord(arrayId: Array<Int?>, level: Int) {
+        Log.e("删除装箱记录",MainPageService.deletePackRecord(arrayId,level))
+        deleteRequest.value = MainPageService.deletePackRecord(arrayId,level)
     }
 
     val deleteRecordLiveData = Transformations.switchMap(deleteRequest) {

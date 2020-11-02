@@ -1,7 +1,7 @@
 package cn.work.suyuan.ui.packmanage
 
+import android.annotation.SuppressLint
 import android.os.Bundle
-import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,10 +12,7 @@ import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
 import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
-import cn.work.suyuan.ui.adapter.BoxListAdapter
 import cn.work.suyuan.ui.adapter.BoxRecordAdapter
-import cn.work.suyuan.ui.adapter.NormalStringAdapter
-import cn.work.suyuan.ui.dialog.EditPackDialog
 import cn.work.suyuan.ui.dialog.ExitDialog
 import cn.work.suyuan.ui.dialog.NormalStringDialog
 import cn.work.suyuan.ui.send.SendPackViewModel
@@ -23,8 +20,6 @@ import cn.work.suyuan.util.DateUtil
 import cn.work.suyuan.util.InjectorUtil
 import com.bigkoo.pickerview.builder.TimePickerBuilder
 import com.bigkoo.pickerview.view.TimePickerView
-import com.scwang.smart.refresh.layout.api.RefreshLayout
-import com.scwang.smart.refresh.layout.listener.OnLoadMoreListener
 import kotlinx.android.synthetic.main.fragment_pack_record.*
 import kotlinx.android.synthetic.main.layout_choose_date.*
 import kotlinx.android.synthetic.main.layout_page_action.*
@@ -69,6 +64,14 @@ class BoxRecordFragment : BaseFragment() {
         observer()
     }
 
+    override fun onInvisible() {
+
+    }
+
+    override fun initData() {
+
+    }
+
     override fun loadDataOnce() {
         super.loadDataOnce()
         refreshPack()
@@ -94,10 +97,10 @@ class BoxRecordFragment : BaseFragment() {
 
         homeMgRecycler.layoutManager = LinearLayoutManager(activity)
         homeMgRecycler.adapter = boxRecordAdapter
-        boxRecordAdapter.addChildClickViewIds(R.id.ivCheckOut,R.id.tvLabel3)
+        boxRecordAdapter.addChildClickViewIds(R.id.ivCheckTitle,R.id.tvLabel3)
         boxRecordAdapter.setOnItemChildClickListener { adapters, view, position ->
             when (view.id) {
-                R.id.ivCheckOut -> {
+                R.id.ivCheckTitle -> {
                     val data = boxRecordAdapter.data[position]
                     if (!data.isCheck) {
                         data.isCheck = true
@@ -151,7 +154,7 @@ class BoxRecordFragment : BaseFragment() {
                         }
                         exitDialog.setClick("确认删除","确定删除选中的内容吗",object : ExitDialog.HomeNormalClick{
                             override fun dialogClick() {
-                                viewModel.deleteBoxRecord(arrayId)
+                                viewModel.deleteBoxRecord(arrayId,0)
                             }
                         })
                     } else "请先选择要删除的内容".toast()
@@ -184,6 +187,8 @@ class BoxRecordFragment : BaseFragment() {
         viewModel.deleteRecordLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
             rp.msg.toast()
+            refreshPack()
+            mapId.clear()
         })
         viewModel.editRecordLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
@@ -191,6 +196,7 @@ class BoxRecordFragment : BaseFragment() {
         })
     }
 
+    @SuppressLint("SetTextI18n")
     private fun upPage() {
         smartRefresh.isEnabled = totalPage >= 2
         tvRecordSize.text = "第" + currentPage+ "/"+ totalPage+"页,共"+boxRecordAdapter.data.size+"条数据"
@@ -198,11 +204,7 @@ class BoxRecordFragment : BaseFragment() {
     }
 
     private fun dialogAction(index: Int, id: Int, product: String, carton: String) {
-        editPackDialog.actionBoxRecord(index, id, product, carton,object : EditPackDialog.HomeNormalClick {
-                override fun dialogClick(processName: String, sort: Int) {
-                       viewModel.editBoxRecord(id,"1234",carton)
-                }
-            })
+        editPackDialog.actionBoxRecord(index, id, product, carton)
     }
 
 

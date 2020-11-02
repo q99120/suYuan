@@ -42,7 +42,13 @@ class CancelSingleFragment: BaseFragment(){
         tvSendQrTitle.text = "产品条码"
         editQrCode.hint = "产品条码"
         initView()
-        observer()
+    }
+
+    override fun onInvisible() {
+
+    }
+
+    override fun initData() {
     }
 
     var productFile = ""
@@ -83,6 +89,9 @@ class CancelSingleFragment: BaseFragment(){
     companion object {
         fun newInstance() = CancelSingleFragment()
     }
-
+    override fun onResume() {
+        super.onResume()
+        observer()
+    }
 
 }

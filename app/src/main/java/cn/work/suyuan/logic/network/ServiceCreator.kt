@@ -66,7 +66,7 @@ object ServiceCreator {
             Log.e(TAG, "Sending request: ${request.url()} \n ${request.headers()}")
 
             val response = chain.proceed(request)
-
+            Log.e(TAG, "Sending request2: ${response.body()}")
             val t2 = System.nanoTime()
             Log.e(TAG, "Received response for  ${response.request().url()} in ${(t2 - t1) / 1e6} ms\n${response.headers()}")
             return response

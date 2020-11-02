@@ -64,6 +64,14 @@ class SinglePackFragment :BaseFragment(){
         observer()
     }
 
+    override fun onInvisible() {
+
+    }
+
+    override fun initData() {
+
+    }
+
     private fun observer() {
         viewModel.doPackSingBoxLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull()?:return@Observer
@@ -107,8 +115,12 @@ class SinglePackFragment :BaseFragment(){
 
                 })
 
-                btnDonePack->viewModel.doPackSingBox(SuYuanUtil.getEditProduct(etProductQr.text.toString()),SuYuanUtil.getEditProduct(etBoxQr.text.toString()),productTime,
-                    productFile,1,"")
+                btnDonePack->
+                    if (etProductQr.text.isNotEmpty() && etBoxQr.text.isNotEmpty()){
+                        viewModel.doPackSingBox(SuYuanUtil.getEditProduct(etProductQr.text.toString()),etBoxQr.text.toString(),productTime,
+                            productFile,1,"")
+                    }else "请先填写产品和外箱条码".toast()
+
             }
         }
     }

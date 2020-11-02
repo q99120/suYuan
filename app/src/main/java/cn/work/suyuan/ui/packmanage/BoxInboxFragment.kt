@@ -59,6 +59,14 @@ class BoxInboxFragment : BaseFragment() {
         observer()
     }
 
+    override fun onInvisible() {
+
+    }
+
+    override fun initData() {
+
+    }
+
     private fun observer() {
         viewModel.doPackSingBoxLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
@@ -73,7 +81,7 @@ class BoxInboxFragment : BaseFragment() {
         })
     }
 
-    var productTime = ""
+    var productTime = DateUtil.getCurrentTime(true)
     var productFile = ""
     private fun initClicks() {
         setOnClickListener(tvActionQr, BigBoxActionQr, btnDonePack, tvPackTime, llActionImFiles) {
@@ -106,10 +114,11 @@ class BoxInboxFragment : BaseFragment() {
                 })
 
 
-                btnDonePack->viewModel.doPackSingBox(
-                    SuYuanUtil.getEditProduct(etProductQr.text.toString()),
-                    SuYuanUtil.getEditProduct(etBoxQr.text.toString()),productTime,
-                    productFile,2,"")
+                btnDonePack->
+                    if (etProductQr.text.isNotEmpty() && etBoxQr.text.isNotEmpty()){
+                        viewModel.doPackSingBox(SuYuanUtil.getEditProduct(etProductQr.text.toString()),etBoxQr.text.toString(),productTime,
+                            productFile,2,"")
+                    }else "请先填写产品和大箱条码".toast()
             }
         }
     }

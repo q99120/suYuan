@@ -66,6 +66,12 @@ class ManageFragment : BaseFragment() {
         observe()
     }
 
+    override fun onInvisible() {
+    }
+
+    override fun initData() {
+    }
+
     var selectPosition = -1
     var mapId: MutableMap<Int, Int> = mutableMapOf()
     private lateinit var arrayId: Array<Int?>

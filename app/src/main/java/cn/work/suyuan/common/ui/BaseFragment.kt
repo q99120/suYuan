@@ -19,6 +19,7 @@ package cn.work.suyuan.common.ui
 import android.app.Activity
 import android.content.Context
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -28,7 +29,6 @@ import androidx.fragment.app.Fragment
 import cn.work.suyuan.common.callback.RequestLifecycle
 import cn.work.suyuan.common.extensions.logD
 import cn.work.suyuan.event.MessageEvent
-import cn.work.suyuan.event.StringEvent
 import cn.work.suyuan.ui.dialog.EditPackDialog
 import cn.work.suyuan.ui.dialog.ExitDialog
 import cn.work.suyuan.ui.dialog.FileChooseDialog
@@ -43,11 +43,11 @@ import org.greenrobot.eventbus.ThreadMode
  * @author vipyinzhiwei
  * @since  2020/4/30
  */
-open class BaseFragment : Fragment(), RequestLifecycle {
+abstract class BaseFragment : Fragment(), RequestLifecycle {
     /**
      * 是否已经加载过数据
      */
-    private var mHasLoadedData = false
+     var mHasLoadedData = false
 
     /**
      * Fragment中由于服务器或网络异常导致加载失败显示的布局。
@@ -91,7 +91,11 @@ open class BaseFragment : Fragment(), RequestLifecycle {
         logD(TAG, "BaseFragment-->onCreate()")
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
         logD(TAG, "BaseFragment-->onCreateView()")
         return super.onCreateView(inflater, container, savedInstanceState)
     }
@@ -103,29 +107,78 @@ open class BaseFragment : Fragment(), RequestLifecycle {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        isPrepared = true
+        lazyLoad()
         logD(TAG, "BaseFragment-->onActivityCreated()")
     }
 
     override fun onStart() {
         super.onStart()
-        logD(TAG, "BaseFragment-->onStart()")
+        Log.e(TAG, "BaseFragment-->onStart()")
     }
+
+    override fun getUserVisibleHint(): Boolean {
+        return super.getUserVisibleHint()
+    }
+
+
+    protected var isVisibleUser = false //是否可见
+
+    private var isPrepared = false //是否初始化完成
+
+    private var isFirst = true //是否第一次加载
+
+    override fun setUserVisibleHint(isVisibleToUser: Boolean) {
+        if (userVisibleHint){
+            isVisibleUser = true
+            lazyLoad()
+        }else{
+            isVisibleUser = false
+            onInvisible()
+        }
+    }
+
+    /**
+     * 懒加载
+     */
+     open fun lazyLoad() {
+        if (!isPrepared || !isVisibleUser || !isFirst) {
+            return
+        }
+        initData()
+        isFirst = false
+    }
+
+    /**
+     * 不可见时调用
+     */
+     abstract fun onInvisible()
+
+    /**
+     * 获取数据
+     */
+     abstract fun initData()
+
 
     override fun onResume() {
         super.onResume()
-        logD(TAG, "BaseFragment-->onResume()")
+        if (userVisibleHint) {
+            userVisibleHint = true
+        }
+        Log.e(TAG, "BaseFragment$userVisibleHint")
+        Log.e(TAG, "BaseFragment-->onResume()")
 //        MobclickAgent.onPageStart(javaClass.name)
         //当Fragment在屏幕上可见并且没有加载过数据时调用
         if (!mHasLoadedData) {
             loadDataOnce()
-            logD(TAG, "BaseFragment-->loadDataOnce()")
+            Log.e(TAG, "BaseFragment-->loadDataOnce()")
             mHasLoadedData = true
         }
     }
 
     override fun onPause() {
         super.onPause()
-        logD(TAG, "BaseFragment-->onPause()")
+        Log.e(TAG, "BaseFragment-->onPause()")
 //        MobclickAgent.onPageEnd(javaClass.name)
     }
 
@@ -143,6 +196,8 @@ open class BaseFragment : Fragment(), RequestLifecycle {
 
     override fun onDestroy() {
         super.onDestroy()
+        isVisibleUser = false
+        isFirst = true
         logD(TAG, "BaseFragment-->onDestroy()")
     }
 

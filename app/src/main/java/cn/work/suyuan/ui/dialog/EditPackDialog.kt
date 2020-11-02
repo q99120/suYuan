@@ -7,9 +7,6 @@ import android.view.ViewGroup
 import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
 import kotlinx.android.synthetic.main.dialog_edit_pack.*
-import kotlinx.android.synthetic.main.dialog_home_normal.*
-import kotlinx.android.synthetic.main.dialog_home_normal.etMgName
-import kotlinx.android.synthetic.main.dialog_home_normal.etSort
 import kotlinx.android.synthetic.main.dialog_home_normal.tvHomeCancel
 import kotlinx.android.synthetic.main.dialog_home_normal.tvHomeConfirm
 import kotlinx.android.synthetic.main.dialog_home_normal.view.*
@@ -49,8 +46,7 @@ class EditPackDialog : Dialog {
         index: Int,
         id: Int,
         product: String,
-        carton: String,
-        homeNormalClick: HomeNormalClick
+        carton: String
     ) {
         tvBigBoxCode.text = carton
         show()

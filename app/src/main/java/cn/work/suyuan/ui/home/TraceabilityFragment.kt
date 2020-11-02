@@ -73,6 +73,12 @@ class TraceabilityFragment : BaseFragment() {
        observer()
     }
 
+    override fun onInvisible() {
+    }
+
+    override fun initData() {
+    }
+
     private var startTime = ""
     private var endTime = ""
     private val productName = ""

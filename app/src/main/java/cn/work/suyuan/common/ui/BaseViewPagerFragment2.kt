@@ -30,28 +30,25 @@ import androidx.fragment.app.FragmentPagerAdapter
 abstract class BaseViewPagerFragment2 : BaseFragment() {
 
 
+    protected var offscreenPageLimit = 1
 
 
-
-        protected var offscreenPageLimit = 1
-
-
-        abstract val pageTitles:Array<String>
+    abstract val pageTitles: Array<String>
 
 
-        abstract val createFragments: Array<Fragment>
+    abstract val createFragments: Array<Fragment>
 
-        override fun onActivityCreated(savedInstanceState: Bundle?) {
-            super.onActivityCreated(savedInstanceState)
-            setupViews()
-        }
+    override fun onActivityCreated(savedInstanceState: Bundle?) {
+        super.onActivityCreated(savedInstanceState)
+        setupViews()
+    }
 
-        override fun onDestroy() {
-            super.onDestroy()
-        }
+    override fun onDestroy() {
+        super.onDestroy()
+    }
 
-        open fun setupViews() {
-            initViewPager()
+    open fun setupViews() {
+        initViewPager()
 //        setOnClickListener(ivCalendar, ivSearch) {
 //            if (this == ivCalendar) {
 //                R.string.currently_not_supported.showToast()
@@ -59,39 +56,37 @@ abstract class BaseViewPagerFragment2 : BaseFragment() {
 //                SearchFragment.switchFragment(activity)
 //            }
 //        }
-        }
+    }
 
-        protected fun initViewPager() {
+    protected fun initViewPager() {
 
-        }
-
-
-
+    }
 
 
     /**
-         * 带滑动的tablayout
-         */
-        inner class MyPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm!!) {
+     * 带滑动的tablayout
+     */
+
+    inner class MyPagerAdapter(fm: FragmentManager?) : FragmentPagerAdapter(fm!!,BEHAVIOR_RESUME_ONLY_CURRENT_FRAGMENT) {
         private val fragments = ArrayList<Fragment>()
 
 
-            fun addFragments(fragment: Array<Fragment>) {
-                fragments.clear()
-                fragments.addAll(fragment)
-            }
+        fun addFragments(fragment: Array<Fragment>) {
+            fragments.clear()
+            fragments.addAll(fragment)
+        }
 
 
-            override fun getCount(): Int {
-                return fragments.size
-            }
+        override fun getCount(): Int {
+            return fragments.size
+        }
 
-            override fun getPageTitle(position: Int): CharSequence {
-                return  pageTitles[position]
-            }
+        override fun getPageTitle(position: Int): CharSequence {
+            return pageTitles[position]
+        }
 
-            override fun getItem(position: Int): Fragment {
-                return fragments[position]
-            }
+        override fun getItem(position: Int): Fragment {
+            return fragments[position]
         }
     }
+}

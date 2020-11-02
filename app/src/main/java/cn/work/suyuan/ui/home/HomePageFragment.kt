@@ -29,6 +29,12 @@ class HomePageFragment : BaseViewPagerFragment(){
         return super.onCreateView(inflater.inflate(R.layout.fragment_main_container, container, false))
     }
 
+    override fun onInvisible() {
+    }
+
+    override fun initData() {
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         viewPager2?.currentItem = 0

@@ -1,6 +1,7 @@
 package cn.work.suyuan.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -43,6 +44,12 @@ class TracingFragment  : BaseFragment(){
         observer()
     }
 
+    override fun onInvisible() {
+    }
+
+    override fun initData() {
+    }
+
     private fun observer() {
         viewModel.upLoadFileLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
@@ -52,6 +59,8 @@ class TracingFragment  : BaseFragment(){
             tvImportFile.text = "导入文件成功" })
         viewModel.setTracingLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
+            Log.e("message",rp.msg)
+            Log.e("code",rp.code.toString())
             rp.msg.toast()
         })
     }

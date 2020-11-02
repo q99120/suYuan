@@ -22,6 +22,14 @@ class PackManageFragment: BaseViewPagerFragment2(),OnTabSelectListener{
         return super.onCreateView(inflater.inflate(R.layout.fragment_other_container, container, false))
     }
 
+    override fun onInvisible() {
+
+    }
+
+    override fun initData() {
+
+    }
+
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
         val pagerAdapter = MyPagerAdapter(getActivity()!!.supportFragmentManager).apply { addFragments(createFragments) }

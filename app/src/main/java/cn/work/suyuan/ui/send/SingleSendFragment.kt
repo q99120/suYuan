@@ -9,7 +9,8 @@ import android.view.View
 import android.view.ViewGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
-import cn.work.suyuan.Const.singPopFlag
+import cn.work.suyuan.Const
+import cn.work.suyuan.Const.sendViewFlag
 import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
 import cn.work.suyuan.common.extensions.toast
@@ -19,9 +20,10 @@ import cn.work.suyuan.util.*
 import kotlinx.android.synthetic.main.fragment_send_manage.*
 import kotlinx.android.synthetic.main.layout_import_file.*
 import kotlinx.android.synthetic.main.layout_send_manage_fm.*
-import kotlinx.android.synthetic.main.layout_send_manage_fm.tvActionQr
-import kotlinx.android.synthetic.main.layout_send_manage_fm.tvTracingTime
+import org.angmarch.views.NiceSpinner
+import org.angmarch.views.OnSpinnerItemSelectedListener
 import java.io.File
+import java.util.*
 
 /**
  * 单个发货
@@ -44,12 +46,26 @@ class SingleSendFragment : BaseFragment() {
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
-        singPopFlag = 1
         tvSendQrTitle.text = "产品条码"
         layoutFloWater.visibility = View.GONE
         tvTracingTime.text = DateUtil.getCurrentTime(true)
+        getDisAndProduct()
         initViews()
-        observer()
+    }
+
+    override fun onInvisible() {
+    }
+
+    override fun initData() {
+    }
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+    }
+
+    private fun getDisAndProduct() {
+        viewModel.getDistributor()
+        viewModel.getProduct()
     }
 
 
@@ -59,26 +75,33 @@ class SingleSendFragment : BaseFragment() {
             btnSend,
             tvChooseProduct,
             tvTracingTime,
-            llActionImFiles,tvActionQr
+            llActionImFiles, tvActionQr
         ) {
             when (this) {
-                tvActionQr->{
+                tvActionQr -> {
                     ScanQrCodeActivity.start(activity, object : ScanQrCodeActivity.QrCallBack {
                         override fun qrData(result: String) {
-                            editQrCode.append(result+"\n")
+                            editQrCode.append(result + "\n")
                         }
                     })
                 }
-                tvChooseDistributor -> {
-                    if (APUtils.getInt("agentLevel",0)!=0) viewModel.getDistributor(2) else viewModel.getDistributor(1)
-                }
-                tvChooseProduct -> {
-                    viewModel.getProduct()
-                }
-                llActionImFiles -> FileUtils.upLoadFiles(activity,fileChooseDialog,object :FileUtils.CallBackFile{
-                        override fun backFile(file: File) { viewModel.upLoadFile(file) } })
+                llActionImFiles -> FileUtils.upLoadFiles(
+                    activity,
+                    fileChooseDialog,
+                    object : FileUtils.CallBackFile {
+                        override fun backFile(file: File) {
+                            viewModel.upLoadFile(file)
+                        }
+                    })
                 btnSend -> {
-                    viewModel.sendProduct(1, productId, distributorId, SuYuanUtil.getEditProduct(editQrCode.text.toString()), productTime, productFile)
+                    if (editQrCode.text.isNotEmpty()) {
+                        viewModel.sendProduct(
+                            1, productId, distributorId, SuYuanUtil.getEditProduct(
+                                editQrCode.text.toString()
+                            ), productTime, productFile
+                        )
+                    } else "请先填写产品条码".toast()
+
                 }
                 tvTracingTime -> {
                     DateUtil.showDate(activity, true, object : DateUtil.ChooseDate {
@@ -91,6 +114,16 @@ class SingleSendFragment : BaseFragment() {
                 }
             }
         }
+        tvChooseProduct.onSpinnerItemSelectedListener =
+            OnSpinnerItemSelectedListener { parent, view, position, id ->
+                productId = arrayProduct[position]!!
+                Log.e("productId", productId.toString())
+            }
+        tvChooseDistributor.onSpinnerItemSelectedListener =
+            OnSpinnerItemSelectedListener { parent, view, position, id ->
+                distributorId = arrayAgent[position]!!
+                Log.e("distributorId", distributorId.toString())
+            }
     }
 
     lateinit var popUtil: SinglePopUtil
@@ -99,34 +132,41 @@ class SingleSendFragment : BaseFragment() {
     private var productCode = ""
     private var productTime = DateUtil.getCurrentTime(true)
     private var productFile = ""
+    lateinit var arrayProduct: Array<Int?>
+    val listProduct = mutableListOf<String>()
+    lateinit var arrayAgent: Array<Int?>
+    val listAgent = mutableListOf<String>()
     private fun observer() {
         viewModel.distributorLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
-                popUtil = SinglePopUtil(requireContext(), object : SinglePopUtil.popClick {
-                override fun clickPop(type: String, pi: Int) {
-                    tvChooseDistributor.text = type
-                    distributorId = pi
-                }
-            })
-            popUtil.setData(rp.data, 1)
-            popUtil.showAsDropDown(tvChooseDistributor,0,50)
+            if (listAgent.isNotEmpty()) listAgent.clear()
+            arrayAgent = arrayOfNulls<Int>(rp.data.size)
+            for (i in 0 until rp.data.size) {
+                arrayAgent[i] = rp.data[i].id
+                listAgent.add(rp.data[i].title)
+            }
+            distributorId = rp.data[0].id
+            val dataset: List<String> =
+                LinkedList(listAgent)
+            tvChooseDistributor.attachDataSource(dataset)
         })
         viewModel.productLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
-            Log.e("金卡金卡的角色","111")
-                popUtil = SinglePopUtil(requireContext(), object : SinglePopUtil.popClick {
-                    override fun clickPop(type: String, pi: Int) {
-                        tvChooseProduct.text = type
-                        productId = pi
-                    }
-
-                })
-                popUtil.setData(rp.data, 2)
-                popUtil.showAsDropDown(tvChooseProduct,0,50)
+            if (listProduct.isNotEmpty()) listProduct.clear()
+            arrayProduct = arrayOfNulls<Int>(rp.data.size)
+            for (i in 0 until rp.data.size) {
+                arrayProduct[i] = rp.data[i].id
+                listProduct.add(rp.data[i].name)
+            }
+            val dataset: List<String> =
+                LinkedList(listProduct)
+            productId = rp.data[0].id
+            tvChooseProduct.attachDataSource(dataset)
         })
         viewModel.sendProductLiveData.observe(viewLifecycleOwner, Observer {
+            Log.e("livedata1", "111")
             val rp = it.getOrNull() ?: return@Observer
-            if (rp.code == 200) rp.msg.toast()
+            rp.msg.toast()
         })
 
         viewModel.upLoadFileLiveData.observe(viewLifecycleOwner, Observer {
@@ -142,15 +182,18 @@ class SingleSendFragment : BaseFragment() {
 
 
     override fun loadDataOnce() {
+        Log.e("生命周期single", "onResume")
         super.loadDataOnce()
+
+
     }
+
+
 
 
     companion object {
         fun newInstance() = SingleSendFragment()
     }
-
-
 
 
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
@@ -161,6 +204,15 @@ class SingleSendFragment : BaseFragment() {
 
         }
 
+    }
+
+    override fun onResume() {
+        super.onResume()
+        observer()
+    }
+
+    override fun onDetach() {
+        super.onDetach()
     }
 
 }

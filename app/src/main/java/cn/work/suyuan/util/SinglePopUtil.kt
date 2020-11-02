@@ -50,7 +50,6 @@ class SinglePopUtil(context: Context, param: popClick) : PopupWindow(context) {
 
     var flags = 1
     fun setData(data: MutableList<HomeData.Data>, flag: Int) {
-        Log.e("结合数据",Const.singPopFlag.toString())
         flags = flag
         singleSpinnerAdapter.setType(flag)
           singleSpinnerAdapter.setList(data)
