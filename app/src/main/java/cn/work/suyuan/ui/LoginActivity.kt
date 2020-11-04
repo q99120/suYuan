@@ -174,13 +174,15 @@ class LoginActivity:BaseActivity(),IUiListener {
                 if (token.isNotEmpty() && expires.isNotEmpty() && openId.isNotEmpty()) {
                     mTencent.setAccessToken(token, expires)
                     mTencent.openId = openId
+                    //拿到openid后给后台传码
+                    viewModel.login(openId,"123456")
                     "登录成功".toast()
                     /**
                      * 获取用户昵称，头像等信息
                      */
                     isgetTokenQQ = true
-                    val userInfo = UserInfo(this, mTencent.qqToken)
-                    userInfo.getUserInfo(this)
+//                    val userInfo = UserInfo(this, mTencent.qqToken)
+//                    userInfo.getUserInfo(this)
                 }
             }
         } catch (e: Exception) {
@@ -200,11 +202,11 @@ class LoginActivity:BaseActivity(),IUiListener {
         if (!isgetTokenQQ){
             initOpenidAndToken(response as JSONObject)
         }else{
-            val jsonObject: JSONObject = JSONObject(response.toString())
-            Log.e("获取登录的用户详情",jsonObject.toString())
-            val nickname = jsonObject.optString("nickname")
-            val figuralQq2 = jsonObject.optString("figureurl_qq_2")
-            MainActivity.start(1, this, nickname, figuralQq2)
+//            val jsonObject: JSONObject = JSONObject(response.toString())
+//            Log.e("获取登录的用户详情",jsonObject.toString())
+//            val nickname = jsonObject.optString("nickname")
+//            val figuralQq2 = jsonObject.optString("figureurl_qq_2")
+//            MainActivity.start(1, this, nickname, figuralQq2)
         }
 
     }

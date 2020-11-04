@@ -17,7 +17,7 @@ import cn.work.suyuan.util.*
 import kotlinx.android.synthetic.main.fragment_send_manage.*
 import kotlinx.android.synthetic.main.layout_import_file.*
 import kotlinx.android.synthetic.main.layout_send_manage_fm.*
-import kotlinx.android.synthetic.main.layoutflowwater.view.*
+import kotlinx.android.synthetic.main.layoutflowwater.*
 import org.angmarch.views.OnSpinnerItemSelectedListener
 import java.io.File
 import java.util.*
@@ -45,6 +45,9 @@ class BatchSendFragment: BaseFragment(){
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        tvSendQrTitle.visibility = View.GONE
+        editQrCode.visibility = View.GONE
+        tvActionQr.visibility = View.GONE
         getDisAndProduct()
         initViews()
     }
@@ -90,8 +93,14 @@ class BatchSendFragment: BaseFragment(){
                     FileUtils.CallBackFile{
                     override fun backFile(file: File) { viewModel.upLoadFile(file) } })
                 btnSend -> {
-                    val array = arrayOf(flowWaterBegin.text.toString(),flowWaterStop.text.toString())
-                    viewModel.batchSend(productId, distributorId, array, productTime, productFile, 2)
+//                    tvTitleSince.setText("测试")
+//                    Log.e("流水号1",flowWaterBegin.text.toString())
+//                    Log.e("流水号2",flowWaterStop.text.toString())
+                    if (flowWaterBegin.text.isNotEmpty() && flowWaterStop.text.isNotEmpty()){
+                        val array = arrayOf(flowWaterBegin.text.toString(),flowWaterStop.text.toString())
+                        viewModel.batchSend(productId, distributorId, array, productTime, productFile, 2)
+                    }else "请输入流水号".toast()
+
                 }
                 tvTracingTime -> {
                     DateUtil.showDate(activity, true, object : DateUtil.ChooseDate {
@@ -154,6 +163,11 @@ class BatchSendFragment: BaseFragment(){
             if (rp.code == 200)
                 productFile = rp.data.toString()
             tvImportFile.text = "导入文件成功" })
+
+        viewModel.batchSendLiveData.observe(viewLifecycleOwner, Observer {
+            val rp = it.getOrNull() ?: return@Observer
+            rp.msg.toast()
+        })
     }
 
 

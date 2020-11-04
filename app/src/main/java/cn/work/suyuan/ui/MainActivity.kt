@@ -64,14 +64,15 @@ class MainActivity : BaseActivity() {
         }
         val flag = intent.getIntExtra("intentFlag", 0)
         APUtils.putInt("loginFlag", flag)
-        if (flag == 0) {
-            viewModel.getUser()
-        } else if (flag == 1) {
-            val nickName = intent.getStringExtra("userName")
-            val headUrl = intent.getStringExtra("userHead")
-            tvUserName.text = nickName
-            GlideEngine.getInstance().loadPhoto(this, Uri.parse(headUrl), ivUserHead)
-        }
+//        if (flag == 0) {
+//        } else if (flag == 1) {
+//            val nickName = intent.getStringExtra("userName")
+//            val headUrl = intent.getStringExtra("userHead")
+//            tvUserName.text = nickName
+//            GlideEngine.getInstance().loadPhoto(this, Uri.parse(headUrl), ivUserHead)
+//        }
+        viewModel.getUser()
+
         observer()
     }
 

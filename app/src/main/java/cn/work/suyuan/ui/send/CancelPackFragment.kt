@@ -58,7 +58,13 @@ class CancelPackFragment: BaseFragment(){
             when(this){
                 btnImportFile-> FileUtils.upLoadFiles(activity,fileChooseDialog,object : FileUtils.CallBackFile{
                     override fun backFile(file: File) { viewModel.upLoadFile(file) } })
-                    btnCancel-> viewModel.cancelSendPack(2,SuYuanUtil.getEditProduct(editQrCode.text.toString()),productTime,productFile)
+                    btnCancel-> {
+                        if (editQrCode.text.isEmpty()) {
+                            "请输入外箱条码".toast()
+                            return@setOnClickListener
+                        }
+                        viewModel.cancelSendPack(2, SuYuanUtil.getEditProduct(editQrCode.text.toString()), productTime, productFile)
+                    }
                 tvActionQr->ScanQrCodeActivity.start(activity,object :ScanQrCodeActivity.QrCallBack{
                     override fun qrData(result: String) {
                         editQrCode.append(result+"\n")

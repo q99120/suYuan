@@ -8,6 +8,7 @@ import android.view.View.VISIBLE
 import android.view.ViewGroup
 import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
+import cn.work.suyuan.common.extensions.toast
 import kotlinx.android.synthetic.main.dialog_home_normal.*
 import kotlinx.android.synthetic.main.dialog_home_normal.etMgName
 import kotlinx.android.synthetic.main.dialog_home_normal.tvHomeCancel
@@ -32,24 +33,29 @@ class HomeNormalDialog : Dialog {
                 tvHomeCancel -> dismiss()
                 tvHomeConfirm -> {
                     dialogClicks()
-                    dismiss()
                 }
             }
         }
     }
 
     private fun dialogClicks() {
-        if (etMgName.text.isNotEmpty() )
-            if (etMgName.text.isNotEmpty() && etSort.text.isNotEmpty()){
-                homeNormalClick.dialogClick(etMgName.text.toString(), etSort.text.toString().toInt())
-            }
+        if (etMgName.text.isEmpty()) {
+            "请输入流程名称".toast()
+            return
+        }
+        if (etSort.text.isEmpty()) {
+            "请输入排序序号".toast()
+            return
+        }
+        homeNormalClick.dialogClick(etMgName.text.toString(), etSort.text.toString().toInt())
+        dismiss()
     }
 
     fun action(index: Int, name: String, sort: Int, param: HomeNormalClick) {
         homeNormalClick = param
         when (index) {
             1 -> {
-                llId.visibility = VISIBLE
+//                llId.visibility = VISIBLE
                 tvDialogTitle.text = "添加数据"
             }
             2 -> {
@@ -61,9 +67,6 @@ class HomeNormalDialog : Dialog {
         }
         show()
     }
-
-
-
 
 
     interface HomeNormalClick {

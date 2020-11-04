@@ -25,7 +25,7 @@ import java.io.File
 /**
  * 流程追朔
  */
-class TracingFragment  : BaseFragment(){
+class TracingFragment : BaseFragment() {
 
     private val viewModel by lazy {
         ViewModelProvider(
@@ -34,8 +34,18 @@ class TracingFragment  : BaseFragment(){
         ).get(HomeViewModel::class.java)
     }
 
-    override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
-        return super.onCreateView(inflater.inflate(R.layout.fragment_home_tracing, container, false))
+    override fun onCreateView(
+        inflater: LayoutInflater,
+        container: ViewGroup?,
+        savedInstanceState: Bundle?
+    ): View? {
+        return super.onCreateView(
+            inflater.inflate(
+                R.layout.fragment_home_tracing,
+                container,
+                false
+            )
+        )
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -56,11 +66,12 @@ class TracingFragment  : BaseFragment(){
             rp.msg.toast()
             if (rp.code == 200)
                 productFile = rp.data.toString()
-            tvImportFile.text = "导入文件成功" })
+            tvImportFile.text = "导入文件成功"
+        })
         viewModel.setTracingLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
-            Log.e("message",rp.msg)
-            Log.e("code",rp.code.toString())
+            Log.e("message", rp.msg)
+            Log.e("code", rp.code.toString())
             rp.msg.toast()
         })
     }
@@ -68,46 +79,93 @@ class TracingFragment  : BaseFragment(){
     var categoryId = 1
     var tracingTime = ""
     var productFile = ""
-    lateinit var  arrayCode:Array<String?>
+    lateinit var arrayCode: Array<String?>
     private fun initViews() {
         tvTracingTime.text = DateUtil.getCurrentTime(true)
-        setOnClickListener(btnConfirm,tvChooseCate,tvTracingTime,llActionImFiles,tvActionQr){
-            when(this){
-                btnConfirm->
-                {
-                    viewModel.setTracing(categoryId,editUName.text.toString(),SuYuanUtil.getEditProduct(editProductName.text.toString()),tracingTime,productFile
-                    ,richEditText.text.toString(),editProductNum.text.toString(),editOrderNum.text.toString())
-                }
-                tvChooseCate->{spinnerDialog.initSpinner(viewModel.getCate(),object :SingleSpinnerDialog.HomeNormalClick{
-                    override fun dialogClick(processName: String, sort: Int) {
-                        tvChooseCate.text = processName
-                        categoryId = sort
-                    } })}
-                tvTracingTime->{DateUtil.showDate(activity,true,object :DateUtil.ChooseDate{
-                    override fun getTime(result: String) {
-                        tvTracingTime.text = result
-                        tracingTime = result
-                    } })}
-                llActionImFiles->{
-                    FileUtils.upLoadFiles(activity,fileChooseDialog,object :
-                    FileUtils.CallBackFile{
-                    override fun backFile(file: File) { viewModel.upLoadFile(file) } })}
-                tvActionQr->{
-                    ScanQrCodeActivity.start(activity, object : ScanQrCodeActivity.QrCallBack{
-                    override fun qrData(result: String) {
-                        editProductName.append(result+"\n")
+        setOnClickListener(btnConfirm, tvChooseCate, tvTracingTime, llActionImFiles, tvActionQr) {
+            when (this) {
+                btnConfirm -> {
+                    if (editUName.text!!.isEmpty()) {
+                        fuToast("责任人或工号不能为空")
+                        return@setOnClickListener
                     }
+                    if (editProductName.text!!.isEmpty()) {
+                        fuToast("产品条码不能为空")
+                        return@setOnClickListener
+                    }
+                    if (richEditText.text!!.isEmpty()) {
+                        fuToast("富文本编辑器不能为空")
+                        return@setOnClickListener
+                    }
+                    if (editProductNum.text!!.isEmpty()){
+                        fuToast("生产批次不能为空")
+                        return@setOnClickListener
+                    }
+                    if (editOrderNum.text!!.isEmpty()) {
+                        fuToast("订单号不能为空")
+                        return@setOnClickListener
+                    }
+                    viewModel.setTracing(
+                        categoryId,
+                        editUName.text.toString(),
+                        SuYuanUtil.getEditProduct(editProductName.text.toString()),
+                        tracingTime,
+                        productFile,
+                        richEditText.text.toString(),
+                        editProductNum.text.toString(),
+                        editOrderNum.text.toString()
+                    )
+                }
+                tvChooseCate -> {
+                    spinnerDialog.initSpinner(viewModel.getCate(),
+                        object : SingleSpinnerDialog.HomeNormalClick {
+                            override fun dialogClick(processName: String, sort: Int) {
+                                tvChooseCate.text = processName
+                                categoryId = sort
+                            }
+                        })
+                }
+                tvTracingTime -> {
+                    DateUtil.showDate(activity, true, object : DateUtil.ChooseDate {
+                        override fun getTime(result: String) {
+                            tvTracingTime.text = result
+                            tracingTime = result
+                        }
+                    })
+                }
+                llActionImFiles -> {
+                    FileUtils.upLoadFiles(activity, fileChooseDialog, object :
+                        FileUtils.CallBackFile {
+                        override fun backFile(file: File) {
+                            viewModel.upLoadFile(file)
+                        }
+                    })
+                }
+                tvActionQr -> {
+                    ScanQrCodeActivity.start(activity, object : ScanQrCodeActivity.QrCallBack {
+                        override fun qrData(result: String) {
+                            editProductName.append(result + "\n")
+                        }
 
-                })  }
+                    })
+                }
 
             }
         }
 
     }
 
+    private fun isEnableClick(view: View?) {
 
-    companion object { fun newInstance() = TracingFragment()
+    }
 
+    private fun fuToast(content: String) {
+        content.toast()
+    }
+
+
+    companion object {
+        fun newInstance() = TracingFragment()
 
 
     }

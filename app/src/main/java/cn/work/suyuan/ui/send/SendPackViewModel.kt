@@ -352,6 +352,7 @@ class SendPackViewModel(private val repository: SendPackRepository) : ViewModel(
      */
     private val batchSendRequest = MutableLiveData<String>()
     fun batchSend(product_id:Int,agent_id:Int,product:Array<String>,product_time:String,file:String,level:Int) {
+        Log.e("批量发货",MainPageService.batchSend(product_id,agent_id,product,product_time,file,level))
         batchSendRequest.value = MainPageService.batchSend(product_id,agent_id,product,product_time,file,level)
     }
 

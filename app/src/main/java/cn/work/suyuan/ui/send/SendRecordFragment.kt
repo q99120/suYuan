@@ -60,6 +60,7 @@ class SendRecordFragment : BaseFragment() {
         tvTitle5.text = "日期"
         tvTitle6.text = "IP"
         layout_choose_date.visibility = View.VISIBLE
+        initView()
     }
 
     override fun onInvisible() {
