@@ -65,6 +65,10 @@ interface MainPageService {
     @POST("api/v1/")
     fun sendRecord2(@Body body: RequestBody): Call<SendRecord>
 
+
+    @POST("api/v1/")
+    fun setTracing(@Body body: RequestBody): Call<HomeData>
+
     companion object {
         val gson = Gson()
         private fun getServiceHead(manageServiceJson: JSONObject, interfaceData: String) {
@@ -149,7 +153,7 @@ interface MainPageService {
             file: String,
             content: String,
             batch: String,
-            orderNum: String,
+            orderNum: String,zhijianID:String
         ): String {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.goodsAdd")
@@ -162,6 +166,7 @@ interface MainPageService {
             param.put("content", content)
             param.put("batch", batch)
             param.put("order_num", orderNum)
+            param.put("report_id", zhijianID)
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }
@@ -465,6 +470,16 @@ interface MainPageService {
                 getServiceHead(manageServiceJson, "shop.consignmentAddAllLower")
                 param.put("agent_level",APUtils.getInt("agentLevel",1))
             }
+            manageServiceJson.put("param", param)
+            return manageServiceJson.toString()
+        }
+
+        fun sendReport(edittext: String, productFile: String): String? {
+            val manageServiceJson = JSONObject()
+            getServiceHead(manageServiceJson, "shop.reportAdd")
+            val param = JSONObject()
+            param.put("test_report", edittext)
+            param.put("test_report_img", productFile)
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }

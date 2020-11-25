@@ -52,6 +52,10 @@ public class GlideEngine implements ImageEngine {
         Glide.with(context).load(uri).circleCrop().transition(withCrossFade()).into(imageView);
     }
 
+    public void loadPhotoNoCircle(@NonNull Context context, @NonNull Uri uri, @NonNull ImageView imageView) {
+        Glide.with(context).load(uri).transition(withCrossFade()).into(imageView);
+    }
+
     /**
      * 加载gif动图图片到ImageView，gif动图不动
      *

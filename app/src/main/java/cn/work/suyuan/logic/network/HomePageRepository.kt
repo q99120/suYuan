@@ -70,6 +70,10 @@ class HomePageRepository private constructor(private val network: SuYuanNetwork)
         response
     }
 
+    suspend fun setTracing(body: RequestBody)= withContext(Dispatchers.IO){
+        val response = network.setTracing(body)
+        response
+    }
 
 
     companion object {

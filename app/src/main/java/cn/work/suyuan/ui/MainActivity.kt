@@ -98,13 +98,13 @@ class MainActivity : BaseActivity() {
                     notificationUiRefresh(1)
                     setTabSelection(1)
                 }
-                ll_send -> {
-                    notificationUiRefresh(2)
-                    setTabSelection(2)
-                }
+//                ll_send -> {
+//                    notificationUiRefresh(2)
+//                    setTabSelection(2)
+//                }
                 ll_mine -> {
                     notificationUiRefresh(3)
-                    setTabSelection(3)
+                    setTabSelection(2)
                 }
                 llHead -> {
                     if (APUtils.getInt("agentLevel", 0) != 0) {
@@ -120,10 +120,10 @@ class MainActivity : BaseActivity() {
 
             }
         }
-        if (APUtils.getInt("agentLevel", 0) != 0) {
-            setTabSelection(2)
-            return
-        }
+//        if (APUtils.getInt("agentLevel", 0) != 0) {
+//            setTabSelection(2)
+//            return
+//        }
         setTabSelection(0)
     }
 
@@ -137,11 +137,11 @@ class MainActivity : BaseActivity() {
                 if (ivPack.isSelected) EventBus.getDefault()
                     .post(RefreshEvent(PackManageFragment::class.java))
             }
+//            2 -> {
+//                if (ivSend.isSelected) EventBus.getDefault()
+//                    .post(RefreshEvent(SendManageFragment::class.java))
+//            }
             2 -> {
-                if (ivSend.isSelected) EventBus.getDefault()
-                    .post(RefreshEvent(SendManageFragment::class.java))
-            }
-            3 -> {
                 if (ivMine.isSelected) EventBus.getDefault()
                     .post(RefreshEvent(MineFragment::class.java))
             }
@@ -176,18 +176,18 @@ class MainActivity : BaseActivity() {
                         show(packFragmentManager!!)
                     }
                 }
+//                2 -> {
+//                    rl_sel_title.visibility = View.VISIBLE
+//                    tv_sel_title.text = "发货管理"
+//                    ivSend.isSelected = true
+//                    if (sendManageFragment == null) {
+//                        sendManageFragment = SendManageFragment.newInstance()
+//                        add(R.id.homeContain, sendManageFragment!!)
+//                    } else {
+//                        show(sendManageFragment!!)
+//                    }
+//                }
                 2 -> {
-                    rl_sel_title.visibility = View.VISIBLE
-                    tv_sel_title.text = "发货管理"
-                    ivSend.isSelected = true
-                    if (sendManageFragment == null) {
-                        sendManageFragment = SendManageFragment.newInstance()
-                        add(R.id.homeContain, sendManageFragment!!)
-                    } else {
-                        show(sendManageFragment!!)
-                    }
-                }
-                3 -> {
                     rl_sel_title.visibility = View.GONE
                     ivMine.isSelected = true
                     if (mineFragment == null) {
@@ -206,7 +206,7 @@ class MainActivity : BaseActivity() {
         transaction.run {
             if (homePageFragment != null) hide(homePageFragment!!)
             if (packFragmentManager != null) hide(packFragmentManager!!)
-            if (sendManageFragment != null) hide(sendManageFragment!!)
+//            if (sendManageFragment != null) hide(sendManageFragment!!)
             if (mineFragment != null) hide(mineFragment!!)
         }
     }

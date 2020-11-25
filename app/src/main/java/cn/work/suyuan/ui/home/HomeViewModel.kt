@@ -5,10 +5,7 @@ import androidx.lifecycle.MutableLiveData
 import androidx.lifecycle.Transformations
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.liveData
-import cn.work.suyuan.logic.model.HomeData
-import cn.work.suyuan.logic.model.NormalData
-import cn.work.suyuan.logic.model.TokenData
-import cn.work.suyuan.logic.model.UserInfo
+import cn.work.suyuan.logic.model.*
 import cn.work.suyuan.logic.network.HomePageRepository
 import cn.work.suyuan.logic.network.api.MainPageService
 import cn.work.suyuan.util.FileUtils
@@ -251,11 +248,12 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
         file: String,
         content: String,
         batch: String,
-        orderNum: String
+        orderNum: String,
+        zhijianID: String
     ) {
-//        Log.e("流程追溯", MainPageService.manageTrace(category_id, uname, product, product_time, file,content,batch,orderNum))
+        Log.e("流程追溯", MainPageService.manageTrace(category_id, uname, product, product_time, file,content,batch,orderNum,zhijianID))
         setTracingRequest.value =
-            MainPageService.manageTrace(category_id, uname, product, product_time, file,content,batch,orderNum)
+            MainPageService.manageTrace(category_id, uname, product, product_time, file,content,batch,orderNum,zhijianID)
     }
 
     val setTracingLiveData = Transformations.switchMap(setTracingRequest) {
@@ -263,11 +261,11 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
             val result = try {
                 val body: RequestBody =
                     RequestBody.create(parse("application/json; charset=utf-8"), it)
-                val recommend = repository.editProcess(body)
+                val recommend = repository.setTracing(body)
                 Result.success(recommend)
             } catch (e: Exception) {
                 Log.e("获取错误信息", e.toString())
-                Result.failure<NormalData>(e)
+                Result.failure<HomeData>(e)
             }
             emit(result)
         }
@@ -290,6 +288,8 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
         return list
     }
 
+
+
     val upLoadFileLiveData = Transformations.switchMap(upLoadFileRequest) {
         liveData {
             val result = try {
@@ -303,6 +303,26 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
         }
     }
 
-
+    /**
+     * 上传质检报告
+     */
+    private val sendReportRequest = MutableLiveData<String>()
+    fun sendReport(edittext: String, productFile: String) {
+          sendReportRequest.value = MainPageService.sendReport(edittext,productFile)
+    }
+    val sendReportLiveData = Transformations.switchMap(sendReportRequest) {
+        liveData {
+            val result = try {
+                val body: RequestBody =
+                    RequestBody.create(parse("application/json; charset=utf-8"), it)
+                val recommend = repository.editProcess(body)
+                Result.success(recommend)
+            } catch (e: Exception) {
+                Log.e("获取错误", e.toString())
+                Result.failure<NormalData>(e)
+            }
+            emit(result)
+        }
+    }
 
 }
