@@ -65,6 +65,7 @@ class SuYuanNetwork {
     suspend fun upLoadFile(part: MultipartBody.Part) = mainPageService.upLoadFile(part).await()
     suspend fun getSendRecord2(body: RequestBody)= mainPageService.sendRecord2(body).await()
     suspend fun setTracing(body: RequestBody)= mainPageService.setTracing(body).await()
+    suspend fun getQutalityList(body: RequestBody)= mainPageService.getQutalityList(body).await()
 
     companion object {
 

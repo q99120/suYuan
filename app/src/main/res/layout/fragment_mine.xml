@@ -36,6 +36,8 @@
 
             </LinearLayout>
 
+
+
             <ImageView
                 android:id="@+id/ivSetting"
                 android:padding="20dp"

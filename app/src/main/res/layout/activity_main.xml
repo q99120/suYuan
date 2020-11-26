@@ -24,6 +24,15 @@
             android:textColor="@color/white"
             android:layout_height="wrap_content"/>
 
+        <ImageView
+            android:id="@+id/ivAddZhijian"
+            android:layout_marginEnd="30dp"
+            android:layout_centerVertical="true"
+            android:layout_toStartOf="@+id/llHead"
+            android:layout_width="30dp"
+            android:layout_height="30dp"
+            android:src="@mipmap/addpic"/>
+
         <LinearLayout
             android:id="@+id/llHead"
             android:layout_marginTop="20dp"

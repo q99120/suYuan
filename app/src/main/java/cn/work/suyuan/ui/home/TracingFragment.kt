@@ -1,6 +1,5 @@
 package cn.work.suyuan.ui.home
 
-import android.net.Uri
 import android.os.Bundle
 import android.util.Log
 import android.view.LayoutInflater
@@ -12,23 +11,19 @@ import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
 import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
-import cn.work.suyuan.event.MessageEvent
-import cn.work.suyuan.event.StringEvent
 import cn.work.suyuan.ui.ScanQrCodeActivity
+import cn.work.suyuan.ui.dialog.QutalityListDialog
 import cn.work.suyuan.ui.dialog.SingleSpinnerDialog
 import cn.work.suyuan.util.DateUtil
 import cn.work.suyuan.util.FileUtils
 import cn.work.suyuan.util.InjectorUtil
 import cn.work.suyuan.util.SuYuanUtil
-import cn.work.suyuan.widget.GlideEngine
-import com.huantansheng.easyphotos.EasyPhotos
 import kotlinx.android.synthetic.main.fragment_home_tracing.*
 import kotlinx.android.synthetic.main.fragment_mine.*
 import kotlinx.android.synthetic.main.layout_import_file.*
 import kotlinx.android.synthetic.main.layout_tracing_fm.*
 import kotlinx.android.synthetic.main.layout_tracing_fm.editProductName
 import kotlinx.android.synthetic.main.layout_tracing_fm.tvActionQr
-import kotlinx.android.synthetic.main.layout_zhijian.*
 import java.io.File
 
 /**
@@ -70,12 +65,18 @@ class TracingFragment : BaseFragment() {
     }
     var zhijianID = ""
     private fun observer() {
-        viewModel.upLoadFileLiveData.observe(viewLifecycleOwner, Observer {
+        viewModel.qutalityListLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
-            rp.msg.toast()
-            if (rp.code == 200)
-                productFile = rp.data.toString()
-            tvImportFile.text = "导入图片成功"
+            if (rp.code == 200){
+                qutalityListDialog.initDialog(rp.data,object :QutalityListDialog.FileClick{
+                    override fun fileClick(reportName: String, id: Int) {
+                        "获取质检报告成功".toast()
+                        zhijianID = id.toString()
+                        checkQuality.text = reportName
+                    }
+
+                })
+            }
         })
         viewModel.setTracingLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
@@ -83,14 +84,7 @@ class TracingFragment : BaseFragment() {
             Log.e("code", rp.code.toString())
             rp.msg.toast()
         })
-        viewModel.sendReportLiveData.observe(viewLifecycleOwner, Observer {
-            val rp = it.getOrNull() ?: return@Observer
-            Log.e("message", rp.msg)
-            Log.e("code", rp.code.toString())
-            Log.e("dataa", rp.data.toString())
-            zhijianID = rp.data.toString()
-            if (rp.code == 200) "上传质检报告成功".toast() else rp.msg.toast()
-        })
+
     }
 
     var categoryId = 1
@@ -99,7 +93,7 @@ class TracingFragment : BaseFragment() {
     lateinit var arrayCode: Array<String?>
     private fun initViews() {
         tvTracingTime.text = DateUtil.getCurrentTime(true)
-        setOnClickListener(btnConfirm, tvChooseCate, tvTracingTime, llActionImFiles, tvActionQr,ivPic,btnConfirmReport,tvActionZhijian) {
+        setOnClickListener(btnConfirm, tvChooseCate, tvTracingTime, llActionImFiles, tvActionQr,checkQuality) {
             when (this) {
                 btnConfirm -> {
                     if (editUName.text!!.isEmpty()) {
@@ -166,29 +160,8 @@ class TracingFragment : BaseFragment() {
 
                     })
                 }
-                ivPic->{
-                    EasyPhotos.createAlbum(activity, true, GlideEngine.getInstance())
-                        .setFileProviderAuthority("cn.work.suyuan.fileprovider")
-                        .start(103)
-                }
-                btnConfirmReport->{
-                    if (editZhijian.text.isEmpty()){
-                        "质检单号不能为空".toast()
-                        return@setOnClickListener
-                    }
-                    if (productFile == "") {
-                        "请先上传质检图片文件".toast()
-                        return@setOnClickListener
-                    }
-                    viewModel.sendReport(editZhijian.text.toString(),productFile)
-                }
-                tvActionZhijian->{
-                    ScanQrCodeActivity.start(activity, object : ScanQrCodeActivity.QrCallBack {
-                        override fun qrData(result: String) {
-                            editZhijian.append(result + "\n")
-                        }
-
-                    })
+                checkQuality->{
+                   viewModel.getQutalityList()
                 }
 
             }
@@ -219,22 +192,8 @@ class TracingFragment : BaseFragment() {
         SingleSpinnerDialog(requireContext())
     }
 
-    override fun onMessageEvent(messageEvent: MessageEvent) {
-        Log.e("的环境撒大汉奸",messageEvent.toString())
-        super.onMessageEvent(messageEvent)
-        if (messageEvent is StringEvent){
-            Log.e("获取路径1",messageEvent.code.toString())
-            Log.e("获取路径2",messageEvent.message.toString())
-            Log.e("获取路径3",messageEvent.path.toString())
-
-            if (messageEvent.code == 103) {
-                GlideEngine.getInstance()
-                    .loadPhotoNoCircle(activity, Uri.parse(messageEvent.message), ivPic)
-                val file = File(messageEvent.path)
-                viewModel.upLoadFile(file)
-            }
-        }
-
+    private val qutalityListDialog by lazy {
+        QutalityListDialog(requireContext())
     }
 
 }

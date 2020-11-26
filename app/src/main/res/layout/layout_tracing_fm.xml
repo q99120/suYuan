@@ -272,16 +272,18 @@
         android:background="#F0F0F0"
         app:layout_constraintTop_toBottomOf="@+id/tvTracingTime" />
 
-
-    <include
-        android:layout_marginStart="60dp"
+    <Button
         android:layout_marginTop="20dp"
-        android:layout_height="wrap_content"
-        android:layout_width="match_parent"
+        android:text="选择质检单"
+        android:layout_marginEnd="30dp"
+        android:layout_marginStart="30dp"
+        android:textColor="@color/white"
+        android:textSize="16sp"
+        android:id="@+id/checkQuality"
         app:layout_constraintTop_toBottomOf="@+id/viewLine2"
-        layout="@layout/layout_zhijian"/>
-
-
+        android:background="@drawable/shape_confirm"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"/>
 
     <include
         android:visibility="gone"

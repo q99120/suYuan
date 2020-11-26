@@ -69,6 +69,9 @@ interface MainPageService {
     @POST("api/v1/")
     fun setTracing(@Body body: RequestBody): Call<HomeData>
 
+    @POST("api/v1/")
+    fun getQutalityList(@Body body: RequestBody): Call<QutalityBean>
+
     companion object {
         val gson = Gson()
         private fun getServiceHead(manageServiceJson: JSONObject, interfaceData: String) {
@@ -480,6 +483,14 @@ interface MainPageService {
             val param = JSONObject()
             param.put("test_report", edittext)
             param.put("test_report_img", productFile)
+            manageServiceJson.put("param", param)
+            return manageServiceJson.toString()
+        }
+
+        fun getQutalityList(): String {
+            val manageServiceJson = JSONObject()
+            getServiceHead(manageServiceJson, "shop.reportInfo")
+            val param = JSONObject()
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }

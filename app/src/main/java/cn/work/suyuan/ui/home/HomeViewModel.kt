@@ -310,6 +310,7 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
     fun sendReport(edittext: String, productFile: String) {
           sendReportRequest.value = MainPageService.sendReport(edittext,productFile)
     }
+
     val sendReportLiveData = Transformations.switchMap(sendReportRequest) {
         liveData {
             val result = try {
@@ -320,6 +321,29 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
             } catch (e: Exception) {
                 Log.e("获取错误", e.toString())
                 Result.failure<NormalData>(e)
+            }
+            emit(result)
+        }
+    }
+
+    /**
+     * 质检报告信息
+     */
+    val qutalityListRequest = MutableLiveData<String>()
+    fun getQutalityList() {
+        qutalityListRequest.value = MainPageService.getQutalityList()
+        Log.e("互殴去",MainPageService.getQutalityList())
+    }
+    val qutalityListLiveData = Transformations.switchMap(qutalityListRequest) {
+        liveData {
+            val result = try {
+                val body: RequestBody =
+                    RequestBody.create(parse("application/json; charset=utf-8"), it)
+                val recommend = repository.getQutalityList(body)
+                Result.success(recommend)
+            } catch (e: Exception) {
+                Log.e("获取错误", e.toString())
+                Result.failure<QutalityBean>(e)
             }
             emit(result)
         }

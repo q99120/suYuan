@@ -75,6 +75,10 @@ class HomePageRepository private constructor(private val network: SuYuanNetwork)
         response
     }
 
+    suspend fun getQutalityList(body: RequestBody)= withContext(Dispatchers.IO){
+        val response = network.getQutalityList(body)
+        response
+    }
 
     companion object {
 

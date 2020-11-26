@@ -83,12 +83,13 @@ class MainActivity : BaseActivity() {
             tvUserName.text = response.nickname
             GlideEngine.getInstance().loadPhoto(this, Uri.parse(response.cover), ivUserHead)
         })
+
     }
 
 
     override fun setupViews() {
         super.setupViews()
-        setOnClickListener(ll_home, ll_pack, ll_send, ll_mine, llHead) {
+        setOnClickListener(ll_home, ll_pack, ll_send, ll_mine, llHead,ivAddZhijian) {
             when (this) {
                 ll_home -> {
                     notificationUiRefresh(0)
@@ -116,6 +117,9 @@ class MainActivity : BaseActivity() {
                             }
                         })
                     }
+                }
+                ivAddZhijian->{
+                        QualityActivity.start(this@MainActivity)
                 }
 
             }
