@@ -13,6 +13,8 @@
 
     <color name="statusbar">#007BFF</color>
 
+    <color name="red">#FF0000</color>
+
 
     <color name="whiteAlpha85">#26ffffff</color>
     <color name="whiteAlpha80">#33ffffff</color>

@@ -86,8 +86,9 @@ dependencies {
     debugImplementation 'com.squareup.leakcanary:leakcanary-android:2.4'
     implementation 'com.flyco.tablayout:FlycoTabLayout_Lib:2.1.2@aar'
     implementation 'com.scwang.smart:refresh-header-material:2.0.0'
-    implementation 'com.scwang.smart:refresh-layout-kernel:2.0.0'
+    implementation 'com.scwang.smart:refresh-layout-kernel:2.0.1'
     implementation  'com.scwang.smart:refresh-footer-classics:2.0.1'    //经典加载
+    implementation  'com.scwang.smart:refresh-header-classics:2.0.1'    //经典刷新头
 
     implementation 'com.gyf.immersionbar:immersionbar:3.0.0'
     implementation 'de.hdodenhof:circleimageview:3.1.0'
@@ -119,6 +120,8 @@ dependencies {
 
 
     implementation 'com.github.arcadefire:nice-spinner:1.4.4'
+
+    implementation 'com.yanzhenjie.recyclerview:x:1.3.2'
 
 
 
