@@ -17,9 +17,12 @@ import cn.work.suyuan.util.InjectorUtil
 import com.yanzhenjie.recyclerview.*
 import kotlinx.android.synthetic.main.layout_import_file.*
 import kotlinx.android.synthetic.main.layout_qutality_list.*
+import kotlinx.android.synthetic.main.layout_qutality_list.smartRefresh
+import kotlinx.android.synthetic.main.layout_search_view.*
 import kotlinx.android.synthetic.main.layout_tracing_fm.*
 import kotlinx.android.synthetic.main.layout_zhijian.*
 import kotlinx.android.synthetic.main.layout_zhijian.ivBack
+import kotlinx.android.synthetic.main.smart_refresh_recly.*
 
 class QualityActivity:BaseActivity() {
     private val spinnerAdapter = QuListAdapter()
@@ -48,10 +51,10 @@ class QualityActivity:BaseActivity() {
             Log.e("菜单3",adapterPosition.toString())
             when (menuPosition) {
                 0 -> {
-                   "点击了修改".toast()
+                   "暂时只是展示".toast()
                 }
                 1 -> {
-                    "点击了删除".toast()
+                    "暂时只是展示".toast()
                 }
             }
         }
@@ -64,17 +67,36 @@ class QualityActivity:BaseActivity() {
     var zhijianID = ""
     var productFile = ""
     private fun initObserver() {
-        viewModel.getQutalityList()
+        Requfresh()
         viewModel.qutalityListLiveData.observe(this, Observer {
             val rp = it.getOrNull() ?: return@Observer
+            totalPage = rp.data.last_page
             if (rp.code == 200) {
                 Log.e("获取质检报告", rp.data.toString())
-                spinnerAdapter.setList(rp.data)
+                if (currentPage == 1){
+                    spinnerAdapter.setList(rp.data.data)
+                }else{
+                    spinnerAdapter.addData(rp.data.data)
+                }
 //                        "获取质检报告成功".toast()
 //                        zhijianID = id.toString()
 //                        checkQuality.text = reportName
             }
         })
+        smartRefresh.setOnLoadMoreListener {
+            smartRefresh.finishLoadMore(1000)
+            if (currentPage<totalPage){
+                next()
+              Requfresh()
+            }else{
+                "没有更多数据了".toast()
+                smartRefresh.finishLoadMoreWithNoMoreData() //设置之后，将不会再触发加载事件
+            }
+        }
+    }
+
+    private fun Requfresh() {
+        viewModel.getQutalityList(currentPage)
     }
 
     override fun onResume() {
@@ -82,6 +104,7 @@ class QualityActivity:BaseActivity() {
     }
 
     private fun initView() {
+        smartRefresh.setEnableFooterFollowWhenNoMoreData(true)
 
         ivBack.setOnClickListener {
             finish()
@@ -90,7 +113,8 @@ class QualityActivity:BaseActivity() {
             AddQualityActivity.start(this)
         }
         smartRefresh.setOnRefreshListener{
-            viewModel.getQutalityList()
+            currentPage = 1
+            Requfresh()
             smartRefresh.finishRefresh(1500)
         }
 
@@ -117,12 +141,29 @@ class QualityActivity:BaseActivity() {
         SwipeMenuCreator { leftMenu, rightMenu, position ->
             val deleteItem = SwipeMenuItem(this@QualityActivity)
             deleteItem.height = 80
-            deleteItem.setImage(R.mipmap.action_delete)
+            deleteItem.width = 120
+            deleteItem.text = "删除"
+            deleteItem.textSize = 20
+            deleteItem.setTextColor(resources.getColor(R.color.white))
+            deleteItem.setBackground( R.drawable.d_red)
             val updateItem = SwipeMenuItem(this@QualityActivity)
             updateItem.height = 80
-            updateItem.setImage(R.mipmap.action_reset)
+            updateItem.width = 120
+            updateItem.textSize = 20
+            updateItem.setTextColor(resources.getColor(R.color.white))
+            updateItem.text = "修改"
+            updateItem.setBackground( R.drawable.d_blue)
             rightMenu.addMenuItem(updateItem)
             rightMenu.addMenuItem(deleteItem)
         }
+
+    var currentPage = 1
+    var totalPage = 1
+
+
+    fun next():Int{
+        currentPage+=1
+        return currentPage
+    }
 
 }

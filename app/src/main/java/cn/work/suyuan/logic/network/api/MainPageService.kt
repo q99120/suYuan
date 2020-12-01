@@ -487,10 +487,12 @@ interface MainPageService {
             return manageServiceJson.toString()
         }
 
-        fun getQutalityList(): String {
+        fun getQutalityList(page: Int): String {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.reportInfo")
             val param = JSONObject()
+            param.put("page", page)
+            param.put("limit", 10)
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }

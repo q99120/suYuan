@@ -330,9 +330,9 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
      * 质检报告信息
      */
     val qutalityListRequest = MutableLiveData<String>()
-    fun getQutalityList() {
-        qutalityListRequest.value = MainPageService.getQutalityList()
-        Log.e("互殴去",MainPageService.getQutalityList())
+    fun getQutalityList(page: Int) {
+        qutalityListRequest.value = MainPageService.getQutalityList(page)
+        Log.e("互殴去",MainPageService.getQutalityList(page))
     }
     val qutalityListLiveData = Transformations.switchMap(qutalityListRequest) {
         liveData {

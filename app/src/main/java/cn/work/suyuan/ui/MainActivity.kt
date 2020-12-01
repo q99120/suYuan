@@ -80,8 +80,11 @@ class MainActivity : BaseActivity() {
         viewModel.userLiveData.observe(this, Observer {
             val rp = it.getOrNull() ?: return@Observer
             val response = rp.data
+            Log.e("获取个人用户信息",response.toString())
             tvUserName.text = response.nickname
             GlideEngine.getInstance().loadPhoto(this, Uri.parse(response.cover), ivUserHead)
+            APUtils.putInt("trace_process_id",response.trace_process_id)
+            APUtils.putString("trace_process_title",response.trace_process_title)
         })
 
     }

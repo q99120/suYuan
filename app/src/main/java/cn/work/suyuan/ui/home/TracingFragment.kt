@@ -13,11 +13,9 @@ import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
 import cn.work.suyuan.ui.ScanQrCodeActivity
 import cn.work.suyuan.ui.dialog.QutalityListDialog
+import cn.work.suyuan.ui.dialog.QutalityListDialog.*
 import cn.work.suyuan.ui.dialog.SingleSpinnerDialog
-import cn.work.suyuan.util.DateUtil
-import cn.work.suyuan.util.FileUtils
-import cn.work.suyuan.util.InjectorUtil
-import cn.work.suyuan.util.SuYuanUtil
+import cn.work.suyuan.util.*
 import kotlinx.android.synthetic.main.fragment_home_tracing.*
 import kotlinx.android.synthetic.main.fragment_mine.*
 import kotlinx.android.synthetic.main.layout_import_file.*
@@ -63,19 +61,27 @@ class TracingFragment : BaseFragment() {
 
     override fun initData() {
     }
+
     var zhijianID = ""
     private fun observer() {
         viewModel.qutalityListLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
-            if (rp.code == 200){
-                qutalityListDialog.initDialog(rp.data,object :QutalityListDialog.FileClick{
+            if (rp.code == 200) {
+                qutalityListDialog.initDialog(rp.data.data, rp.data.last_page, object : FileClick {
                     override fun fileClick(reportName: String, id: Int) {
                         "获取质检报告成功".toast()
                         zhijianID = id.toString()
                         checkQuality.text = reportName
                     }
+                }, object : quRefresh {
+                    override fun refresh(page: Int) {
+                        viewModel.getQutalityList(page)
+                    }
 
                 })
+                if (rp.data.current_page>1){
+                    qutalityListDialog.addList(rp.data.data)
+                }
             }
         })
         viewModel.setTracingLiveData.observe(viewLifecycleOwner, Observer {
@@ -92,8 +98,14 @@ class TracingFragment : BaseFragment() {
     var productFile = ""
     lateinit var arrayCode: Array<String?>
     private fun initViews() {
+        categoryId = APUtils.getInt("trace_process_id", 0)
+        if (APUtils.getString("trace_process_title") == "") {
+            tvChooseCate.text = "暂无流程，请在后台添加"
+        } else {
+            tvChooseCate.text = APUtils.getString("trace_process_title")
+        }
         tvTracingTime.text = DateUtil.getCurrentTime(true)
-        setOnClickListener(btnConfirm, tvChooseCate, tvTracingTime, llActionImFiles, tvActionQr,checkQuality) {
+        setOnClickListener(btnConfirm, tvTracingTime, llActionImFiles, tvActionQr, checkQuality) {
             when (this) {
                 btnConfirm -> {
                     if (editUName.text!!.isEmpty()) {
@@ -108,7 +120,7 @@ class TracingFragment : BaseFragment() {
                         fuToast("富文本编辑器不能为空")
                         return@setOnClickListener
                     }
-                    if (editProductNum.text!!.isEmpty()){
+                    if (editProductNum.text!!.isEmpty()) {
                         fuToast("生产批次不能为空")
                         return@setOnClickListener
                     }
@@ -124,7 +136,7 @@ class TracingFragment : BaseFragment() {
                         "",
                         richEditText.text.toString(),
                         editProductNum.text.toString(),
-                        editOrderNum.text.toString(),zhijianID
+                        editOrderNum.text.toString(), zhijianID
                     )
                 }
                 tvChooseCate -> {
@@ -160,8 +172,8 @@ class TracingFragment : BaseFragment() {
 
                     })
                 }
-                checkQuality->{
-                   viewModel.getQutalityList()
+                checkQuality -> {
+                    viewModel.getQutalityList(1)
                 }
 
             }
