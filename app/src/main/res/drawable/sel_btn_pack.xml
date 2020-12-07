@@ -1,4 +1,4 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@mipmap/packpress" android:state_selected="true" />
-    <item android:drawable="@mipmap/baogao" />
+    <item android:drawable="@mipmap/pack_press" android:state_selected="true" />
+    <item android:drawable="@mipmap/pack_unpress" />
 </selector>

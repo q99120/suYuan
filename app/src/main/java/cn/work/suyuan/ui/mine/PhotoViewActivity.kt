@@ -20,7 +20,6 @@ class PhotoViewActivity:BaseActivity() {
 
     private fun initData() {
         val urls = intent.getStringExtra("photoUrl")
-        Log.e("获取url",urls.toString())
         GlideEngine.getInstance().loadPhoto(this, Uri.parse(urls),iv_photo)
 
         ivBack.setOnClickListener { finish() }

@@ -5,6 +5,7 @@ import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import androidx.annotation.IntegerRes
 import cn.work.suyuan.Const.traceFlag
 import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.singleClick
@@ -12,7 +13,10 @@ import cn.work.suyuan.common.ui.BaseFragment
 import cn.work.suyuan.event.RefreshEvent
 import cn.work.suyuan.ui.MainActivity
 import cn.work.suyuan.ui.QualityActivity
+import cn.work.suyuan.ui.adapter.BannerImgAdapter
 import cn.work.suyuan.ui.mine.SettingActivity
+import com.youth.banner.indicator.CircleIndicator
+import com.youth.banner.util.BannerUtils
 import kotlinx.android.synthetic.main.fragment_home_page.*
 import org.greenrobot.eventbus.EventBus
 
@@ -36,12 +40,12 @@ class HomePageFragment : BaseFragment(){
     }
 
     override fun initData() {
-        llReport.singleClick { QualityActivity.start(requireContext()) }
+        llReport.singleClick { mainActivity.startReport() }
         llActionTrace.singleClick {
             traceFlag = 0
             EventBus.getDefault()
                 .post(RefreshEvent(TraceManageFragment::class.java))
-            mainActivity.setTabSelection(3)
+            mainActivity.setTabSelection(2)
         }
 //        llTraceInfo.singleClick {
 //            traceFlag = 1
@@ -49,13 +53,29 @@ class HomePageFragment : BaseFragment(){
 //                .post(RefreshEvent(TraceManageFragment::class.java))
 //            mainActivity.setTabSelection(3)
 //        }
-        llPackManage.singleClick {  mainActivity.setTabSelection(1) }
+        llPackManage.singleClick {  mainActivity.setTabSelection(3) }
         llSetting.singleClick { SettingActivity.start(requireContext()) }
     }
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
 //        viewPager2?.currentItem = 0
+        initBanner()
+    }
+
+    private fun initBanner() {
+        val list = mutableListOf<Int>()
+        list.add(R.drawable.pic111)
+        list.add(R.drawable.pic222)
+        list.add(R.drawable.pic333)
+        list.add(R.drawable.pic4444)
+
+        homeBanner.isAutoLoop(false)
+        homeBanner.adapter = BannerImgAdapter(list)
+        homeBanner.indicator = CircleIndicator(activity)
+        //圆角
+        homeBanner.setBannerRound(BannerUtils.dp2px(5f))
+        homeBanner.start()
     }
 
     lateinit var mainActivity:MainActivity

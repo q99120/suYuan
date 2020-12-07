@@ -139,6 +139,7 @@ class MineFragment : BaseFragment() {
             val rp = it.getOrNull() ?: return@Observer
             val userData = rp.data
             userCover = userData.cover
+            Log.e("拿到头像",userCover.toString())
             tvNickName.text = userData.nickname
             tvDecs.text = userData.descs
             tvAge.text = userData.age.toString()

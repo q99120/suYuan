@@ -18,7 +18,6 @@ import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
 import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseActivity
-import cn.work.suyuan.event.RefreshEvent
 import cn.work.suyuan.event.StringEvent
 import cn.work.suyuan.ui.dialog.ExitDialog
 import cn.work.suyuan.ui.home.HomePageFragment
@@ -39,7 +38,7 @@ import kotlinx.android.synthetic.main.layout_bottom_navigation_bar.*
 import org.greenrobot.eventbus.EventBus
 import pub.devrel.easypermissions.AfterPermissionGranted
 import pub.devrel.easypermissions.EasyPermissions
-import java.util.ArrayList
+import java.util.*
 
 
 class MainActivity : BaseActivity() {
@@ -82,11 +81,12 @@ class MainActivity : BaseActivity() {
         viewModel.userLiveData.observe(this, Observer {
             val rp = it.getOrNull() ?: return@Observer
             val response = rp.data
-            Log.e("获取个人用户信息",response.toString())
+            Log.e("获取个人用户信息", response.toString())
             tvUserName.text = response.nickname
+            APUtils.putString("nickName", response.nickname)
             GlideEngine.getInstance().loadPhoto(this, Uri.parse(response.cover), ivUserHead)
-            APUtils.putInt("trace_process_id",response.trace_process_id)
-            APUtils.putString("trace_process_title",response.trace_process_title)
+            APUtils.putInt("trace_process_id", response.trace_process_id)
+            APUtils.putString("trace_process_title", response.trace_process_title)
         })
 
     }
@@ -94,39 +94,35 @@ class MainActivity : BaseActivity() {
 
     override fun setupViews() {
         super.setupViews()
-        setOnClickListener(ll_home, ll_pack, ll_send, ll_mine, llHead,ivAddZhijian) {
+        setOnClickListener(ll_home, ll_report, ll_trace, ll_pack, llHead) {
             when (this) {
                 ll_home -> {
                     notificationUiRefresh(0)
                     setTabSelection(0)
                 }
-                ll_pack -> {
-                    notificationUiRefresh(1)
-                    setTabSelection(1)
+                ll_report -> {
+                    startReport()
                 }
-//                ll_send -> {
-//                    notificationUiRefresh(2)
-//                    setTabSelection(2)
-//                }
-                ll_mine -> {
-                    notificationUiRefresh(3)
+                ll_trace -> {
+                    notificationUiRefresh(2)
                     setTabSelection(2)
                 }
+                ll_pack -> {
+                    notificationUiRefresh(3)
+                    setTabSelection(3)
+                }
                 llHead -> {
-                    if (APUtils.getInt("agentLevel", 0) != 0) {
-                        exitDialog.setClick(object : ExitDialog.HomeNormalClick {
-                            override fun dialogClick() {
-                                APUtils.remove("tokens")
-                                LoginActivity.start(this@MainActivity)
-                                finish()
-                            }
-                        })
-                    }
+//                    if (APUtils.getInt("agentLevel", 0) != 0) {
+//                        exitDialog.setClick(object : ExitDialog.HomeNormalClick {
+//                            override fun dialogClick() {
+//                                APUtils.remove("tokens")
+//                                LoginActivity.start(this@MainActivity)
+//                                finish()
+//                            }
+//                        })
+//                    }
+                    setTabSelection(4)
                 }
-                ivAddZhijian->{
-                        QualityActivity.start(this@MainActivity)
-                }
-
             }
         }
 //        if (APUtils.getInt("agentLevel", 0) != 0) {
@@ -136,24 +132,31 @@ class MainActivity : BaseActivity() {
         setTabSelection(0)
     }
 
+    fun startReport() {
+        if (traceManageFragment == null){
+            setTabSelection(2)
+        }
+        val intent = Intent(this@MainActivity, QualityActivity::class.java)
+        startActivityForResult(intent, 2000)
+    }
+
     private fun notificationUiRefresh(selectionIndex: Int) {
         when (selectionIndex) {
-            0 -> {
-                if (ivHomePage.isSelected) EventBus.getDefault()
-                    .post(RefreshEvent(HomePageFragment::class.java))
-            }
-            1 -> {
-                if (ivPack.isSelected) EventBus.getDefault()
-                    .post(RefreshEvent(PackManageFragment::class.java))
-            }
+//            0 -> {
+//                if (ivHomePage.isSelected) EventBus.getDefault()
+//                    .post(RefreshEvent(HomePageFragment::class.java))
+//            }
+//            1 -> {
+////                if (ivReport.isSelected)
+//            }
 //            2 -> {
-//                if (ivSend.isSelected) EventBus.getDefault()
+//                if (ivTrace.isSelected) EventBus.getDefault()
 //                    .post(RefreshEvent(SendManageFragment::class.java))
 //            }
-            2 -> {
-                if (ivMine.isSelected) EventBus.getDefault()
-                    .post(RefreshEvent(MineFragment::class.java))
-            }
+//            3 -> {
+//                if (ivPack.isSelected) EventBus.getDefault()
+//                    .post(RefreshEvent(PackManageFragment::class.java))
+//            }
         }
     }
 
@@ -171,10 +174,22 @@ class MainActivity : BaseActivity() {
                         homePageFragment = HomePageFragment.newInstance()
                         add(R.id.homeContain, homePageFragment!!)
                     } else {
-                        show(homePageFragment!!)
+                            show(homePageFragment!!)
                     }
                 }
-                1 -> {
+                2 -> {
+                    rl_sel_title.visibility = View.VISIBLE
+                    tv_sel_title.text = "首页"
+                    tv_sel_title.text = "流程追溯"
+                    ivTrace.isSelected = true
+                    if (traceManageFragment == null) {
+                        traceManageFragment = TraceManageFragment.newInstance()
+                        add(R.id.homeContain, traceManageFragment!!)
+                    } else {
+                            show(traceManageFragment!!)
+                    }
+                }
+                3 -> {
                     rl_sel_title.visibility = View.VISIBLE
                     tv_sel_title.text = "装箱管理"
                     ivPack.isSelected = true
@@ -185,33 +200,13 @@ class MainActivity : BaseActivity() {
                         show(packFragmentManager!!)
                     }
                 }
-//                2 -> {
-//                    rl_sel_title.visibility = View.VISIBLE
-//                    tv_sel_title.text = "发货管理"
-//                    ivSend.isSelected = true
-//                    if (sendManageFragment == null) {
-//                        sendManageFragment = SendManageFragment.newInstance()
-//                        add(R.id.homeContain, sendManageFragment!!)
-//                    } else {
-//                        show(sendManageFragment!!)
-//                    }
-//                }
-                2 -> {
+                4 -> {
                     rl_sel_title.visibility = View.GONE
-                    ivMine.isSelected = true
                     if (mineFragment == null) {
                         mineFragment = MineFragment.newInstance()
                         add(R.id.homeContain, mineFragment!!)
                     } else {
                         show(mineFragment!!)
-                    }
-                }
-                3 -> {
-                    if (traceManageFragment == null) {
-                        traceManageFragment = TraceManageFragment.newInstance()
-                        add(R.id.homeContain, traceManageFragment!!)
-                    } else {
-                        show(traceManageFragment!!)
                     }
                 }
             }
@@ -233,11 +228,11 @@ class MainActivity : BaseActivity() {
     private fun clearAllSelected() {
         ivHomePage.isSelected = false
 //        tvHomePage.isSelected = false
-        ivPack.isSelected = false
+        ivReport.isSelected = false
 //        tvCommunity.isSelected = false
-        ivSend.isSelected = false
+        ivTrace.isSelected = false
 //        tvNotification.isSelected = false
-        ivMine.isSelected = false
+        ivPack.isSelected = false
 //        tvMine.isSelected = false
     }
 
@@ -290,7 +285,10 @@ class MainActivity : BaseActivity() {
         }
     }
 
+
+
     override fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
+        Log.e("获取20000","111")
         super.onActivityResult(requestCode, resultCode, data)
         if (data == null) return
         if (resultCode == Activity.RESULT_OK) {
@@ -300,12 +298,17 @@ class MainActivity : BaseActivity() {
                 val path = getFilePathFromContentUri(uri, contentResolver)
             }
             if (requestCode == 103) {
-
                 val resultPhotos: ArrayList<Photo>? =
                     data.getParcelableArrayListExtra(EasyPhotos.RESULT_PHOTOS)
                 for (f in resultPhotos!!) {
                     EventBus.getDefault().post(StringEvent(103, f.uri.toString(), f.path))
                 }
+            }
+            if (requestCode == 2000){
+                val id: Int = data.getIntExtra("quId",0)
+                val reportNum: String = data.getStringExtra("quContent")!! //房间号ID
+                setTabSelection(2)
+                EventBus.getDefault().post(StringEvent(2000,id.toString(),reportNum))
             }
         }
     }

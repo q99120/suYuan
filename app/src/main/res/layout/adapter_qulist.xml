@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/tvId"
+        android:layout_marginStart="10dp"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintLeft_toLeftOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:textColor="@color/red"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:textSize="18sp"/>
+
+    <TextView
+        android:layout_marginStart="25dp"
+        android:id="@+id/tvPopItemTitle"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:text="销售一大区"
+        android:textColor="#202020"
+        android:textSize="14sp"
+        android:layout_marginEnd="15dp"
+        android:singleLine="false"
+        app:layout_constraintRight_toLeftOf="@id/tvSeePic"
+        app:layout_constraintLeft_toRightOf="@+id/tvId"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <TextView
+        android:layout_marginEnd="10dp"
+        android:padding="10dp"
+        android:id="@+id/tvSeePic"
+        android:text="查看大图"
+        android:layout_marginTop="10dp"
+        app:layout_constraintTop_toTopOf="@+id/tvPopItemTitle"
+        app:layout_constraintRight_toRightOf="parent"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:background="@drawable/shape_home_bg"/>
+
+
+    <View
+        android:layout_width="match_parent"
+        android:layout_height="1dp"
+        android:background="#F0F0F0"
+        app:layout_constraintTop_toBottomOf="@+id/tvPopItemTitle" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

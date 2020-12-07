@@ -12,10 +12,10 @@ import com.chad.library.adapter.base.viewholder.BaseViewHolder
  * 下拉单选列表
  */
 class QuListAdapter :
-    BaseQuickAdapter<QutalityBean.Data.Datas, BaseViewHolder>(R.layout.adapter_single_spinner) {
+    BaseQuickAdapter<QutalityBean.Data.Datas, BaseViewHolder>(R.layout.adapter_qulist) {
     override fun convert(holder: BaseViewHolder, item: QutalityBean.Data.Datas) {
-        holder.setGone(R.id.ivPopItemCheck,true)
         holder.setText(R.id.tvPopItemTitle, item.test_report)
+        holder.setText(R.id.tvId,item.id.toString()+".")
     }
 
     private var selectPosition = -1

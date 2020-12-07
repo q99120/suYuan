@@ -1,6 +1,7 @@
 package cn.work.suyuan.ui.home
 
 import android.os.Bundle
+import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
@@ -12,7 +13,6 @@ import cn.work.suyuan.event.MessageEvent
 import cn.work.suyuan.event.RefreshEvent
 import cn.work.suyuan.event.SwitchPagesEvent
 import cn.work.suyuan.logic.model.TabEntity
-import cn.work.suyuan.ui.mine.MineFragment
 import com.flyco.tablayout.listener.CustomTabEntity
 import org.greenrobot.eventbus.EventBus
 
@@ -24,7 +24,7 @@ class TraceManageFragment : BaseViewPagerFragment(){
         add(TabEntity("溯源信息"))
     }
 
-    override val createFragments: Array<Fragment> = arrayOf(ManageFragment.newInstance(), TracingFragment.newInstance(), TraceabilityFragment.newInstance())
+    override val createFragments: Array<Fragment> = arrayOf(TracingFragment.newInstance(), TraceabilityFragment.newInstance())
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         return super.onCreateView(inflater.inflate(R.layout.fragment_main_container, container, false))
@@ -39,6 +39,7 @@ class TraceManageFragment : BaseViewPagerFragment(){
 
     override fun onActivityCreated(savedInstanceState: Bundle?) {
         super.onActivityCreated(savedInstanceState)
+        viewPager2?.isUserInputEnabled = false
         viewPager2?.currentItem = Const.traceFlag
 
     }
@@ -64,6 +65,10 @@ class TraceManageFragment : BaseViewPagerFragment(){
         super.onResume()
     }
 
+    fun setReportNum(id: Int, reportNum: String) {
+        Log.e("进口的健身卡大家",reportNum)
+//        traceManageFragment.setNum(id,reportNum)
+    }
 
 
     companion object {

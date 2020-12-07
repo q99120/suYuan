@@ -4,7 +4,7 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/color12"
+    android:background="@color/white"
     android:orientation="horizontal">
 
 
@@ -32,7 +32,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ll_pack"
+        android:id="@+id/ll_report"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -41,10 +41,10 @@
         android:padding="10dp">
 
         <ImageView
-            android:id="@+id/ivPack"
+            android:id="@+id/ivReport"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/sel_btn_pack" />
+            android:src="@drawable/sel_btn_report" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -55,7 +55,7 @@
     </LinearLayout>
 
     <LinearLayout
-        android:id="@+id/ll_send"
+        android:id="@+id/ll_trace"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -64,10 +64,10 @@
         android:padding="10dp">
 
         <ImageView
-            android:id="@+id/ivSend"
+            android:id="@+id/ivTrace"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/sel_btn_pack" />
+            android:src="@drawable/sel_btn_trace" />
 
         <TextView
             android:layout_width="wrap_content"
@@ -80,7 +80,7 @@
 
 
     <LinearLayout
-        android:id="@+id/ll_mine"
+        android:id="@+id/ll_pack"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
@@ -89,7 +89,7 @@
         android:padding="10dp">
 
         <ImageView
-            android:id="@+id/ivMine"
+            android:id="@+id/ivPack"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
             android:src="@drawable/sel_btn_pack" />

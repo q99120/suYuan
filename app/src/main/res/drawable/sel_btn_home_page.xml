@@ -1,4 +1,4 @@
 <selector xmlns:android="http://schemas.android.com/apk/res/android">
-    <item android:drawable="@mipmap/homepress" android:state_selected="true" />
-    <item android:drawable="@mipmap/homenormal" />
+    <item android:drawable="@mipmap/home_press" android:state_selected="true" />
+    <item android:drawable="@mipmap/home_unpress" />
 </selector>

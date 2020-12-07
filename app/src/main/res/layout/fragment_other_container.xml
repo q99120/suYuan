@@ -15,7 +15,7 @@
         android:background="@color/gray" />
 
 
-        <androidx.viewpager.widget.ViewPager
+        <cn.work.suyuan.ui.packmanage.CustomViewPage
             android:background="@color/normalBlue"
             android:id="@+id/viewPager1"
             android:layout_weight="1"

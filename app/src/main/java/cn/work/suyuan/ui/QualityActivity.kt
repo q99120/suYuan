@@ -2,7 +2,6 @@ package cn.work.suyuan.ui
 
 import android.content.Context
 import android.content.Intent
-import android.graphics.Color.red
 import android.os.Bundle
 import android.util.Log
 import androidx.lifecycle.Observer
@@ -12,6 +11,7 @@ import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseActivity
 import cn.work.suyuan.ui.adapter.QuListAdapter
+import cn.work.suyuan.ui.dialog.PhotoDialog
 import cn.work.suyuan.ui.home.HomeViewModel
 import cn.work.suyuan.util.InjectorUtil
 import com.yanzhenjie.recyclerview.*
@@ -51,7 +51,11 @@ class QualityActivity:BaseActivity() {
             Log.e("菜单3",adapterPosition.toString())
             when (menuPosition) {
                 0 -> {
-                   "暂时只是展示".toast()
+                   val intent = intent
+                    intent.putExtra("quId",spinnerAdapter.data[adapterPosition].id)
+                    intent.putExtra("quContent",spinnerAdapter.data[adapterPosition].test_report)
+                    this.setResult(-1,intent)
+                    finish()
                 }
                 1 -> {
                     "暂时只是展示".toast()
@@ -99,10 +103,6 @@ class QualityActivity:BaseActivity() {
         viewModel.getQutalityList(currentPage)
     }
 
-    override fun onResume() {
-        super.onResume()
-    }
-
     private fun initView() {
         smartRefresh.setEnableFooterFollowWhenNoMoreData(true)
 
@@ -128,6 +128,13 @@ class QualityActivity:BaseActivity() {
 //                    "没有更多数据了".toast()
 //                }
             }
+        spinnerAdapter.addChildClickViewIds(R.id.tvSeePic)
+        spinnerAdapter.setOnItemChildClickListener { adapter, view, position ->
+            when(view.id){
+                R.id.tvSeePic->{
+                    photoDialog.initData(spinnerAdapter.data[position].test_report_img)
+                }
+            }}
 
     }
 
@@ -174,4 +181,7 @@ class QualityActivity:BaseActivity() {
         return currentPage
     }
 
+    private val photoDialog by lazy {
+        PhotoDialog(this)
+    }
 }
