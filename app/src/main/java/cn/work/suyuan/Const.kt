@@ -2,6 +2,7 @@ package cn.work.suyuan
 
 object Const {
 
+    var traceFlag: Int = 0
     var sendViewFlag: Int = 0
     const val qqAppId: String = "101910634"
     const val qqAppKey: String = "5c1f3a6c0f36ae1d1a0c6db1015b4243"

@@ -146,6 +146,13 @@ class QualityActivity:BaseActivity() {
             deleteItem.textSize = 20
             deleteItem.setTextColor(resources.getColor(R.color.white))
             deleteItem.setBackground( R.drawable.d_red)
+            val deleteItem1 = SwipeMenuItem(this@QualityActivity)
+            deleteItem1.height = 80
+            deleteItem1.width = 200
+            deleteItem1.text = "流程追溯"
+            deleteItem1.textSize = 20
+            deleteItem1.setTextColor(resources.getColor(R.color.white))
+            deleteItem1.setBackground( R.drawable.d_red)
             val updateItem = SwipeMenuItem(this@QualityActivity)
             updateItem.height = 80
             updateItem.width = 120
@@ -153,6 +160,7 @@ class QualityActivity:BaseActivity() {
             updateItem.setTextColor(resources.getColor(R.color.white))
             updateItem.text = "修改"
             updateItem.setBackground( R.drawable.d_blue)
+            rightMenu.addMenuItem(deleteItem1)
             rightMenu.addMenuItem(updateItem)
             rightMenu.addMenuItem(deleteItem)
         }

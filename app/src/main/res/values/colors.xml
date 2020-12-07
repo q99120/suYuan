@@ -40,5 +40,6 @@
     <color name="loading">#cdcdcd</color>
     <color name="normalBlue">#007BFF</color>
     <color name="unSelText">#CCE5FF</color>
+    <color name="color12">#1296db</color>
 
 </resources>

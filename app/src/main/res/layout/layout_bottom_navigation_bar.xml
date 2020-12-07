@@ -1,22 +1,21 @@
 <?xml version="1.0" encoding="utf-8"?>
-<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
-    android:background="@color/white"
+    android:background="@color/color12"
     android:orientation="horizontal">
 
 
     <LinearLayout
-        android:padding="10dp"
-        android:layout_alignParentStart="true"
-        android:layout_marginStart="31dp"
         android:id="@+id/ll_home"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/ivHomePage"
@@ -25,27 +24,21 @@
             android:src="@drawable/sel_btn_home_page" />
 
         <TextView
-            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:layout_marginTop="5dp"
             android:text="首页"
             android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
-        android:layout_centerInParent="true"
-        android:layout_gravity="center"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-       >
-
-    <LinearLayout
-        android:padding="10dp"
         android:id="@+id/ll_pack"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/ivPack"
@@ -54,62 +47,60 @@
             android:src="@drawable/sel_btn_pack" />
 
         <TextView
-            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="装箱管理"
+            android:layout_marginTop="5dp"
+            android:text="质检报告"
             android:textSize="12sp" />
     </LinearLayout>
 
     <LinearLayout
-        android:visibility="gone"
-        android:layout_marginRight="39dp"
         android:id="@+id/ll_send"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/ivSend"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/sel_btn_send" />
+            android:src="@drawable/sel_btn_pack" />
 
         <TextView
-            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="发货管理"
+            android:layout_marginTop="5dp"
+            android:text="流程追溯"
             android:textSize="12sp" />
     </LinearLayout>
 
-    </LinearLayout>
+
 
     <LinearLayout
-        android:padding="10dp"
-        android:layout_alignParentEnd="true"
-        android:layout_marginEnd="31dp"
         android:id="@+id/ll_mine"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
+        android:layout_weight="1"
         android:gravity="center"
-        android:orientation="vertical">
+        android:orientation="vertical"
+        android:padding="10dp">
 
         <ImageView
             android:id="@+id/ivMine"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:src="@drawable/sel_btn_mine" />
+            android:src="@drawable/sel_btn_pack" />
 
         <TextView
-            android:layout_marginTop="5dp"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:text="我的"
+            android:layout_marginTop="5dp"
+            android:text="装箱管理"
             android:textSize="12sp" />
     </LinearLayout>
 
 
-</RelativeLayout>
+</LinearLayout>

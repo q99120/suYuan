@@ -23,6 +23,7 @@ import cn.work.suyuan.event.StringEvent
 import cn.work.suyuan.ui.dialog.ExitDialog
 import cn.work.suyuan.ui.home.HomePageFragment
 import cn.work.suyuan.ui.home.HomeViewModel
+import cn.work.suyuan.ui.home.TraceManageFragment
 import cn.work.suyuan.ui.mine.MineFragment
 import cn.work.suyuan.ui.packmanage.PackManageFragment
 import cn.work.suyuan.ui.send.SendManageFragment
@@ -52,6 +53,7 @@ class MainActivity : BaseActivity() {
     private val fragmentManager: FragmentManager by lazy { supportFragmentManager }
 
     private var homePageFragment: HomePageFragment? = null
+    private var traceManageFragment: TraceManageFragment? = null
     private var packFragmentManager: PackManageFragment? = null
     private var sendManageFragment: SendManageFragment? = null
     private var mineFragment: MineFragment? = null
@@ -155,7 +157,7 @@ class MainActivity : BaseActivity() {
         }
     }
 
-    private fun setTabSelection(index: Int) {
+    fun setTabSelection(index: Int) {
 
         fragmentManager.beginTransaction().apply {
             clearAllSelected()
@@ -204,6 +206,14 @@ class MainActivity : BaseActivity() {
                         show(mineFragment!!)
                     }
                 }
+                3 -> {
+                    if (traceManageFragment == null) {
+                        traceManageFragment = TraceManageFragment.newInstance()
+                        add(R.id.homeContain, traceManageFragment!!)
+                    } else {
+                        show(traceManageFragment!!)
+                    }
+                }
             }
         }.commitAllowingStateLoss()
 
@@ -215,6 +225,7 @@ class MainActivity : BaseActivity() {
             if (packFragmentManager != null) hide(packFragmentManager!!)
 //            if (sendManageFragment != null) hide(sendManageFragment!!)
             if (mineFragment != null) hide(mineFragment!!)
+            if (traceManageFragment!=null) hide(traceManageFragment!!)
         }
     }
 
