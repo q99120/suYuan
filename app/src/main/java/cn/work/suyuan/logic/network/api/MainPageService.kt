@@ -156,7 +156,7 @@ interface MainPageService {
             file: String,
             content: String,
             batch: String,
-            orderNum: String,zhijianID:String
+            orderNum: String, zhijianID: String, distributorId: Int, imageArray: JSONArray
         ): String {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.goodsAdd")
@@ -170,6 +170,8 @@ interface MainPageService {
             param.put("batch", batch)
             param.put("order_num", orderNum)
             param.put("report_id", zhijianID)
+            param.put("dealer_id", distributorId)
+            param.put("img", imageArray)
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }
@@ -487,15 +489,44 @@ interface MainPageService {
             return manageServiceJson.toString()
         }
 
-        fun getQutalityList(page: Int): String {
+        /**
+         * 修改质检报告
+         */
+        fun updateReport(id: Int, edittext: String, productFile: String): String? {
+            val manageServiceJson = JSONObject()
+            getServiceHead(manageServiceJson, "shop.reportUp")
+            val param = JSONObject()
+            param.put("id",id)
+            param.put("test_report", edittext)
+            param.put("test_report_img", productFile)
+            manageServiceJson.put("param", param)
+            return manageServiceJson.toString()
+        }
+
+        /**
+         * 删除质检报告
+         */
+        fun deleteReport(id: Int): String? {
+            val manageServiceJson = JSONObject()
+            getServiceHead(manageServiceJson, "shop.reportDe")
+            val param = JSONObject()
+            param.put("id",id)
+            manageServiceJson.put("param", param)
+            return manageServiceJson.toString()
+        }
+
+        fun getQutalityList(page: Int, content: String): String {
             val manageServiceJson = JSONObject()
             getServiceHead(manageServiceJson, "shop.reportInfo")
             val param = JSONObject()
             param.put("page", page)
             param.put("limit", 10)
+            param.put("kw", content)
             manageServiceJson.put("param", param)
             return manageServiceJson.toString()
         }
+
+
 
 
     }

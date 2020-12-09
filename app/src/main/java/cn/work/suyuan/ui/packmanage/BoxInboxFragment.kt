@@ -1,6 +1,7 @@
 package cn.work.suyuan.ui.packmanage
 
 import android.content.Intent
+import android.media.MediaPlayer
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.View
@@ -17,13 +18,11 @@ import cn.work.suyuan.util.DateUtil
 import cn.work.suyuan.util.FileUtils
 import cn.work.suyuan.util.InjectorUtil
 import cn.work.suyuan.util.SuYuanUtil
-import kotlinx.android.synthetic.main.fragment_cancel_send.*
 import kotlinx.android.synthetic.main.fragment_pack_manage.*
-import kotlinx.android.synthetic.main.layout_import_file.*
-import kotlinx.android.synthetic.main.layout_import_file.tvImportFile
 import kotlinx.android.synthetic.main.layout_pack_mg.*
-import kotlinx.android.synthetic.main.layout_send_manage_fm.*
-import kotlinx.android.synthetic.main.layout_send_manage_fm.tvActionQr
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
 import java.io.File
 
 /**
@@ -77,41 +76,34 @@ class BoxInboxFragment : BaseFragment() {
             rp.msg.toast()
             if (rp.code == 200)
                 productFile = rp.data
-            tvImportFile.text = "导入文件成功"
+//            tvImportFile.text = "导入文件成功"
         })
     }
 
     var productTime = DateUtil.getCurrentTime(true)
     var productFile = ""
     private fun initClicks() {
-        setOnClickListener(tvActionQr, BigBoxActionQr, btnDonePack, tvPackTime, llActionImFiles) {
+        setOnClickListener(tvActionQr, BigBoxActionQr, btnDonePack, tvPackTime) {
             when (this) {
-                tvActionQr -> {
-                    ScanQrCodeActivity.start(activity, object : ScanQrCodeActivity.QrCallBack {
-                        override fun qrData(result: String) {
-                            etProductQr.append(result+"\n")
-                        }
-                    })
-                }
-                BigBoxActionQr -> ScanQrCodeActivity.start(activity,
-                    object : ScanQrCodeActivity.QrCallBack {
-                        override fun qrData(result: String) {
-                            etBoxQr.append(result+"\n")
-                        }
-                    })
+                tvActionQr -> goQrCode()
+                BigBoxActionQr -> ScanQrCodeActivity.start(activity,object :ScanQrCodeActivity.QrCallBack{
+                    override fun qrData(result: String) {
+                        etBoxQr.append(result+"\n")
+                    }
+                })
                 tvPackTime -> DateUtil.showDate(activity, true, object : DateUtil.ChooseDate {
                     override fun getTime(result: String) {
                         productTime = result
                         tvPackTime.text = productTime
                     }
                 })
-                llActionImFiles -> FileUtils.upLoadFiles(activity, fileChooseDialog, object :
-                    FileUtils.CallBackFile {
-                    override fun backFile(file: File) {
-                        viewModel.upLoadFile(file)
-                    }
-
-                })
+//                llActionImFiles -> FileUtils.upLoadFiles(activity, fileChooseDialog, object :
+//                    FileUtils.CallBackFile {
+//                    override fun backFile(file: File) {
+//                        viewModel.upLoadFile(file)
+//                    }
+//
+//                })
 
 
                 btnDonePack->
@@ -121,8 +113,29 @@ class BoxInboxFragment : BaseFragment() {
                     }else "请先填写产品和大箱条码".toast()
             }
         }
+        radioGroup.setOnCheckedChangeListener { group, checkedId ->
+            isOpen = group.checkedRadioButtonId == R.id.radioOpen
+        }
     }
 
+    var isOpen = false
+    private fun goQrCode() {
+        val player = MediaPlayer.create(requireContext(), R.raw.ding)
+        ScanQrCodeActivity.start(activity, object : ScanQrCodeActivity.QrCallBack {
+            override fun qrData(result: String) {
+                etProductQr.append(result + "\n")
+                player.start()
+                if (isOpen) {
+                    "2秒后继续自动扫描".toast()
+                    CoroutineScope(job).launch {
+                        delay(2000)
+                        goQrCode()
+                    }
+                }
+            }
+
+        })
+    }
 
     companion object {
         fun newInstance() = BoxInboxFragment()

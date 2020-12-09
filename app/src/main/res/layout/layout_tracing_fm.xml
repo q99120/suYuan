@@ -69,8 +69,10 @@
 
     <TextView
         android:id="@+id/tvChooseCate"
-        android:paddingLeft="20dp"
-        android:layout_width="wrap_content"
+        android:paddingLeft="10dp"
+        android:layout_width="0dp"
+        android:gravity="right"
+        app:layout_constraintLeft_toRightOf="@+id/tvLiuChen"
         android:layout_height="wrap_content"
         android:layout_marginEnd="10dp"
         android:drawablePadding="15dp"
@@ -162,6 +164,7 @@
     </LinearLayout>
 
     <TextView
+        android:id="@+id/tvActionQrTitle"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_marginTop="20dp"
@@ -170,6 +173,34 @@
         android:textSize="16sp"
         app:layout_constraintLeft_toLeftOf="@+id/tvLiuChen"
         app:layout_constraintTop_toBottomOf="@+id/llDescribe" />
+
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_marginStart="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvActionQr"
+        app:layout_constraintTop_toTopOf="@+id/tvActionQr"
+        app:layout_constraintLeft_toRightOf="@+id/tvActionQrTitle"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/radioOpen"
+            android:checked="false"
+            android:text="自扫开启"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RadioButton
+            android:layout_marginStart="10dp"
+            android:id="@+id/radioClose"
+            android:checked="true"
+            android:text="自扫关闭"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+    </RadioGroup>
 
    <LinearLayout
        android:layout_marginEnd="10dp"
@@ -182,7 +213,7 @@
 
        <TextView
            android:text="扫一扫"
-           android:layout_marginEnd="15dp"
+           android:layout_marginEnd="5dp"
            android:layout_width="wrap_content"
            android:layout_height="wrap_content"
            />
@@ -198,7 +229,7 @@
     <EditText
         android:id="@+id/editProductName"
         android:layout_width="0dp"
-        android:layout_height="100dp"
+        android:layout_height="wrap_content"
         android:layout_marginTop="10dp"
         android:padding="10dp"
         android:hint="请填写外箱条码..."

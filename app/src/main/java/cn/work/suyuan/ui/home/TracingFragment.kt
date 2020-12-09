@@ -1,16 +1,21 @@
 package cn.work.suyuan.ui.home
 
+import android.media.MediaPlayer
 import android.net.Uri
 import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
 import android.util.Log
 import android.view.LayoutInflater
 import android.view.View
 import android.view.ViewGroup
+import android.widget.RadioGroup
 import androidx.lifecycle.Observer
 import androidx.lifecycle.ViewModelProvider
 import androidx.recyclerview.widget.GridLayoutManager
 import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.setOnClickListener
+import cn.work.suyuan.common.extensions.singleClick
 import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseFragment
 import cn.work.suyuan.event.MessageEvent
@@ -24,6 +29,7 @@ import cn.work.suyuan.ui.send.SendPackViewModel
 import cn.work.suyuan.util.*
 import cn.work.suyuan.widget.GlideEngine
 import com.huantansheng.easyphotos.EasyPhotos
+import kotlinx.android.synthetic.main.dialog_qutality_list.*
 import kotlinx.android.synthetic.main.fragment_home_tracing.*
 import kotlinx.android.synthetic.main.fragment_mine.*
 import kotlinx.android.synthetic.main.layout_import_file.*
@@ -33,6 +39,11 @@ import kotlinx.android.synthetic.main.layout_tracing_fm.editProductName
 import kotlinx.android.synthetic.main.layout_tracing_fm.tvActionQr
 import kotlinx.android.synthetic.main.layout_tracing_fm.tvChooseDistributor
 import kotlinx.android.synthetic.main.layout_tracing_fm.tvTracingTime
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Job
+import kotlinx.coroutines.delay
+import kotlinx.coroutines.launch
+import org.json.JSONArray
 import java.io.File
 import java.util.*
 import kotlin.collections.HashMap
@@ -100,7 +111,7 @@ class TracingFragment : BaseFragment() {
                     }
                 }, object : quRefresh {
                     override fun refresh(page: Int) {
-                        viewModel.getQutalityList(page)
+                        viewModel.getQutalityList(page, "")
                     }
 
                 })
@@ -121,7 +132,18 @@ class TracingFragment : BaseFragment() {
                 "上传图片成功".toast()
             isUpLoad = false
             arrayId[currentPosition] = rp.data
-            for (a in arrayId) {
+
+        })
+        viewModel.uploadHeadLiveData.observe(viewLifecycleOwner, Observer {
+            isUpLoad = false
+            val rp = it.getOrNull() ?: return@Observer
+            Log.e("获取图片id成功", rp.data.toString())
+            if (rp.code == 200) {
+                "上传图片成功".toast()
+                arrayId[currentPosition] = rp.data.lid
+            }
+            for (a in arrayId){
+                Log.e("拿去id",a.toString())
             }
         })
         sendPackViewModel.distributorLiveData.observe(viewLifecycleOwner, Observer {
@@ -142,6 +164,7 @@ class TracingFragment : BaseFragment() {
     var categoryId = 1
     var tracingTime = ""
     var productFile = ""
+    var isOpen = false
     lateinit var arrayCode: Array<String?>
     private fun initViews() {
         recyclerAddPic.layoutManager = GridLayoutManager(requireContext(), 3)
@@ -188,6 +211,11 @@ class TracingFragment : BaseFragment() {
                         fuToast("订单号不能为空")
                         return@setOnClickListener
                     }
+                    val imageArray = JSONArray()
+                    for (a in arrayId) {
+                        imageArray.put(a.value)
+
+                    }
                     viewModel.setTracing(
                         categoryId,
                         editUName.text.toString(),
@@ -196,7 +224,7 @@ class TracingFragment : BaseFragment() {
                         "",
                         richEditText.text.toString(),
                         editProductNum.text.toString(),
-                        editOrderNum.text.toString(), zhijianID
+                        editOrderNum.text.toString(), zhijianID,distributorId,imageArray
                     )
                 }
                 tvChooseCate -> {
@@ -225,20 +253,14 @@ class TracingFragment : BaseFragment() {
                     })
                 }
                 tvActionQr -> {
-                    ScanQrCodeActivity.start(activity, object : ScanQrCodeActivity.QrCallBack {
-                        override fun qrData(result: String) {
-                            editProductName.append(result + "\n")
-                        }
-
-                    })
+                    goQrCode()
                 }
                 btnImportQ -> {
-                    viewModel.getQutalityList(1)
+                    viewModel.getQutalityList(1, "")
                 }
                 btnAddPicD -> {
                     initAdapterData()
                 }
-
             }
         }
         addPicAdapter.addChildClickViewIds(R.id.ivPic, R.id.btnAddPic)
@@ -254,9 +276,10 @@ class TracingFragment : BaseFragment() {
                     if (!isUpLoad) {
                         for (a in array) {
                             if (position == a.key) {
-                                val file = File(a.value)
+//                                val file = File(a.value)
                                 isUpLoad = true
-                                viewModel.upLoadFile(file)
+                                val base64Result = FileUtils.imageToBase64(a.value)
+                                viewModel.uploadHead(base64Result.toString())
                             }
                         }
                     } else {
@@ -266,7 +289,43 @@ class TracingFragment : BaseFragment() {
                 }
             }
         }
+        qutalityListDialog.btnScan.singleClick { viewModel.getQutalityList(1,qutalityListDialog.editQuSearch.text.toString()) }
+        qutalityListDialog.editQuSearch.addTextChangedListener(object :TextWatcher{
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {
+            }
 
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {
+            }
+
+            override fun afterTextChanged(s: Editable?) {
+                viewModel.getQutalityList(1,s.toString())
+            }
+
+        })
+        radioGroup.setOnCheckedChangeListener { group, checkedId ->
+            isOpen = group.checkedRadioButtonId == R.id.radioOpen
+        }
+
+    }
+
+    val isQrCode = false
+
+        private fun goQrCode() {
+            val player = MediaPlayer.create(requireContext(), R.raw.ding)
+            ScanQrCodeActivity.start(activity, object : ScanQrCodeActivity.QrCallBack {
+            override fun qrData(result: String) {
+                editProductName.append(result + "\n")
+                player.start()
+                if (isOpen){
+                    "2秒后继续自动扫描".toast()
+                    CoroutineScope(job).launch {
+                        delay(2000)
+                        goQrCode()
+                    }
+                }
+            }
+
+        })
     }
 
     var isUpLoad = false

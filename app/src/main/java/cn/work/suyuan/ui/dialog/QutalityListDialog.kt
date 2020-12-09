@@ -13,7 +13,6 @@ import cn.work.suyuan.ui.adapter.QuListAdapter
 import kotlinx.android.synthetic.main.dialog_qutality_list.*
 import kotlinx.android.synthetic.main.dialog_qutality_list.recyclerQualityList
 import kotlinx.android.synthetic.main.dialog_qutality_list.smartRefresh
-import kotlinx.android.synthetic.main.layout_qutality_list.*
 
 class QutalityListDialog : Dialog {
     lateinit var quClick:FileClick
@@ -26,12 +25,11 @@ class QutalityListDialog : Dialog {
         initView()
     }
 
-    private val spinnerAdapter = QuListAdapter()
+    private val spinnerAdapter = QuListAdapter(2)
     var dialogPosition  = -1
     var totalPage = 1
     var currentPage = 1
     private fun initView() {
-        btnCancel.setOnClickListener { dismiss() }
         blackBack.setOnClickListener { dismiss() }
 
         smartRefresh.setOnRefreshListener{

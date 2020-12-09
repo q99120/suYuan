@@ -19,23 +19,63 @@
         app:layout_constraintTop_toTopOf="parent" />
 
 
-    <TextView
-        android:layout_marginEnd="20dp"
+    <RadioGroup
+        android:id="@+id/radioGroup"
+        android:layout_marginStart="5dp"
+        app:layout_constraintBottom_toBottomOf="@+id/tvActionQr"
+        app:layout_constraintTop_toTopOf="@+id/tvActionQr"
+        app:layout_constraintLeft_toRightOf="@+id/tvProductTitle"
+        android:layout_width="wrap_content"
+        android:orientation="horizontal"
+        android:layout_height="wrap_content">
+
+        <RadioButton
+            android:id="@+id/radioOpen"
+            android:checked="false"
+            android:text="自扫开启"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+        <RadioButton
+            android:layout_marginStart="10dp"
+            android:id="@+id/radioClose"
+            android:checked="true"
+            android:text="自扫关闭"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"/>
+
+
+    </RadioGroup>
+
+
+    <LinearLayout
+        android:layout_marginEnd="10dp"
         android:id="@+id/tvActionQr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawablePadding="15dp"
-        android:text="扫一扫"
-        android:textColor="#808080"
-        android:textSize="14sp"
-        app:drawableEndCompat="@mipmap/action_qrcode"
+        app:layout_constraintTop_toTopOf="@+id/tvProductTitle"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/tvProductTitle" />
+        app:layout_constraintTop_toBottomOf="@+id/tvProductTitle">
+
+        <TextView
+            android:text="扫一扫"
+            android:layout_marginEnd="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/action_qrcode"/>
+
+    </LinearLayout>
 
     <EditText
         android:id="@+id/etProductQr"
         android:paddingLeft="10dp"
         android:paddingTop="10dp"
+        android:paddingBottom="10dp"
         android:background="@drawable/shape_edit_bg"
         android:layout_marginTop="20dp"
         android:gravity="top|left"
@@ -44,7 +84,7 @@
         app:layout_constraintLeft_toLeftOf="@+id/tvProductTitle"
         app:layout_constraintTop_toBottomOf="@+id/tvProductTitle"
         android:layout_width="0dp"
-        android:layout_height="120dp"/>
+        android:layout_height="wrap_content"/>
 
 
     <TextView
@@ -76,18 +116,28 @@
         app:layout_constraintTop_toBottomOf="@+id/etProductQr"
         app:drawableStartCompat="@mipmap/boxbox" />
 
-    <TextView
-        android:layout_marginEnd="20dp"
+    <LinearLayout
+        android:layout_marginEnd="10dp"
         android:id="@+id/BigBoxActionQr"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawablePadding="15dp"
-        android:text="扫一扫"
-        android:textColor="#808080"
-        android:textSize="14sp"
-        app:drawableEndCompat="@mipmap/action_qrcode"
         app:layout_constraintRight_toRightOf="parent"
-        app:layout_constraintTop_toTopOf="@+id/BigBoxQr" />
+        app:layout_constraintTop_toTopOf="@+id/BigBoxQr">
+
+        <TextView
+            android:text="扫一扫"
+            android:layout_marginEnd="5dp"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            />
+
+        <ImageView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:src="@mipmap/action_qrcode"/>
+
+    </LinearLayout>
+
 
     <EditText
         android:id="@+id/etBoxQr"

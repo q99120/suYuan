@@ -58,9 +58,21 @@ class AddQualityActivity:BaseActivity() {
                 "上传图片成功".toast()
                 productFile = rp.data.toString()
         })
+        viewModel.upDataReportLiveData.observe(this, Observer {
+            val rp = it.getOrNull() ?: return@Observer
+            if (rp.code == 200){
+                "修改质检报告成功".toast()
+                zhijianID = rp.data.toString()
+            } else rp.msg.toast()
+        })
     }
 
+    var quFlag = 1
+    var quId = 0
     private fun initView() {
+        quFlag = intent.getIntExtra("quFlag",1)
+        quId = intent.getIntExtra("quId",0)
+        if (quFlag == 1) tvTitle.text = "添加质检报告" else tvTitle.text = "修改质检报告"
         ivBack.setOnClickListener {
             finish()
         }
@@ -78,7 +90,11 @@ class AddQualityActivity:BaseActivity() {
                 "请先上传质检图片文件".toast()
                 return@setOnClickListener
             }
-            viewModel.sendReport(editZhijian.text.toString(),productFile)
+            if (quFlag == 1){
+                viewModel.sendReport(editZhijian.text.toString(),productFile)
+            }else{
+                viewModel.upDataReport(quId,editZhijian.text.toString(),productFile)
+            }
         }
         tvActionZhijian.setOnClickListener {
             ScanQrCodeActivity.start(this, object : ScanQrCodeActivity.QrCallBack {
@@ -92,8 +108,11 @@ class AddQualityActivity:BaseActivity() {
     }
 
     companion object{
-        fun start(context: Context){
-            context.startActivity(Intent(context,AddQualityActivity::class.java))
+        fun start(context: Context,flag:Int,id:Int){
+            val intent = Intent(context,AddQualityActivity::class.java)
+            intent.putExtra("quFlag",flag)
+            intent.putExtra("quId",id)
+            context.startActivity(intent)
         }
     }
 

@@ -249,11 +249,13 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
         content: String,
         batch: String,
         orderNum: String,
-        zhijianID: String
+        zhijianID: String,
+        distributorId: Int,
+        imageArray: JSONArray
     ) {
-        Log.e("流程追溯", MainPageService.manageTrace(category_id, uname, product, product_time, file,content,batch,orderNum,zhijianID))
+        Log.e("流程追溯", MainPageService.manageTrace(category_id, uname, product, product_time, file,content,batch,orderNum,zhijianID,distributorId,imageArray))
         setTracingRequest.value =
-            MainPageService.manageTrace(category_id, uname, product, product_time, file,content,batch,orderNum,zhijianID)
+            MainPageService.manageTrace(category_id, uname, product, product_time, file,content,batch,orderNum,zhijianID,distributorId,imageArray)
     }
 
     val setTracingLiveData = Transformations.switchMap(setTracingRequest) {
@@ -326,14 +328,63 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
         }
     }
 
+
+    /**
+     * 修改质检报告
+     */
+    private val upDateReportRequest = MutableLiveData<String>()
+    fun upDataReport(id:Int,edittext: String, productFile: String) {
+        upDateReportRequest.value = MainPageService.updateReport(id,edittext,productFile)
+    }
+
+    val upDataReportLiveData = Transformations.switchMap(upDateReportRequest) {
+        liveData {
+            val result = try {
+                val body: RequestBody =
+                    RequestBody.create(parse("application/json; charset=utf-8"), it)
+                val recommend = repository.editProcess(body)
+                Result.success(recommend)
+            } catch (e: Exception) {
+                Log.e("获取错误", e.toString())
+                Result.failure<NormalData>(e)
+            }
+            emit(result)
+        }
+    }
+
+    /**
+     * 删除质检报告
+     */
+    private val deleteReportRequest = MutableLiveData<String>()
+    fun deleteReport(id:Int) {
+        deleteReportRequest.value = MainPageService.deleteReport(id)
+    }
+
+    val deleteReportLiveData = Transformations.switchMap(deleteReportRequest) {
+        liveData {
+            val result = try {
+                val body: RequestBody =
+                    RequestBody.create(parse("application/json; charset=utf-8"), it)
+                val recommend = repository.editProcess(body)
+                Result.success(recommend)
+            } catch (e: Exception) {
+                Log.e("获取错误", e.toString())
+                Result.failure<NormalData>(e)
+            }
+            emit(result)
+        }
+    }
+
+
     /**
      * 质检报告信息
      */
     val qutalityListRequest = MutableLiveData<String>()
-    fun getQutalityList(page: Int) {
-        qutalityListRequest.value = MainPageService.getQutalityList(page)
-        Log.e("互殴去",MainPageService.getQutalityList(page))
+    fun getQutalityList(page: Int, content: String) {
+        qutalityListRequest.value = MainPageService.getQutalityList(page,content)
+        Log.e("互殴去",MainPageService.getQutalityList(page, content))
     }
+
     val qutalityListLiveData = Transformations.switchMap(qutalityListRequest) {
         liveData {
             val result = try {

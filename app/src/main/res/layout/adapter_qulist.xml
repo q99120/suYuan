@@ -6,43 +6,72 @@
 
     <TextView
         android:id="@+id/tvId"
-        android:layout_marginStart="10dp"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintLeft_toLeftOf="parent"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
+        android:layout_marginStart="10dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
         android:textColor="@color/red"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:textSize="18sp"/>
-
-    <TextView
-        android:layout_marginStart="25dp"
-        android:id="@+id/tvPopItemTitle"
-        android:layout_width="0dp"
-        android:layout_height="wrap_content"
-        android:paddingTop="20dp"
-        android:paddingBottom="20dp"
-        android:text="销售一大区"
-        android:textColor="#202020"
-        android:textSize="14sp"
-        android:layout_marginEnd="15dp"
-        android:singleLine="false"
-        app:layout_constraintRight_toLeftOf="@id/tvSeePic"
-        app:layout_constraintLeft_toRightOf="@+id/tvId"
+        android:textSize="18sp"
+        app:layout_constraintLeft_toLeftOf="parent"
         app:layout_constraintTop_toTopOf="parent" />
 
     <TextView
-        android:layout_marginEnd="10dp"
-        android:padding="10dp"
-        android:id="@+id/tvSeePic"
-        android:text="查看大图"
-        android:layout_marginTop="10dp"
-        app:layout_constraintTop_toTopOf="@+id/tvPopItemTitle"
-        app:layout_constraintRight_toRightOf="parent"
-        android:layout_width="wrap_content"
+        android:id="@+id/tvPopItemTitle"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
-        android:background="@drawable/shape_home_bg"/>
+        android:layout_marginStart="25dp"
+        android:layout_marginEnd="15dp"
+        android:paddingTop="20dp"
+        android:paddingBottom="20dp"
+        android:singleLine="false"
+        android:text="销售一大区"
+        android:textColor="#202020"
+        android:textSize="14sp"
+        app:layout_constraintLeft_toRightOf="@+id/tvId"
+        app:layout_constraintRight_toLeftOf="@id/ivSeePic"
+        app:layout_constraintTop_toTopOf="parent" />
+
+    <ImageView
+        android:id="@+id/ivSeePic"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/fangdajing"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPopItemTitle"
+        app:layout_constraintRight_toLeftOf="@+id/ivTrace"
+        app:layout_constraintTop_toTopOf="@+id/tvPopItemTitle" />
+
+
+    <ImageView
+        android:id="@+id/ivTrace"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="15dp"
+        android:src="@mipmap/trace_unpress"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPopItemTitle"
+        app:layout_constraintRight_toLeftOf="@+id/ivUpdate"
+        app:layout_constraintTop_toTopOf="@+id/tvPopItemTitle" />
+
+    <ImageView
+        android:id="@+id/ivDelete"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/shanchu"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPopItemTitle"
+        app:layout_constraintRight_toRightOf="parent"
+        app:layout_constraintTop_toTopOf="@+id/tvPopItemTitle" />
+
+    <ImageView
+        android:id="@+id/ivUpdate"
+        android:layout_width="30dp"
+        android:layout_height="30dp"
+        android:layout_marginEnd="15dp"
+        android:src="@drawable/xiugai"
+        app:layout_constraintBottom_toBottomOf="@+id/tvPopItemTitle"
+        app:layout_constraintRight_toLeftOf="@+id/ivDelete"
+        app:layout_constraintTop_toTopOf="@+id/tvPopItemTitle" />
 
 
     <View

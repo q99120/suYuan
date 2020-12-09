@@ -33,6 +33,7 @@ import cn.work.suyuan.ui.dialog.EditPackDialog
 import cn.work.suyuan.ui.dialog.ExitDialog
 import cn.work.suyuan.ui.dialog.FileChooseDialog
 import cn.work.suyuan.ui.dialog.HomeNormalDialog
+import kotlinx.coroutines.Job
 import org.greenrobot.eventbus.EventBus
 import org.greenrobot.eventbus.Subscribe
 import org.greenrobot.eventbus.ThreadMode
@@ -302,6 +303,7 @@ abstract class BaseFragment : Fragment(), RequestLifecycle {
     val exitDialog by lazy {
         ExitDialog(requireContext())
     }
+    val job by lazy { Job() }
 
 
 }
