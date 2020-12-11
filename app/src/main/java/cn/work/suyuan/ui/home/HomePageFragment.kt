@@ -14,6 +14,7 @@ import cn.work.suyuan.event.RefreshEvent
 import cn.work.suyuan.ui.MainActivity
 import cn.work.suyuan.ui.QualityActivity
 import cn.work.suyuan.ui.adapter.BannerImgAdapter
+import cn.work.suyuan.ui.mine.FeedBackActivity
 import cn.work.suyuan.ui.mine.SettingActivity
 import com.youth.banner.indicator.CircleIndicator
 import com.youth.banner.util.BannerUtils
@@ -46,6 +47,9 @@ class HomePageFragment : BaseFragment(){
             EventBus.getDefault()
                 .post(RefreshEvent(TraceManageFragment::class.java))
             mainActivity.setTabSelection(2)
+        }
+        llFeedBack.singleClick {
+            FeedBackActivity.start(requireContext())
         }
 //        llTraceInfo.singleClick {
 //            traceFlag = 1

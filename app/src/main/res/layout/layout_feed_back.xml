@@ -1,0 +1,250 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.core.widget.NestedScrollView xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+    <androidx.constraintlayout.widget.ConstraintLayout
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <RelativeLayout
+            android:id="@+id/rlTop"
+            android:layout_width="match_parent"
+            android:layout_height="60dp"
+            android:background="@color/normalBlue"
+            app:layout_constraintTop_toTopOf="parent">
+
+            <ImageView
+                android:id="@+id/ivBack"
+                android:layout_width="30dp"
+                android:layout_height="30dp"
+                android:layout_centerVertical="true"
+                android:src="@mipmap/white_back" />
+
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_centerInParent="true"
+                android:text="问题反馈"
+                android:textColor="@color/white"
+                android:textSize="16sp" />
+
+        </RelativeLayout>
+
+
+
+        <TextView
+            android:id="@+id/tvActionQrTitle"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:text="产品条码"
+            android:textColor="#202020"
+            android:textSize="16sp"
+            android:layout_marginStart="20dp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ll_edit_tracing" />
+
+
+        <LinearLayout
+            android:id="@+id/tvActionQr"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="20dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/ll_edit_tracing">
+
+            <TextView
+                android:text="扫一扫"
+                android:layout_marginEnd="5dp"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                />
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/action_qrcode"/>
+
+        </LinearLayout>
+
+
+        <EditText
+            android:id="@+id/editProductName"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginTop="10dp"
+            android:padding="10dp"
+            android:hint="请填写条码..."
+            android:background="@drawable/shape_edit_bg"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            app:layout_constraintTop_toBottomOf="@+id/tvActionQr" />
+
+
+        <TextView
+            android:padding="@dimen/dp_10"
+            android:id="@+id/tvQutaliy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="10dp"
+            android:layout_marginTop="25dp"
+            android:drawablePadding="15dp"
+            android:text="质检报告"
+            android:textColor="#202020"
+            android:textSize="16sp"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/rlTop" />
+
+        <EditText
+            android:paddingStart="10dp"
+            android:hint="质检报告单号.."
+            android:id="@+id/editQResult"
+            android:layout_marginEnd="@dimen/dp_10"
+            app:layout_constraintBottom_toBottomOf="@+id/btnImportQ"
+            app:layout_constraintTop_toTopOf="@+id/btnImportQ"
+            app:layout_constraintRight_toLeftOf="@+id/btnImportQ"
+            app:layout_constraintLeft_toRightOf="@+id/tvQutaliy"
+            android:background="@drawable/shape_edit_bg"
+            android:layout_width="0dp"
+            android:layout_height="0dp"
+            tools:ignore="RtlSymmetry">
+
+
+        </EditText>
+
+        <TextView
+            android:padding="@dimen/dp_10"
+            android:id="@+id/btnImportQ"
+            android:layout_marginEnd="10dp"
+            app:layout_constraintRight_toRightOf="parent"
+            app:layout_constraintTop_toTopOf="@id/tvQutaliy"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:background="@drawable/shape_home_bg"
+            android:textColor="@color/white"
+            android:textSize="18sp"
+            android:text="导入报告"/>
+
+        <LinearLayout
+            android:id="@+id/ll_edit_tracing"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:layout_marginStart="20dp"
+            android:layout_marginTop="20dp"
+            android:gravity="center_vertical"
+            android:orientation="horizontal"
+            app:layout_constraintLeft_toLeftOf="parent"
+            app:layout_constraintTop_toBottomOf="@+id/btnImportQ">
+
+
+            <ImageView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:src="@mipmap/home_trac2" />
+
+            <EditText
+                android:id="@+id/editUName"
+                android:hint="请输入责任人或工号..."
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:layout_marginStart="15dp"
+                android:layout_marginEnd="20dp"
+                android:background="@drawable/shape_edit_bg"
+                android:textColor="@color/black"
+                android:textSize="18sp" />
+
+
+        </LinearLayout>
+
+
+        <LinearLayout
+            android:id="@+id/llAddPic"
+            android:layout_marginTop="30dp"
+            app:layout_constraintTop_toBottomOf="@+id/editProductName"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content">
+
+                <TextView
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:textColor="@color/black"
+                    android:textSize="16sp"
+                    android:text="添加图片"/>
+
+                <TextView
+                    android:layout_marginStart="20dp"
+                    android:padding="@dimen/dp_10"
+                    android:id="@+id/btnAddPicD"
+                    android:layout_marginEnd="10dp"
+                    app:layout_constraintRight_toRightOf="parent"
+                    app:layout_constraintTop_toTopOf="@id/tvQutaliy"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="@drawable/shape_home_bg"
+                    android:textColor="@color/white"
+                    android:textSize="18sp"
+                    android:text="添加图片上传(最多9张)"/>
+
+
+
+            </LinearLayout>
+
+            <androidx.recyclerview.widget.RecyclerView
+                android:id="@+id/recyclerAddPic"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"/>
+
+        </LinearLayout>
+
+        <LinearLayout
+            android:id="@+id/llRich"
+            android:layout_marginTop="30dp"
+            app:layout_constraintTop_toBottomOf="@+id/llAddPic"
+            android:layout_marginStart="20dp"
+            android:layout_marginEnd="20dp"
+            android:orientation="vertical"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content">
+
+            <TextView
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:textColor="@color/black"
+                android:textSize="16sp"
+                android:text="备注"/>
+
+            <EditText
+                android:id="@+id/richEditText"
+                android:layout_height="wrap_content"
+                android:background="@drawable/shape_edit_bg"
+                android:layout_marginTop="15dp"
+                android:hint="请输入..."
+                android:layout_width="match_parent"
+                android:lineSpacingExtra="5dp"
+                android:paddingBottom="70dp"
+                android:paddingLeft="15dp"
+                android:paddingRight="15dp"
+                android:paddingTop="23dp"
+                android:textColor="#171717"
+                android:textColorHint="#aaaaaa"
+                android:textSize="16dp" />
+
+
+
+        </LinearLayout>
+
+    </androidx.constraintlayout.widget.ConstraintLayout>
+
+</androidx.core.widget.NestedScrollView>

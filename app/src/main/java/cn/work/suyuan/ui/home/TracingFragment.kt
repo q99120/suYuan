@@ -120,6 +120,20 @@ class TracingFragment : BaseFragment() {
                 }
             }
         })
+        viewModel.uploadHeadLiveData.observe(viewLifecycleOwner, Observer {
+            isUpLoad = false
+            val rp = it.getOrNull() ?: return@Observer
+            if (rp.code == 200) {
+                "上传图片成功".toast()
+                arrayId[currentPosition] = rp.data.lid
+            }else{
+                rp.msg.toast()
+                return@Observer
+            }
+            for (a in arrayId){
+                Log.e("拿去id",a.toString())
+            }
+        })
         viewModel.setTracingLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
             Log.e("message", rp.msg)
@@ -134,18 +148,7 @@ class TracingFragment : BaseFragment() {
             arrayId[currentPosition] = rp.data
 
         })
-        viewModel.uploadHeadLiveData.observe(viewLifecycleOwner, Observer {
-            isUpLoad = false
-            val rp = it.getOrNull() ?: return@Observer
-            Log.e("获取图片id成功", rp.data.toString())
-            if (rp.code == 200) {
-                "上传图片成功".toast()
-                arrayId[currentPosition] = rp.data.lid
-            }
-            for (a in arrayId){
-                Log.e("拿去id",a.toString())
-            }
-        })
+
         sendPackViewModel.distributorLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
             if (listAgent.isNotEmpty()) listAgent.clear()

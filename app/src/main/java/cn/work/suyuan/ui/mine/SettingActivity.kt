@@ -4,6 +4,7 @@ import android.content.Context
 import android.content.Intent
 import android.os.Bundle
 import cn.work.suyuan.R
+import cn.work.suyuan.common.extensions.singleClick
 import cn.work.suyuan.common.ui.BaseActivity
 import kotlinx.android.synthetic.main.activity_setting.*
 
@@ -13,6 +14,13 @@ class SettingActivity:BaseActivity() {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_setting)
         ivBack.setOnClickListener { finish() }
+        initView()
+    }
+
+    private fun initView() {
+        llFeedBack.singleClick {
+            FeedBackActivity.start(this)
+        }
     }
 
     companion object{
