@@ -32,10 +32,17 @@ import com.huantansheng.easyphotos.EasyPhotos
 import kotlinx.android.synthetic.main.dialog_qutality_list.*
 import kotlinx.android.synthetic.main.fragment_home_tracing.*
 import kotlinx.android.synthetic.main.fragment_mine.*
+import kotlinx.android.synthetic.main.layout_feed_back.*
 import kotlinx.android.synthetic.main.layout_import_file.*
 import kotlinx.android.synthetic.main.layout_send_manage_fm.*
 import kotlinx.android.synthetic.main.layout_tracing_fm.*
+import kotlinx.android.synthetic.main.layout_tracing_fm.btnAddPicD
+import kotlinx.android.synthetic.main.layout_tracing_fm.btnImportQ
 import kotlinx.android.synthetic.main.layout_tracing_fm.editProductName
+import kotlinx.android.synthetic.main.layout_tracing_fm.editQResult
+import kotlinx.android.synthetic.main.layout_tracing_fm.editUName
+import kotlinx.android.synthetic.main.layout_tracing_fm.recyclerAddPic
+import kotlinx.android.synthetic.main.layout_tracing_fm.richEditText
 import kotlinx.android.synthetic.main.layout_tracing_fm.tvActionQr
 import kotlinx.android.synthetic.main.layout_tracing_fm.tvChooseDistributor
 import kotlinx.android.synthetic.main.layout_tracing_fm.tvTracingTime
@@ -130,22 +137,41 @@ class TracingFragment : BaseFragment() {
                 rp.msg.toast()
                 return@Observer
             }
-            for (a in arrayId){
-                Log.e("拿去id",a.toString())
-            }
+//            for (a in 0 until arrayId.size){
+//                if (a == arrayId.size-1){
+//                    resultId[a] = arrayId[a].toString().replace(",","")
+//                }else{
+//                    resultId[a] = arrayId[a].toString()
+//                }
+//
+//            }
         })
         viewModel.setTracingLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
             Log.e("message", rp.msg)
             Log.e("code", rp.code.toString())
             rp.msg.toast()
+            if (rp.code == 200){
+                editProductName.setText("")
+                arrayId.clear()
+                richEditText.setText("")
+                list.clear()
+                list.add("1")
+                addPicAdapter.setList(list)
+                addPicAdapter.setPic(-1)
+                editOrderNum.setText("")
+                editProductNum.setText("")
+                "流程追溯成功".toast()
+            }else{
+                rp.msg.toast()
+            }
         })
         viewModel.upLoadFileLiveData.observe(viewLifecycleOwner, Observer {
             val rp = it.getOrNull() ?: return@Observer
             if (rp.code == 200)
                 "上传图片成功".toast()
             isUpLoad = false
-            arrayId[currentPosition] = rp.data
+//            arrayId[currentPosition] = rp.data
 
         })
 
@@ -215,9 +241,12 @@ class TracingFragment : BaseFragment() {
                         return@setOnClickListener
                     }
                     val imageArray = JSONArray()
-                    for (a in arrayId) {
-                        imageArray.put(a.value)
-
+                    if (arrayId.isNotEmpty()){
+                        for (a in arrayId) {
+                            imageArray.put(a.value)
+                        }
+                    }else{
+                        "未上传图片".toast()
                     }
                     viewModel.setTracing(
                         categoryId,
@@ -377,6 +406,8 @@ class TracingFragment : BaseFragment() {
             if (messageEvent.code == 103) {
                 array[currentPosition] = messageEvent.path
                 addPicAdapter.setPic(currentPosition, Uri.parse(messageEvent.message))
+                val base64Result = FileUtils.imageToBase64(messageEvent.path)
+                viewModel.uploadHead(base64Result.toString())
                 Log.e("获取路径1", messageEvent.path)
             }
             if (messageEvent.code == 2000) {

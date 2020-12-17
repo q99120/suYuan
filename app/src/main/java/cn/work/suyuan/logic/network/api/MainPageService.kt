@@ -526,7 +526,18 @@ interface MainPageService {
             return manageServiceJson.toString()
         }
 
-
+        fun feedBack(tiaoma: String, zhijiandan: String, user: String, content: String, arrayId: JSONArray): String? {
+            val manageServiceJson = JSONObject()
+            getServiceHead(manageServiceJson, "shop.feedAdd")
+            val param = JSONObject()
+            param.put("sn", tiaoma)
+            param.put("file", zhijiandan)
+            param.put("user", user)
+            param.put("content", content)
+            param.put("cover", arrayId)
+            manageServiceJson.put("param", param)
+            return manageServiceJson.toString()
+        }
 
 
     }

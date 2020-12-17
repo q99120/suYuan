@@ -400,4 +400,24 @@ class HomeViewModel(private val repository: HomePageRepository) : ViewModel() {
         }
     }
 
+        //反馈信息
+        val feedBackRequest = MutableLiveData<String>()
+    fun sendFeedBack(tiaoma: String, zhijiandan: String, user: String, content: String, arrayId: JSONArray) {
+        feedBackRequest.value = MainPageService.feedBack(tiaoma,zhijiandan,user,content,arrayId)
+        Log.e("获取value",feedBackRequest.value.toString())
+    }
+    val feedBackLiveData = Transformations.switchMap(feedBackRequest) {
+        liveData {
+            val result = try {
+                val body: RequestBody =
+                    RequestBody.create(parse("application/json; charset=utf-8"), it)
+                val recommend = repository.editProcess(body)
+                Result.success(recommend)
+            } catch (e: Exception) {
+                Log.e("获取错误", e.toString())
+                Result.failure<NormalData>(e)
+            }
+            emit(result)
+        }
+    }
 }

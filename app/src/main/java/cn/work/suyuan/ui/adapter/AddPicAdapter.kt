@@ -12,11 +12,16 @@ import kotlinx.android.synthetic.main.fragment_mine.*
 class AddPicAdapter :
     BaseQuickAdapter<String, BaseViewHolder>(R.layout.adapter_add_pic) {
     override fun convert(holder: BaseViewHolder, item:String) {
-        if (holder.bindingAdapterPosition == pI){
-            val ivImage:ImageView = holder.getView(R.id.ivPic)
-            GlideEngine.getInstance()
-                .loadPhotoNoCircle(context, path!!, ivImage)
+        val ivImage:ImageView = holder.getView(R.id.ivPic)
+        if (pI!=-1){
+            if (holder.bindingAdapterPosition == pI){
+                GlideEngine.getInstance()
+                    .loadPhotoNoCircle(context, path!!, ivImage)
+            }
+        }else{
+          ivImage.setImageResource(R.mipmap.add_pic)
         }
+
 
     }
 
@@ -26,5 +31,9 @@ class AddPicAdapter :
         pI = currentPosition
         path = uriPath
         notifyItemChanged(currentPosition)
+    }
+    fun setPic(currentPosition: Int) {
+        pI = currentPosition
+        notifyDataSetChanged()
     }
 }

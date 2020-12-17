@@ -13,7 +13,6 @@ import cn.work.suyuan.R
 import cn.work.suyuan.common.extensions.singleClick
 import cn.work.suyuan.common.extensions.toast
 import cn.work.suyuan.common.ui.BaseActivity
-import cn.work.suyuan.event.StringEvent
 import cn.work.suyuan.ui.ScanQrCodeActivity
 import cn.work.suyuan.ui.adapter.AddPicAdapter
 import cn.work.suyuan.ui.dialog.QutalityListDialog
@@ -24,6 +23,7 @@ import cn.work.suyuan.util.InjectorUtil
 import cn.work.suyuan.widget.GlideEngine
 import com.huantansheng.easyphotos.EasyPhotos
 import com.huantansheng.easyphotos.models.album.entity.Photo
+import kotlinx.android.synthetic.main.activity_feedback.*
 import kotlinx.android.synthetic.main.activity_setting.*
 import kotlinx.android.synthetic.main.activity_setting.ivBack
 import kotlinx.android.synthetic.main.layout_feed_back.*
@@ -34,11 +34,7 @@ import kotlinx.android.synthetic.main.layout_feed_back.editQResult
 import kotlinx.android.synthetic.main.layout_feed_back.editUName
 import kotlinx.android.synthetic.main.layout_feed_back.recyclerAddPic
 import kotlinx.android.synthetic.main.layout_feed_back.tvActionQr
-import kotlinx.android.synthetic.main.layout_tracing_fm.*
-import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.delay
-import kotlinx.coroutines.launch
-import org.greenrobot.eventbus.EventBus
+import org.json.JSONArray
 import java.util.ArrayList
 
 class FeedBackActivity :BaseActivity() {
@@ -91,13 +87,34 @@ class FeedBackActivity :BaseActivity() {
             if (rp.code == 200) {
                 "上传图片成功".toast()
                 arrayId[currentPosition] = rp.data.lid
-            }else{
+            } else {
                 rp.msg.toast()
                 return@Observer
             }
-            for (a in arrayId){
-                Log.e("拿去id",a.toString())
+//            for (a in 0 until arrayId.size) {
+//                resultId[a] = arrayId[a].toString()
+//            }
+//            resultId[arrayId.size - 1] = arrayId[arrayId.size - 1].toString().replace(",","")
+        })
+        viewModel.feedBackLiveData.observe(this, Observer {
+            val rp = it.getOrNull() ?: return@Observer
+            if (rp.code == 200){
+                "上传反馈信息成功".toast()
+                editQResult.setText("")
+                editProductName.setText("")
+                arrayId.clear()
+                richEditText.setText("")
+                list.clear()
+                list.add("1")
+                addPicAdapter.setList(list)
+                addPicAdapter.setPic(-1)
+            }else{
+                rp.msg.toast()
             }
+            Log.e("获取rppp1",rp.code.toString())
+            Log.e("获取rppp2",rp.msg.toString())
+            Log.e("获取rppp3",rp.data.toString())
+
         })
     }
 
@@ -145,6 +162,32 @@ class FeedBackActivity :BaseActivity() {
                     editProductName.append(result + "\n") }
             })
         }
+        btnUpLoadFeed.singleClick {
+            if (editProductName.text.isEmpty()){
+                "请输入产品条码".toast()
+                return@singleClick
+            }
+            if (editQResult.text.isEmpty()){
+                "请输入质检单号".toast()
+                return@singleClick
+            }
+            if (editUName.text.isEmpty()){
+                "请输入操作员".toast()
+                return@singleClick
+            }
+            val imageArray = JSONArray()
+            if (arrayId.isNotEmpty()){
+                for (a in arrayId) {
+                    imageArray.put(a.value)
+                }
+            }else{
+                "如果添加了图片请检查是否上传图片".toast()
+            }
+            Log.e("imagearray",imageArray.toString())
+            viewModel.sendFeedBack(editProductName.text.toString(),editQResult.text.toString(),editUName.text.toString(),richEditText
+                .text.toString(),imageArray)
+        }
+
     }
     val list = mutableListOf<String>()
     private fun initAdapterData() {
@@ -181,6 +224,8 @@ class FeedBackActivity :BaseActivity() {
                 for (f in resultPhotos!!) {
                     array[currentPosition] = f.path
                     addPicAdapter.setPic(currentPosition, Uri.parse(f.uri.toString()))
+                    val base64Result = FileUtils.imageToBase64(f.path)
+                    viewModel.uploadHead(base64Result.toString())
                 }
             }
 

@@ -13,6 +13,7 @@
         android:src="@mipmap/add_pic" />
 
     <TextView
+        android:visibility="gone"
         android:id="@+id/btnAddPic"
         android:padding="10dp"
         android:textSize="18sp"
